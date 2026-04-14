@@ -1154,9 +1154,22 @@ function refreshHome(){
   if(!CU)return;
   document.getElementById('home-greeting').textContent=CU.name.split(' ')[0];
   document.getElementById('ratiba-home-sub').textContent=CU.premium?'✅ Fungua Ratiba':'🔒 Inagusa malipo';
-  // Mini mimea scroll
+  const stg=getStg();
+  const prEl=document.getElementById('home-price');
+  if(prEl)prEl.textContent='TSh '+Number(stg.priceM||5000).toLocaleString()+' / mwezi';
+  // Mini mimea scroll — with herb images from admin
   const sc=document.getElementById('mimea-home-scroll');
-  if(sc)sc.innerHTML=MIMEA.map((m,i)=>`<div class="mmea-mini" onclick="openMmea(${i})"><div class="mmea-mini-icon">${m.emoji}</div><div class="mmea-mini-name">${m.name}</div></div>`).join('');
+  if(sc){
+    let hi={};try{hi=JSON.parse(localStorage.getItem('afya_herb_imgs')||'{}');}catch{}
+    sc.innerHTML=MIMEA.slice(0,12).map(m=>`
+      <div class="mmea-mini" onclick="openMmea(${m.id})">
+        ${hi[m.id]
+          ? `<img src="${hi[m.id]}" class="mmea-mini-img" style="width:60px;height:60px;object-fit:cover;border-radius:10px;margin:0 auto 7px;display:block;">`
+          : `<div class="mmea-mini-icon">${m.emoji}</div>`
+        }
+        <div class="mmea-mini-name">${m.name}</div>
+      </div>`).join('');
+  }
 }
 
 // ══════════════════════════════════
@@ -1379,17 +1392,26 @@ let mmeaFilt='all',mmeaQ='';
 function renderMimea(){
   let data=MIMEA;
   if(mmeaFilt!=='all')data=data.filter(m=>m.cats.includes(mmeaFilt));
-  if(mmeaQ)data=data.filter(m=>m.name.toLowerCase().includes(mmeaQ)||m.latin.toLowerCase().includes(mmeaQ));
-  document.getElementById('mimea-grid').innerHTML=data.map(m=>`
-    <div class="mmea-card" onclick="openMmea(${m.id})">
-      <div class="mmea-card-img"><span style="font-size:52px">${m.emoji}</span><div class="mmea-verified">✓ Imehakikiwa</div></div>
+  if(mmeaQ)data=data.filter(m=>m.name.toLowerCase().includes(mmeaQ)||(m.latin||'').toLowerCase().includes(mmeaQ));
+  // Read herb images from localStorage (shared with admin)
+  let herbImgs={};
+  try{herbImgs=JSON.parse(localStorage.getItem('afya_herb_imgs')||'{}');}catch{}
+  const catLabel={nguvu:'💪 Nguvu',uzazi:'🌸 Uzazi',damu:'❤️ Damu',akili:'🧠 Akili',lishe:'🍽️ Lishe',kinga:'🛡️ Kinga',ngozi:'✨ Ngozi',usingizi:'😴 Usingizi',ini:'🫀 Ini',macho:'👁️ Macho'};
+  document.getElementById('mimea-grid').innerHTML=data.map(m=>{
+    const img=herbImgs[m.id]||null;
+    const imgHtml=img
+      ? `<img src="${img}" style="width:100%;height:100%;object-fit:cover;display:block;">`
+      : `<span style="font-size:52px">${m.emoji}</span>`;
+    return `<div class="mmea-card" onclick="openMmea(${m.id})">
+      <div class="mmea-card-img">${imgHtml}<div class="mmea-verified">✓ Imehakikiwa</div></div>
       <div class="mmea-body">
         <div class="mmea-name">${m.name}</div>
-        <div class="mmea-latin">${m.latin}</div>
-        <div class="mmea-tags">${m.cats.map(c=>`<span class="mmea-tag">${{nguvu:'💪 Nguvu',uzazi:'🌸 Uzazi',damu:'❤️ Damu',akili:'🧠 Akili',lishe:'🍽️ Lishe'}[c]}</span>`).join('')}</div>
+        <div class="mmea-latin">${m.latin||''}</div>
+        <div class="mmea-tags">${(m.cats||[]).map(c=>`<span class="mmea-tag">${catLabel[c]||c}</span>`).join('')}</div>
         <div class="mmea-rating">⭐ ${m.rating} (${m.reviews} maoni)</div>
       </div>
-    </div>`).join('')||'<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)"><div style="font-size:42px;margin-bottom:10px;">🔍</div>Hakuna mmea unaolingana</div>';
+    </div>`;
+  }).join('')||'<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)"><div style="font-size:42px;margin-bottom:10px;">🔍</div>Hakuna mmea unaolingana</div>';
 }
 function filterMimea(q){mmeaQ=q.toLowerCase();renderMimea();}
 function setFilter(f,btn){
