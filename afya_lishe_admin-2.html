@@ -1,0 +1,834 @@
+<!DOCTYPE html>
+<html lang="sw">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>JOS Natural Herbs — Admin Panel</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+<style>
+*{margin:0;padding:0;box-sizing:border-box;}
+:root{
+  --bg:#07100a;--bg2:#0c1a10;--bg3:#122016;
+  --line:#162b1a;--line2:#243d27;
+  --text:#e8f0e8;--sub:#8aaa8c;--muted:#5a7a5c;
+  --gr:#22c55e;--gr2:#16a34a;--gr3:rgba(34,197,94,.12);
+  --am:#f5c842;--am2:rgba(245,200,66,.12);
+  --rd:#f87171;--rd2:rgba(248,113,113,.12);
+  --bl:#60a5fa;--bl2:rgba(96,165,250,.12);
+  --r:14px;--rs:10px;--rxs:7px;
+}
+html,body{height:100%;font-family:"DM Sans",sans-serif;background:var(--bg);color:var(--text);-webkit-font-smoothing:antialiased;}
+.sc{display:none;min-height:100vh;}
+.sc.on{display:block;}
+.inp{width:100%;padding:10px 13px;border:1px solid var(--line2);border-radius:var(--rs);font-family:"DM Sans",sans-serif;font-size:13px;color:var(--text);background:var(--bg2);outline:none;transition:border-color .2s;}
+.inp:focus{border-color:var(--gr2);}
+.inp::placeholder{color:var(--muted);}
+select.inp{cursor:pointer;}
+textarea.inp{resize:vertical;min-height:80px;line-height:1.6;}
+.btn{font-family:"DM Sans",sans-serif;font-weight:700;border:none;cursor:pointer;border-radius:var(--rs);transition:all .18s;display:inline-flex;align-items:center;justify-content:center;gap:5px;font-size:13px;}
+.btn-gr{background:var(--gr2);color:#fff;padding:10px 20px;}
+.btn-gr:hover{background:#15803d;}
+.btn-sm{padding:6px 12px;font-size:11px;border-radius:var(--rxs);}
+.btn-v{background:var(--gr3);color:var(--gr);}
+.btn-v:hover{background:rgba(34,197,94,.2);}
+.btn-r{background:var(--rd2);color:var(--rd);}
+.btn-r:hover{background:rgba(248,113,113,.2);}
+.btn-b{background:var(--bl2);color:var(--bl);}
+.btn-b:hover{background:rgba(96,165,250,.2);}
+.btn-am{background:var(--am2);color:var(--am);}
+/* LOGIN */
+.login-page{min-height:100vh;display:flex;align-items:center;justify-content:center;background:var(--bg);padding:20px;}
+.login-card{background:var(--bg2);border:1px solid var(--line);border-radius:20px;padding:38px 32px;width:100%;max-width:400px;box-shadow:0 24px 80px rgba(0,0,0,.5);}
+.login-icon{font-size:44px;text-align:center;display:block;margin-bottom:10px;}
+.login-brand{font-family:"Playfair Display",serif;font-size:22px;font-weight:700;color:var(--text);text-align:center;margin-bottom:3px;}
+.login-sub{font-size:12px;color:var(--muted);text-align:center;margin-bottom:26px;}
+.fg{margin-bottom:13px;}
+.fg label{display:block;font-size:11px;font-weight:700;color:var(--sub);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px;}
+/* TOPBAR */
+.topbar{background:var(--bg2);border-bottom:1px solid var(--line);padding:13px 24px;display:flex;align-items:center;justify-content:space-between;position:sticky;top:0;z-index:100;}
+.tlogo{font-family:"Playfair Display",serif;font-size:18px;font-weight:700;color:var(--text);display:flex;align-items:center;gap:10px;}
+.tbadge{background:var(--gr2);color:#fff;font-size:9px;font-weight:700;padding:3px 8px;border-radius:5px;letter-spacing:.8px;font-family:"DM Sans",sans-serif;}
+/* PAGE */
+.page{max-width:1200px;margin:0 auto;padding:24px 20px 40px;}
+/* STATS */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:14px;margin-bottom:26px;}
+@media(max-width:680px){.stats-grid{grid-template-columns:repeat(2,1fr);}}
+.stat-card{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:20px;position:relative;overflow:hidden;}
+.stat-card::after{content:attr(data-ic);position:absolute;right:14px;top:50%;transform:translateY(-50%);font-size:30px;opacity:.08;}
+.stat-num{font-family:"Playfair Display",serif;font-size:28px;font-weight:700;color:var(--text);}
+.stat-lbl{font-size:12px;color:var(--muted);font-weight:600;margin-top:4px;}
+/* TABS */
+.tabs{display:flex;gap:4px;background:var(--bg2);border-radius:var(--rs);padding:4px;margin-bottom:22px;overflow-x:auto;border:1px solid var(--line);}
+.tab{flex-shrink:0;padding:9px 16px;font-size:12px;font-weight:700;border-radius:8px;cursor:pointer;color:var(--muted);transition:all .18s;border:none;background:transparent;font-family:"DM Sans",sans-serif;white-space:nowrap;}
+.tab.on{background:var(--bg3);color:var(--gr);}
+.tab-badge{background:var(--rd);color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:10px;margin-left:4px;}
+/* PANELS */
+.panel{display:none;}
+.panel.on{display:block;animation:fu .2s ease;}
+@keyframes fu{from{opacity:0;transform:translateY(6px);}to{opacity:1;transform:translateY(0);}}
+/* TABLE */
+.tcard{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:18px;}
+.thead{padding:15px 18px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;}
+.thead-title{font-size:14px;font-weight:700;color:var(--text);}
+.tsearch{background:var(--bg3);border:1px solid var(--line2);color:var(--text);padding:7px 12px;border-radius:var(--rs);font-family:"DM Sans",sans-serif;font-size:12px;outline:none;min-width:180px;}
+.tsearch::placeholder{color:var(--muted);}
+.tscroll{overflow-x:auto;}
+table{width:100%;border-collapse:collapse;}
+th{background:var(--bg3);padding:10px 14px;text-align:left;font-size:10px;font-weight:700;color:var(--muted);letter-spacing:1px;text-transform:uppercase;border-bottom:1px solid var(--line);white-space:nowrap;}
+td{padding:11px 14px;font-size:12px;color:var(--text);border-top:1px solid var(--line);font-weight:500;vertical-align:middle;}
+tr:hover td{background:rgba(255,255,255,.015);}
+.badge{font-size:9px;font-weight:700;padding:3px 8px;border-radius:4px;text-transform:uppercase;display:inline-block;}
+.badge-pend{background:var(--am2);color:var(--am);}
+.badge-ok{background:var(--gr3);color:var(--gr);}
+.badge-rej{background:var(--rd2);color:var(--rd);}
+.td-actions{display:flex;gap:5px;flex-wrap:wrap;}
+/* PANEL CARDS */
+.pcard{background:var(--bg2);border:1px solid var(--line);border-radius:var(--r);padding:22px;margin-bottom:18px;}
+.pcard-title{font-family:"Playfair Display",serif;font-size:17px;font-weight:700;color:var(--text);margin-bottom:4px;}
+.pcard-sub{font-size:13px;color:var(--muted);margin-bottom:20px;font-weight:500;line-height:1.5;}
+.code-display{background:var(--bg3);border:1px solid var(--line2);border-radius:var(--rs);padding:12px 18px;font-size:22px;font-weight:800;color:var(--gr);letter-spacing:6px;flex:1;font-family:monospace;text-align:center;}
+.form-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:500px){.form-2{grid-template-columns:1fr;}}
+/* MEDIA PANEL */
+.logo-preview-wrap{position:relative;display:inline-block;cursor:pointer;}
+.logo-preview-wrap:hover .logo-edit-overlay{opacity:1;}
+.logo-edit-overlay{position:absolute;inset:0;background:rgba(0,0,0,.5);border-radius:50%;display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity .2s;font-size:20px;}
+/* Herb grid — vertical scroll */
+.herb-search-bar{display:flex;align-items:center;gap:10px;margin-bottom:14px;}
+.herb-search-bar input{flex:1;background:var(--bg3);border:1px solid var(--line2);color:var(--text);padding:9px 14px;border-radius:var(--rs);font-family:"DM Sans",sans-serif;font-size:13px;outline:none;}
+.herb-search-bar input::placeholder{color:var(--muted);}
+.herb-grid-scroll{display:flex;flex-direction:column;gap:10px;max-height:620px;overflow-y:auto;padding-right:4px;}
+.herb-grid-scroll::-webkit-scrollbar{width:4px;}
+.herb-grid-scroll::-webkit-scrollbar-track{background:var(--bg3);}
+.herb-grid-scroll::-webkit-scrollbar-thumb{background:var(--line2);border-radius:4px;}
+.herb-row{display:flex;align-items:center;gap:14px;background:var(--bg3);border:1px solid var(--line2);border-radius:var(--rs);padding:10px 14px;transition:border-color .18s;}
+.herb-row:hover{border-color:var(--gr2);}
+.herb-row-img{width:64px;height:48px;border-radius:7px;object-fit:cover;background:var(--bg2);display:flex;align-items:center;justify-content:center;font-size:22px;flex-shrink:0;overflow:hidden;}
+.herb-row-img img{width:100%;height:100%;object-fit:cover;border-radius:7px;}
+.herb-row-info{flex:1;}
+.herb-row-name{font-size:13px;font-weight:700;color:var(--text);margin-bottom:2px;}
+.herb-row-latin{font-size:11px;color:var(--muted);font-style:italic;}
+.herb-row-status{font-size:10px;font-weight:700;padding:3px 8px;border-radius:4px;}
+.herb-row-status.has{background:var(--gr3);color:var(--gr);}
+.herb-row-status.empty{background:var(--am2);color:var(--am);}
+.herb-row-actions{display:flex;gap:6px;flex-shrink:0;}
+/* NOTIFY */
+.ntgt{background:var(--bg3);border:1px solid var(--line2);color:var(--muted);padding:7px 14px;border-radius:20px;font-size:12px;font-weight:700;cursor:pointer;font-family:"DM Sans",sans-serif;transition:all .18s;}
+.ntgt.on{background:var(--gr2);color:#fff;border-color:var(--gr2);}
+/* DANGER */
+.danger-zone{background:rgba(248,113,113,.05);border:1px solid rgba(248,113,113,.15);border-radius:var(--r);padding:18px;}
+/* TOAST */
+.toast{position:fixed;bottom:24px;left:50%;transform:translateX(-50%) translateY(14px);background:var(--text);color:var(--bg);font-weight:700;font-size:13px;padding:11px 24px;border-radius:100px;opacity:0;transition:all .3s;z-index:9999;white-space:nowrap;pointer-events:none;}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+.toast.ok{background:var(--gr2);color:#fff;}
+.toast.err{background:var(--rd);color:#fff;}
+.toast.info{background:var(--bl);color:#fff;}
+/* MODAL */
+.modal-wrap{display:none;position:fixed;inset:0;background:rgba(0,0,0,.6);z-index:500;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(4px);}
+.modal-wrap.open{display:flex;}
+.modal-box{background:var(--bg2);border:1px solid var(--line);border-radius:16px;padding:26px;width:100%;max-width:440px;box-shadow:0 24px 80px rgba(0,0,0,.5);}
+.modal-title{font-family:"Playfair Display",serif;font-size:18px;font-weight:700;color:var(--text);margin-bottom:16px;}
+@media(max-width:680px){.page{padding:14px 12px;}.topbar{padding:10px 14px;}}
+</style>
+</head>
+<body>
+
+<!-- LOGIN -->
+<div class="sc on" id="s-login">
+  <div class="login-page">
+    <div class="login-card">
+      <span class="login-icon">🌿</span>
+      <div class="login-brand">JOS NATURAL HERBS</div>
+      <div class="login-sub">Admin Control Panel</div>
+      <div class="fg"><label>Barua Pepe ya Admin</label><input class="inp" type="email" id="adm-em" placeholder="admin@josherbs.tz" value="admin@josherbs.tz"></div>
+      <div class="fg"><label>Nywila ya Siri</label><input class="inp" type="password" id="adm-pw" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()"></div>
+      <button class="btn btn-gr" style="width:100%;padding:13px;font-size:14px;margin-top:4px;" onclick="doLogin()">Ingia Panel →</button>
+      <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted);cursor:pointer;" onclick="window.location.href='afya_lishe.html'">← Rudi kwenye App</div>
+    </div>
+  </div>
+</div>
+
+<!-- ADMIN DASHBOARD -->
+<div class="sc" id="s-admin">
+  <nav class="topbar">
+    <div class="tlogo">
+      <div id="adm-logo-el" style="width:36px;height:36px;border-radius:50%;background:var(--bg3);display:flex;align-items:center;justify-content:center;font-size:18px;overflow:hidden;cursor:pointer;" onclick="openLogoModal()" title="Bonyeza kubadilisha logo">🌿</div>
+      JOS NATURAL HERBS <span class="tbadge">ADMIN</span>
+    </div>
+    <div style="display:flex;gap:10px;align-items:center;">
+      <span style="font-size:12px;color:var(--muted);">admin@josherbs.tz</span>
+      <button class="btn btn-sm" style="background:var(--bg3);border:1px solid var(--line2);color:var(--sub);" onclick="admRefresh()">🔄</button>
+      <button class="btn btn-sm btn-r" onclick="doLogout()">Toka</button>
+    </div>
+  </nav>
+
+  <div class="page">
+    <div style="margin-bottom:22px;">
+      <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text);margin-bottom:3px;">Dashibodi ya Usimamizi</div>
+      <div style="font-size:13px;color:var(--muted);font-weight:500;">JOS Natural Herbs · Simamia malipo, watumiaji, msimbo na picha za mimea</div>
+    </div>
+
+    <!-- STATS -->
+    <div class="stats-grid">
+      <div class="stat-card" data-ic="👥"><div class="stat-num" id="s-users">0</div><div class="stat-lbl">Watumiaji Wote</div></div>
+      <div class="stat-card" data-ic="💳"><div class="stat-num" id="s-pend" style="color:var(--am)">0</div><div class="stat-lbl">Malipo Yanayosubiri</div></div>
+      <div class="stat-card" data-ic="🔑"><div class="stat-num" id="s-codes">0</div><div class="stat-lbl">Msimbo Uliotolewa</div></div>
+      <div class="stat-card" data-ic="💰"><div class="stat-num" id="s-rev" style="color:var(--gr)">0</div><div class="stat-lbl">Mapato (TSh)</div></div>
+    </div>
+
+    <!-- TABS -->
+    <div class="tabs">
+      <button class="tab on" id="t-malipo" onclick="switchTab('malipo')">💳 Malipo <span class="tab-badge" id="tb-pend">0</span></button>
+      <button class="tab" id="t-watumiaji" onclick="switchTab('watumiaji')">👥 Watumiaji</button>
+      <button class="tab" id="t-codes" onclick="switchTab('codes')">🔑 Msimbo</button>
+      <button class="tab" id="t-media" onclick="switchTab('media')">🖼️ Picha &amp; Logo</button>
+      <button class="tab" id="t-notify" onclick="switchTab('notify')">📢 Arifa</button>
+      <button class="tab" id="t-settings" onclick="switchTab('settings')">⚙️ Mipangilio</button>
+    </div>
+
+    <!-- ─── MALIPO ─── -->
+    <div class="panel on" id="p-malipo">
+      <div class="tcard">
+        <div class="thead">
+          <div class="thead-title">💳 Malipo (<span id="pay-count">0</span>)</div>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;">
+            <select class="inp tsearch" id="pay-filter" onchange="renderPayments()" style="min-width:150px;">
+              <option value="">Hali Zote</option>
+              <option value="pending">Zinasubiri</option>
+              <option value="approved">Zilizothibitishwa</option>
+              <option value="rejected">Zilizokataliwa</option>
+            </select>
+            <input class="tsearch" id="pay-search" placeholder="Tafuta..." oninput="renderPayments()">
+          </div>
+        </div>
+        <div class="tscroll">
+          <table><thead><tr><th>Jina</th><th>Simu</th><th>Njia</th><th>Namba ya Muamala</th><th>Kiasi</th><th>Tarehe</th><th>Hali</th><th>Vitendo</th></tr></thead>
+          <tbody id="pay-tbody"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── WATUMIAJI ─── -->
+    <div class="panel" id="p-watumiaji">
+      <div class="tcard">
+        <div class="thead">
+          <div class="thead-title">👥 Watumiaji (<span id="user-count">0</span>)</div>
+          <input class="tsearch" id="user-search" placeholder="Tafuta..." oninput="renderUsers()">
+        </div>
+        <div class="tscroll">
+          <table><thead><tr><th>Jina</th><th>Barua Pepe</th><th>Simu</th><th>Aina</th><th>Uchunguzi</th><th>Jiunge</th><th>Vitendo</th></tr></thead>
+          <tbody id="user-tbody"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── MSIMBO ─── -->
+    <div class="panel" id="p-codes">
+      <div class="pcard">
+        <div class="pcard-title">🔑 Tengeneza Msimbo wa Ufikiaji</div>
+        <div class="pcard-sub">Baada ya mtumiaji kulipa, tengeneza msimbo wa HERB-XXXX-XXXX. Mtumiaji ataweka msimbo huu kwenye app kufungua Premium.</div>
+        <div class="form-2" style="margin-bottom:14px;">
+          <div class="fg" style="margin:0;"><label>Barua Pepe / Simu ya Mteja</label><input class="inp" id="code-for" placeholder="barua@email.com au +255..."></div>
+          <div class="fg" style="margin:0;"><label>Muda wa Uhalali</label>
+            <select class="inp" id="code-days">
+              <option value="30">Siku 30 — Mwezi 1 (TSh 5,000)</option>
+              <option value="180">Siku 180 — Miezi 6 (TSh 25,000)</option>
+              <option value="365">Siku 365 — Mwaka 1</option>
+              <option value="9999">Milele</option>
+            </select>
+          </div>
+        </div>
+        <div style="display:flex;gap:10px;align-items:center;margin-bottom:12px;">
+          <div class="code-display" id="code-result">— — — — — —</div>
+          <button class="btn btn-gr" onclick="generateCode()">⚡ Tengeneza</button>
+        </div>
+        <div id="code-actions" style="display:none;gap:8px;flex-wrap:wrap;">
+          <button class="btn btn-sm btn-b" onclick="sendCodeWA()">📱 Tuma WhatsApp</button>
+          <button class="btn btn-sm btn-v" onclick="approveAndSend()">✅ Thibitisha &amp; Tuma</button>
+        </div>
+      </div>
+      <div class="tcard">
+        <div class="thead"><div class="thead-title">📋 Historia ya Msimbo (<span id="codes-count">0</span>)</div></div>
+        <div class="tscroll">
+          <table><thead><tr><th>Msimbo</th><th>Mtumiaji</th><th>Siku</th><th>Tarehe</th><th>Hali</th><th>Imetumika Na</th></tr></thead>
+          <tbody id="codes-tbody"></tbody></table>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── MEDIA ─── -->
+    <div class="panel" id="p-media">
+
+      <!-- LOGO NA DR REVO -->
+      <div class="pcard">
+        <div class="pcard-title">🖼️ Logo ya App &amp; Picha ya Dr. Revo</div>
+        <div class="pcard-sub">Bonyeza picha kubadilisha. Picha inasasishwa moja kwa moja kwenye app ya wateja.</div>
+        <div style="display:grid;grid-template-columns:1fr 1fr;gap:20px;">
+          <!-- Logo -->
+          <div style="text-align:center;">
+            <div style="font-size:11px;font-weight:700;color:var(--sub);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;">Logo ya App</div>
+            <div class="logo-preview-wrap" onclick="document.getElementById('logo-file').click()">
+              <div id="logo-preview" style="width:90px;height:90px;border-radius:50%;background:var(--bg3);border:2px dashed var(--gr2);display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 10px;overflow:hidden;">🌿</div>
+              <div class="logo-edit-overlay" style="width:90px;height:90px;border-radius:50%;margin:0 auto;">✏️</div>
+            </div>
+            <input type="file" id="logo-file" accept="image/*" style="display:none" onchange="uploadLogo(this)">
+            <button class="btn btn-sm btn-v" onclick="document.getElementById('logo-file').click()">📷 Badilisha Logo</button>
+            <button class="btn btn-sm btn-r" style="margin-top:6px;display:block;width:100%;" onclick="removeLogo()">🗑️ Ondoa</button>
+          </div>
+          <!-- Dr Revo -->
+          <div style="text-align:center;">
+            <div style="font-size:11px;font-weight:700;color:var(--sub);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;">Picha ya Dr. Revo</div>
+            <div class="logo-preview-wrap" onclick="document.getElementById('drrevo-file').click()">
+              <div id="drrevo-preview" style="width:90px;height:90px;border-radius:50%;background:var(--bg3);border:2px dashed var(--gr2);display:flex;align-items:center;justify-content:center;font-size:36px;margin:0 auto 10px;overflow:hidden;">👨‍⚕️</div>
+              <div class="logo-edit-overlay" style="width:90px;height:90px;border-radius:50%;margin:0 auto;">✏️</div>
+            </div>
+            <input type="file" id="drrevo-file" accept="image/*" style="display:none" onchange="uploadDrRevo(this)">
+            <button class="btn btn-sm btn-v" onclick="document.getElementById('drrevo-file').click()">📷 Badilisha Picha</button>
+            <button class="btn btn-sm btn-r" style="margin-top:6px;display:block;width:100%;" onclick="removeDrRevo()">🗑️ Ondoa</button>
+          </div>
+        </div>
+        <div style="font-size:11px;color:var(--muted);margin-top:14px;text-align:center;">💡 Picha bora: mraba 200×200px hadi 500×500px · JPEG au PNG</div>
+      </div>
+
+      <!-- HERB IMAGES — VERTICAL SCROLL LIST -->
+      <div class="pcard">
+        <div class="pcard-title">🌿 Picha za Mimea (100 Mimea)</div>
+        <div class="pcard-sub">Pakia picha halisi kwa kila mmea. Picha inaonekana moja kwa moja kwenye maktaba ya app. Unaweza kubadilisha picha yoyote wakati wowote.</div>
+        <div class="herb-search-bar">
+          <input type="text" id="herb-search" placeholder="🔍 Tafuta mmea..." oninput="filterHerbs(this.value)">
+          <button class="btn btn-sm" style="background:var(--bg3);border:1px solid var(--line2);color:var(--sub);white-space:nowrap;" onclick="document.getElementById('herb-search').value='';filterHerbs('')">✕ Futa</button>
+          <div style="font-size:11px;color:var(--muted);white-space:nowrap;" id="herb-count-lbl">100 mimea</div>
+        </div>
+        <div class="herb-grid-scroll" id="herb-list"></div>
+      </div>
+    </div>
+
+    <!-- ─── ARIFA ─── -->
+    <div class="panel" id="p-notify">
+      <div class="pcard">
+        <div class="pcard-title">📢 Tuma Arifa kwa Watumiaji</div>
+        <div class="pcard-sub">Tuma ujumbe wa WhatsApp kwa watumiaji. Hadi watumiaji 5 mara moja (kuzuia popup blocker).</div>
+        <div class="fg">
+          <label>Lengwa</label>
+          <div style="display:flex;gap:8px;flex-wrap:wrap;margin-top:4px;">
+            <button class="ntgt on" id="ntgt-all" onclick="setTarget('all',this)">Wote</button>
+            <button class="ntgt" id="ntgt-prem" onclick="setTarget('premium',this)">Premium tu</button>
+            <button class="ntgt" id="ntgt-free" onclick="setTarget('free',this)">Bure tu</button>
+          </div>
+        </div>
+        <div class="fg"><label>Ujumbe <span style="color:var(--rd)">*</span></label><textarea class="inp" id="notify-msg" placeholder="Andika ujumbe wako hapa...&#10;&#10;Mfano: Habari! JOS Natural Herbs sasa ina mimea mpya 10. Tembelea maktaba sasa!"></textarea></div>
+        <div style="display:flex;gap:10px;">
+          <button class="btn btn-gr" onclick="sendBulk()">📤 Tuma WhatsApp</button>
+          <button class="btn btn-sm" style="background:var(--bg3);color:var(--sub);border:1px solid var(--line2);" onclick="document.getElementById('notify-msg').value=''">🗑️ Futa</button>
+        </div>
+      </div>
+    </div>
+
+    <!-- ─── MIPANGILIO ─── -->
+    <div class="panel" id="p-settings">
+      <div class="pcard">
+        <div class="pcard-title">💰 Mipangilio ya Malipo</div>
+        <div class="pcard-sub">Bei ya uanachama na namba ya kupokea malipo</div>
+        <div class="form-2">
+          <div><label style="font-size:11px;font-weight:700;color:var(--sub);display:block;margin-bottom:6px;text-transform:uppercase;">Bei ya Mwezi 1 (TSh)</label><input class="inp" id="stg-pm" type="number" value="5000" style="margin-bottom:12px;"></div>
+          <div><label style="font-size:11px;font-weight:700;color:var(--sub);display:block;margin-bottom:6px;text-transform:uppercase;">Bei ya Miezi 6 (TSh)</label><input class="inp" id="stg-p6" type="number" value="25000" style="margin-bottom:12px;"></div>
+        </div>
+        <label style="font-size:11px;font-weight:700;color:var(--sub);display:block;margin-bottom:6px;text-transform:uppercase;">M-Pesa Lipa Namba</label>
+        <input class="inp" id="stg-mpesa" value="67363327" style="margin-bottom:6px;">
+        <div style="font-size:11px;color:var(--muted);margin-bottom:14px;">Jina: JOS NATURAL HERBS</div>
+        <label style="font-size:11px;font-weight:700;color:var(--sub);display:block;margin-bottom:6px;text-transform:uppercase;">WhatsApp ya Admin</label>
+        <input class="inp" id="stg-wa" value="255652421286" style="margin-bottom:14px;">
+        <button class="btn btn-gr" onclick="saveSettings()">💾 Hifadhi Mipangilio</button>
+      </div>
+      <div class="danger-zone">
+        <div style="font-size:14px;font-weight:700;color:var(--rd);margin-bottom:4px;">⚠️ Eneo Hatari</div>
+        <div style="font-size:12px;color:var(--muted);margin-bottom:14px;">Vitendo hivi haviwezi kurudishwa</div>
+        <div style="display:flex;gap:10px;flex-wrap:wrap;">
+          <button class="btn btn-sm btn-r" onclick="clearData('payments')">🗑️ Futa Malipo</button>
+          <button class="btn btn-sm btn-r" onclick="clearData('users')">👥 Futa Watumiaji</button>
+          <button class="btn btn-sm btn-r" onclick="clearData('all')">⚠️ Futa Data Zote</button>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /page -->
+</div><!-- /s-admin -->
+
+<!-- LOGO MODAL -->
+<div class="modal-wrap" id="logo-modal" onclick="if(event.target===this)this.classList.remove('open')">
+  <div class="modal-box">
+    <div class="modal-title">🌿 Badilisha Logo ya App</div>
+    <div style="text-align:center;margin-bottom:18px;">
+      <div id="modal-logo-prev" style="width:100px;height:100px;border-radius:50%;background:var(--bg3);border:2px dashed var(--gr2);display:flex;align-items:center;justify-content:center;font-size:40px;margin:0 auto 12px;overflow:hidden;">🌿</div>
+    </div>
+    <input type="file" id="modal-logo-file" accept="image/*" class="inp" onchange="uploadLogoFromModal(this)" style="margin-bottom:12px;">
+    <div style="font-size:11px;color:var(--muted);margin-bottom:16px;">Picha bora: mraba, JPEG au PNG, hadi 2MB</div>
+    <div style="display:flex;gap:10px;">
+      <button class="btn btn-gr" style="flex:1" onclick="saveLogoFromModal()">💾 Hifadhi Logo</button>
+      <button class="btn btn-sm btn-r" onclick="removeLogo()">🗑️ Ondoa</button>
+      <button class="btn btn-sm" style="background:var(--bg3);color:var(--sub);border:1px solid var(--line2);" onclick="document.getElementById('logo-modal').classList.remove('open')">Funga</button>
+    </div>
+  </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+// ═══════════════════════ DATA ═══════════════════════
+const DB='afya_db',ADM_EM='admin@josherbs.tz',ADM_PW='josherbs2026',WA='255652421286';
+const db=()=>{try{return JSON.parse(localStorage.getItem(DB)||'{}');}catch{return{};}};
+const sv=d=>{try{localStorage.setItem(DB,JSON.stringify(d));}catch{}};
+const getUsers=()=>db().users||[];
+const setUsers=u=>{const d=db();d.users=u;sv(d);};
+const getPays=()=>db().payments||[];
+const setPays=p=>{const d=db();d.payments=p;sv(d);};
+const getCodes=()=>db().codes||[];
+const setCodes=c=>{const d=db();d.codes=c;sv(d);};
+const getStg=()=>db().settings||{priceM:5000,price3:25000,mpesa:'67363327',wa:WA};
+const saveStg=s=>{const d=db();d.settings=s;sv(d);};
+const getHerbImgs=()=>{try{return JSON.parse(localStorage.getItem('afya_herb_imgs')||'{}');}catch{return{};}};
+const saveHerbImgs=imgs=>{try{localStorage.setItem('afya_herb_imgs',JSON.stringify(imgs));}catch{}};
+
+let curTab='malipo',notifyTarget='all',genCode='',genForUser='',toastT=null,pendingLogo=null;
+
+// ═══════════════════════ AUTH ═══════════════════════
+function doLogin(){
+  const em=document.getElementById('adm-em').value.trim();
+  const pw=document.getElementById('adm-pw').value.trim();
+  if(em===ADM_EM&&pw===ADM_PW){
+    try{sessionStorage.setItem('jos_adm','1');}catch{}
+    showAdmin();
+  } else {
+    toast('Barua pepe au nywila si sahihi ❌','err');
+  }
+}
+function showAdmin(){
+  document.querySelectorAll('.sc').forEach(s=>s.classList.remove('on'));
+  document.getElementById('s-admin').classList.add('on');
+  admRefresh();
+  loadMediaPreviews();
+}
+function doLogout(){
+  try{sessionStorage.removeItem('jos_adm');}catch{}
+  document.querySelectorAll('.sc').forEach(s=>s.classList.remove('on'));
+  document.getElementById('s-login').classList.add('on');
+}
+function openWA(num,msg){window.open('https://wa.me/'+String(num).replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(msg),'_blank');}
+
+// ═══════════════════════ TAB SWITCH ═══════════════════════
+function switchTab(t){
+  curTab=t;
+  document.querySelectorAll('.tab').forEach(el=>el.classList.remove('on'));
+  document.querySelectorAll('.panel').forEach(el=>el.classList.remove('on'));
+  document.getElementById('t-'+t)?.classList.add('on');
+  document.getElementById('p-'+t)?.classList.add('on');
+  if(t==='media'){loadMediaPreviews();renderHerbList();}
+  else admRefresh();
+}
+
+// ═══════════════════════ REFRESH ═══════════════════════
+function admRefresh(){
+  const users=getUsers(),pays=getPays(),codes=getCodes();
+  const prem=users.filter(u=>u.premium).length;
+  const pend=pays.filter(p=>p.status==='pending').length;
+  const rev=pays.filter(p=>p.status==='approved').reduce((s,p)=>s+(p.amount||0),0);
+  document.getElementById('s-users').textContent=users.length;
+  document.getElementById('s-pend').textContent=pend;
+  document.getElementById('s-codes').textContent=codes.length;
+  document.getElementById('s-rev').textContent='TSh '+rev.toLocaleString();
+  document.getElementById('tb-pend').textContent=pend;
+  document.getElementById('pay-count').textContent=pays.length;
+  document.getElementById('user-count').textContent=users.length;
+  document.getElementById('codes-count').textContent=codes.length;
+  const stg=getStg();
+  ['stg-pm','stg-p6','stg-mpesa','stg-wa'].forEach(id=>{
+    const el=document.getElementById(id);if(!el)return;
+    if(id==='stg-pm')el.value=stg.priceM||5000;
+    if(id==='stg-p6')el.value=stg.price3||25000;
+    if(id==='stg-mpesa')el.value=stg.mpesa||'67363327';
+    if(id==='stg-wa')el.value=stg.wa||WA;
+  });
+  if(curTab==='malipo')renderPayments();
+  else if(curTab==='watumiaji')renderUsers();
+  else if(curTab==='codes')renderCodes();
+}
+
+// ═══════════════════════ PAYMENTS ═══════════════════════
+function renderPayments(){
+  const q=(document.getElementById('pay-search')?.value||'').toLowerCase();
+  const filter=document.getElementById('pay-filter')?.value||'';
+  let pays=getPays();
+  if(filter)pays=pays.filter(p=>p.status===filter);
+  if(q)pays=pays.filter(p=>(p.name||'').toLowerCase().includes(q)||(p.phone||'').includes(q)||(p.txnCode||'').toLowerCase().includes(q));
+  document.getElementById('pay-count').textContent=pays.length;
+  document.getElementById('pay-tbody').innerHTML=pays.length?pays.map(p=>`
+    <tr>
+      <td style="font-weight:700">${p.name||'—'}</td>
+      <td>${p.phone||'—'}</td>
+      <td style="text-transform:uppercase;font-weight:600">${p.method||'—'}</td>
+      <td style="font-family:monospace;font-weight:700;color:var(--am)">${p.txnCode||'—'}</td>
+      <td style="font-weight:800;color:var(--gr)">TSh ${Number(p.amount||0).toLocaleString()}</td>
+      <td style="color:var(--muted);font-size:11px">${p.date?new Date(p.date).toLocaleDateString('sw'):'—'}</td>
+      <td><span class="badge ${p.status==='approved'?'badge-ok':p.status==='rejected'?'badge-rej':'badge-pend'}">${p.status==='approved'?'IMETHIBITISHWA':p.status==='rejected'?'ILIKATALIWA':'INASUBIRI'}</span></td>
+      <td><div class="td-actions">
+        ${p.status==='pending'?`<button class="btn btn-sm btn-v" onclick="approvePayment('${p.id}')">✅ Thibitisha</button><button class="btn btn-sm btn-r" onclick="rejectPayment('${p.id}')">❌</button>`:''}
+        <button class="btn btn-sm btn-b" onclick="openWA('${p.phone||WA}','Habari ${(p.name||'Mteja').replace(/'/g,"\\'")}!')">💬</button>
+      </div></td>
+    </tr>`).join(''):'<tr><td colspan="8" style="text-align:center;padding:30px;color:var(--muted)">Hakuna malipo bado</td></tr>';
+}
+function approvePayment(id){
+  const pays=getPays();const p=pays.find(x=>String(x.id)===String(id));if(!p)return;
+  p.status='approved';setPays(pays);
+  const users=getUsers();const u=users.find(x=>x.email===p.userId);
+  if(u){u.premium=true;setUsers(users);}
+  const code=autoGenCode(p.userId||'',30);
+  const msg='🌿 Hongera '+( p.name||'')+' !\n\nMalipo yako ya JOS Natural Herbs yamekubaliwa. ✅\n\nMsimbo wako wa Ufikiaji:\n🔑 '+code+'\n\nWeka msimbo huu: App → Malipo → "Una code?" → Weka msimbo.\n\nSafari njema ya afya! 🌱\n— Dr. Revo, JOS Natural Herbs';
+  openWA(p.phone||WA,msg);
+  toast('✅ Malipo yamethibitishwa! Msimbo: '+code,'ok');
+  admRefresh();
+}
+function rejectPayment(id){
+  if(!confirm('Una uhakika wa kukataa malipo haya?'))return;
+  const pays=getPays();const p=pays.find(x=>String(x.id)===String(id));if(!p)return;
+  p.status='rejected';setPays(pays);
+  openWA(p.phone||WA,'Habari. Malipo yako hayakuthibitishwa. Wasiliana nasi kwa msaada: wa.me/'+WA);
+  toast('Malipo yamekataliwa','err');admRefresh();
+}
+
+// ═══════════════════════ USERS ═══════════════════════
+function renderUsers(){
+  const q=(document.getElementById('user-search')?.value||'').toLowerCase();
+  let users=getUsers();
+  if(q)users=users.filter(u=>(u.name||'').toLowerCase().includes(q)||(u.email||'').toLowerCase().includes(q)||(u.phone||'').includes(q));
+  document.getElementById('user-count').textContent=users.length;
+  document.getElementById('user-tbody').innerHTML=users.length?users.map(u=>`
+    <tr>
+      <td style="font-weight:700">${u.name||'—'}</td>
+      <td>${u.email||'—'}</td>
+      <td>${u.phone||'—'}</td>
+      <td><span class="badge ${u.premium?'badge-ok':'badge-pend'}">${u.premium?'PREMIUM':'BURE'}</span></td>
+      <td style="font-weight:800;color:var(--gr)">${u.uchunguzi||0}</td>
+      <td style="color:var(--muted);font-size:11px">${u.joinDate?new Date(u.joinDate).toLocaleDateString('sw'):'—'}</td>
+      <td><div class="td-actions">
+        <button class="btn btn-sm btn-b" onclick="openWA('${u.phone||u.email||WA}','Habari ${(u.name||'Mteja').replace(/'/g,"\\'")}!')">💬</button>
+        ${!u.premium?`<button class="btn btn-sm btn-v" onclick="grantPremium('${u.email}')">⭐ Premium</button>`:''}
+        <button class="btn btn-sm btn-r" onclick="deleteUser('${u.email}')">🗑️</button>
+      </div></td>
+    </tr>`).join(''):'<tr><td colspan="7" style="text-align:center;padding:30px;color:var(--muted)">Hakuna watumiaji bado</td></tr>';
+}
+function grantPremium(email){const users=getUsers();const u=users.find(x=>x.email===email);if(u){u.premium=true;setUsers(users);}toast('✅ Premium imetolewa','ok');admRefresh();}
+function deleteUser(email){if(!confirm('Una uhakika?'))return;setUsers(getUsers().filter(u=>u.email!==email));toast('Mtumiaji amefutwa','err');admRefresh();}
+
+// ═══════════════════════ CODES ═══════════════════════
+function autoGenCode(userEmail,days){
+  const ch='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+  const rnd=n=>Array.from({length:n},()=>ch[Math.floor(Math.random()*ch.length)]).join('');
+  const code='HERB-'+rnd(4)+'-'+rnd(4);
+  const codes=getCodes();
+  codes.unshift({code,userEmail,days,createdDate:new Date().toISOString(),used:false});
+  setCodes(codes);return code;
+}
+function generateCode(){
+  const userFor=document.getElementById('code-for')?.value.trim()||'';
+  if(!userFor){toast('Weka barua pepe au simu ya mteja','err');return;}
+  const days=Number(document.getElementById('code-days')?.value||30);
+  genCode=autoGenCode(userFor,days);genForUser=userFor;
+  const el=document.getElementById('code-result');if(el)el.textContent=genCode;
+  const acts=document.getElementById('code-actions');if(acts)acts.style.display='flex';
+  toast('✅ Msimbo: '+genCode,'ok');admRefresh();
+}
+function sendCodeWA(){
+  if(!genCode){toast('Tengeneza msimbo kwanza','err');return;}
+  const msg='🌿 Msimbo wako wa Ufikiaji — JOS Natural Herbs\n\n🔑 '+genCode+'\n\nWeka msimbo huu kwenye App:\nMalipo → "Una code?" → Weka msimbo\n\nSafari njema ya afya! 🌱\n— Dr. Revo';
+  openWA(genForUser||WA,msg);
+}
+function approveAndSend(){
+  const pays=getPays();const pend=pays.filter(p=>p.status==='pending');
+  if(pend.length>0)approvePayment(String(pend[0].id));
+  else sendCodeWA();
+}
+function renderCodes(){
+  const codes=getCodes();
+  document.getElementById('codes-count').textContent=codes.length;
+  document.getElementById('codes-tbody').innerHTML=codes.length?codes.map(c=>`
+    <tr>
+      <td style="font-family:monospace;font-weight:800;color:var(--gr);letter-spacing:2px;">${c.code}</td>
+      <td>${c.userEmail||'—'}</td>
+      <td style="font-weight:700">${c.days} siku</td>
+      <td style="color:var(--muted);font-size:11px">${c.createdDate?new Date(c.createdDate).toLocaleDateString('sw'):'—'}</td>
+      <td><span class="badge ${c.used?'badge-ok':'badge-pend'}">${c.used?'IMETUMIKA':'INASUBIRI'}</span></td>
+      <td style="color:var(--muted);font-size:11px">${c.usedBy||'—'}</td>
+    </tr>`).join(''):'<tr><td colspan="6" style="text-align:center;padding:30px;color:var(--muted)">Hakuna msimbo bado</td></tr>';
+}
+
+// ═══════════════════════ MEDIA — LOGO & DR REVO ═══════════════════════
+function cropAndSave(file,size,callback){
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      const canvas=document.createElement('canvas');
+      canvas.width=size;canvas.height=size;
+      const ctx=canvas.getContext('2d');
+      ctx.imageSmoothingQuality='high';
+      const s=Math.min(img.width,img.height);
+      const sx=(img.width-s)/2,sy=(img.height-s)/2;
+      ctx.drawImage(img,sx,sy,s,s,0,0,size,size);
+      callback(canvas.toDataURL('image/jpeg',0.9));
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(file);
+}
+
+function uploadLogo(inp){
+  if(!inp.files[0])return;
+  cropAndSave(inp.files[0],200,data=>{
+    const stg=getStg();stg.appLogo=data;saveStg(stg);
+    const prev=document.getElementById('logo-preview');
+    if(prev)prev.innerHTML=`<img src="${data}" style="width:90px;height:90px;object-fit:cover;border-radius:50%;">`;
+    const admLogo=document.getElementById('adm-logo-el');
+    if(admLogo)admLogo.innerHTML=`<img src="${data}" style="width:36px;height:36px;object-fit:cover;border-radius:50%;">`;
+    toast('✅ Logo imehifadhiwa!','ok');
+  });
+}
+function removeLogo(){
+  const stg=getStg();delete stg.appLogo;saveStg(stg);
+  const prev=document.getElementById('logo-preview');
+  if(prev)prev.innerHTML='🌿';
+  const admLogo=document.getElementById('adm-logo-el');
+  if(admLogo)admLogo.innerHTML='🌿';
+  document.getElementById('logo-modal').classList.remove('open');
+  toast('Logo imeondolewa','err');
+}
+function openLogoModal(){
+  document.getElementById('logo-modal').classList.add('open');
+  const stg=getStg();
+  const prev=document.getElementById('modal-logo-prev');
+  if(prev&&stg.appLogo)prev.innerHTML=`<img src="${stg.appLogo}" style="width:100px;height:100px;object-fit:cover;border-radius:50%;">`;
+}
+function uploadLogoFromModal(inp){
+  if(!inp.files[0])return;
+  cropAndSave(inp.files[0],200,data=>{
+    pendingLogo=data;
+    const prev=document.getElementById('modal-logo-prev');
+    if(prev)prev.innerHTML=`<img src="${data}" style="width:100px;height:100px;object-fit:cover;border-radius:50%;">`;
+  });
+}
+function saveLogoFromModal(){
+  if(!pendingLogo){toast('Chagua picha kwanza','err');return;}
+  const stg=getStg();stg.appLogo=pendingLogo;saveStg(stg);
+  const prev=document.getElementById('logo-preview');
+  if(prev)prev.innerHTML=`<img src="${pendingLogo}" style="width:90px;height:90px;object-fit:cover;border-radius:50%;">`;
+  const admLogo=document.getElementById('adm-logo-el');
+  if(admLogo)admLogo.innerHTML=`<img src="${pendingLogo}" style="width:36px;height:36px;object-fit:cover;border-radius:50%;">`;
+  document.getElementById('logo-modal').classList.remove('open');
+  pendingLogo=null;
+  toast('✅ Logo imehifadhiwa!','ok');
+}
+function uploadDrRevo(inp){
+  if(!inp.files[0])return;
+  cropAndSave(inp.files[0],200,data=>{
+    const stg=getStg();stg.drRevoAvatar=data;saveStg(stg);
+    const prev=document.getElementById('drrevo-preview');
+    if(prev)prev.innerHTML=`<img src="${data}" style="width:90px;height:90px;object-fit:cover;border-radius:50%;">`;
+    toast('✅ Picha ya Dr. Revo imehifadhiwa!','ok');
+  });
+}
+function removeDrRevo(){
+  const stg=getStg();delete stg.drRevoAvatar;saveStg(stg);
+  const prev=document.getElementById('drrevo-preview');
+  if(prev)prev.innerHTML='👨‍⚕️';
+  toast('Picha ya Dr. Revo imeondolewa','err');
+}
+function loadMediaPreviews(){
+  const stg=getStg();
+  if(stg.appLogo){
+    const p1=document.getElementById('logo-preview');
+    if(p1)p1.innerHTML=`<img src="${stg.appLogo}" style="width:90px;height:90px;object-fit:cover;border-radius:50%;">`;
+    const admLogo=document.getElementById('adm-logo-el');
+    if(admLogo)admLogo.innerHTML=`<img src="${stg.appLogo}" style="width:36px;height:36px;object-fit:cover;border-radius:50%;">`;
+  }
+  if(stg.drRevoAvatar){
+    const p2=document.getElementById('drrevo-preview');
+    if(p2)p2.innerHTML=`<img src="${stg.drRevoAvatar}" style="width:90px;height:90px;object-fit:cover;border-radius:50%;">`;
+  }
+  renderHerbList();
+}
+
+// ═══════════════════════ HERB IMAGES — VERTICAL LIST ═══════════════════════
+const MIMEA_NAMES=[
+  {id:0,name:'Mbegu za Maboga',emoji:'🎃'},{id:1,name:'Tangawizi',emoji:'🫚'},
+  {id:2,name:'Moringa',emoji:'🌿'},{id:3,name:'Vitunguu Saumu',emoji:'🧄'},
+  {id:4,name:'Fenugreek (Hulba)',emoji:'🌾'},{id:5,name:'Mdalasini',emoji:'🍂'},
+  {id:6,name:'Hibiscus (Mrukanja)',emoji:'🌺'},{id:7,name:'Chamomile',emoji:'🌼'},
+  {id:8,name:'Aloe Vera',emoji:'🌱'},{id:9,name:'Jirsali (Nettle)',emoji:'🫛'},
+  {id:10,name:'Maua ya Jua',emoji:'🌻'},{id:11,name:'Tulsi (Basil Takatifu)',emoji:'🍃'},
+  {id:12,name:'Ashwagandha',emoji:'🌿'},{id:13,name:'Limao',emoji:'🍋'},
+  {id:14,name:'Blueberry (Beri Bluu)',emoji:'🫐'},{id:15,name:'Broccoli',emoji:'🥦'},
+  {id:16,name:'Pilipili Hoho Nyekundu',emoji:'🌶️'},{id:17,name:'Mbegu za Chia',emoji:'🌰'},
+  {id:18,name:'Mbegu za Flaxseed',emoji:'🫘'},{id:19,name:'Uji wa Shayiri (Barley)',emoji:'🌾'},
+  {id:20,name:'Turmeric (Manjano)',emoji:'🧡'},{id:21,name:'Maua ya Lavender',emoji:'🌸'},
+  {id:22,name:'Chai ya Kijani',emoji:'🍵'},{id:23,name:'Maua ya Nasturtium',emoji:'🌺'},
+  {id:24,name:'Spearmint (Nanaa)',emoji:'🌿'},{id:25,name:'Asali ya Nyuki ya Asili',emoji:'🍯'},
+  {id:26,name:'Spirulina',emoji:'🌱'},{id:27,name:'Karoti (Carrot)',emoji:'🥕'},
+  {id:28,name:'Mafuta ya Zeituni',emoji:'🫚'},{id:29,name:'Parsley',emoji:'🌿'},
+  {id:30,name:'Chamomile ya Afrika',emoji:'🍀'},{id:31,name:'Dandelion',emoji:'🟡'},
+  {id:32,name:'Rosemary',emoji:'🌿'},{id:33,name:'Thyme (Zaatar)',emoji:'🌱'},
+  {id:34,name:'Soya (Soybean)',emoji:'🫘'},{id:35,name:'Kiwi',emoji:'🥝'},
+  {id:36,name:'Echinacea',emoji:'🌿'},{id:37,name:'Mbegu za Sesame (Simsim)',emoji:'🌰'},
+  {id:38,name:'Maca',emoji:'🟤'},{id:39,name:'Ginseng ya Korea',emoji:'🌿'},
+  {id:40,name:'Saw Palmetto',emoji:'🌿'},{id:41,name:'Tongkat Ali',emoji:'🌿'},
+  {id:42,name:'Horny Goat Weed',emoji:'🍃'},{id:43,name:'Mbegu za Malenge',emoji:'🌰'},
+  {id:44,name:'Damiana',emoji:'🌿'},{id:45,name:'Muira Puama',emoji:'🌿'},
+  {id:46,name:'Mafuta ya Mbegu za Malenge',emoji:'🫚'},{id:47,name:'Suma Root',emoji:'🌿'},
+  {id:48,name:'Saffron (Zafarani)',emoji:'🌺'},{id:49,name:'Catuaba',emoji:'🌿'},
+  {id:50,name:'Ginkgo Biloba',emoji:'🍃'},{id:51,name:'Valerian Root',emoji:'🌿'},
+  {id:52,name:'Chia Seeds za Salvia',emoji:'🌱'},{id:53,name:'Mafuta ya Samaki',emoji:'🫚'},
+  {id:54,name:'Boswellia (Uvumba)',emoji:'🌿'},{id:55,name:'Oat (Shayiri ya Oat)',emoji:'🌾'},
+  {id:56,name:'Avocado (Parachichi)',emoji:'🥑'},{id:57,name:'Zabibu (Grapes)',emoji:'🍇'},
+  {id:58,name:'Tofaa (Apple)',emoji:'🍎'},{id:59,name:'Ndizi (Banana)',emoji:'🍌'},
+  {id:60,name:'Vitunguu (Onion)',emoji:'🧅'},{id:61,name:'Mwani (Seaweed)',emoji:'🌊'},
+  {id:62,name:'Nettle Root',emoji:'🌿'},{id:63,name:'Pygeum Bark',emoji:'🌿'},
+  {id:64,name:'Tribulus Terrestris',emoji:'🌿'},{id:65,name:'Mbegu za Celery',emoji:'🌾'},
+  {id:66,name:'Licorice Root (Jamambo)',emoji:'🌿'},{id:67,name:'Stinging Nettle',emoji:'🌱'},
+  {id:68,name:'Yarrow',emoji:'🌿'},{id:69,name:'Elderberry',emoji:'🌿'},
+  {id:70,name:'Rhodiola Rosea',emoji:'🌸'},{id:71,name:'Holy Basil (Tulsi Nyekundu)',emoji:'🌿'},
+  {id:72,name:"Cat's Claw (Msambaa)",emoji:'🌿'},{id:73,name:'Andrographis',emoji:'🌿'},
+  {id:74,name:"Pau D'Arco",emoji:'🌿'},{id:75,name:'Calendula (Marigold ya Dawa)',emoji:'🌼'},
+  {id:76,name:'Lemon Balm (Melissa)',emoji:'🌿'},{id:77,name:'Maua ya Rose Hip',emoji:'🌹'},
+  {id:78,name:'Mugwort (Artemisia)',emoji:'🌿'},{id:79,name:'Passion Flower',emoji:'🌿'},
+  {id:80,name:'Hops (Humulus)',emoji:'🌿'},{id:81,name:'Black Seed (Habbatus Sauda)',emoji:'🌿'},
+  {id:82,name:'Oregano',emoji:'🌱'},{id:83,name:'Mafuta ya Nazi (Coconut Oil)',emoji:'🫚'},
+  {id:84,name:'Feverfew',emoji:'🌿'},{id:85,name:'Skullcap (Scutellaria)',emoji:'🌿'},
+  {id:86,name:'Kava Kava',emoji:'🌿'},{id:87,name:"St. John's Wort",emoji:'🌿'},
+  {id:88,name:'Sage (Mshewi)',emoji:'🌿'},{id:89,name:'Meadowsweet',emoji:'🌿'},
+  {id:90,name:'Milk Thistle (Silymarin)',emoji:'🌸'},{id:91,name:'Artichoke (Mnyanyasi)',emoji:'🌿'},
+  {id:92,name:'Uva Ursi (Bearberry)',emoji:'🌿'},{id:93,name:'Red Clover',emoji:'🌾'},
+  {id:94,name:"Devil's Claw",emoji:'🌿'},{id:95,name:'Baobab (Mbuyu)',emoji:'🌿'},
+  {id:96,name:'Quinoa (Kinoa)',emoji:'🌱'},{id:97,name:'Tamarind (Ukwaju)',emoji:'🌿'},
+  {id:98,name:'Bitter Melon (Karela)',emoji:'🌿'},{id:99,name:'Neem (Mwarubaini)',emoji:'🌿'}
+];
+
+let herbFilterQ='';
+function filterHerbs(q){herbFilterQ=q.toLowerCase();renderHerbList();}
+
+function renderHerbList(){
+  const list=document.getElementById('herb-list');
+  if(!list)return;
+  const imgs=getHerbImgs();
+  const filtered=MIMEA_NAMES.filter(m=>!herbFilterQ||m.name.toLowerCase().includes(herbFilterQ));
+  const lbl=document.getElementById('herb-count-lbl');
+  if(lbl)lbl.textContent=filtered.length+' mimea';
+  list.innerHTML=filtered.map(m=>{
+    const hasImg=!!imgs[m.id];
+    return `<div class="herb-row" id="herb-row-${m.id}">
+      <div class="herb-row-img" id="herb-img-${m.id}">
+        ${hasImg?`<img src="${imgs[m.id]}">`:`<span>${m.emoji}</span>`}
+      </div>
+      <div class="herb-row-info">
+        <div class="herb-row-name">${m.name}</div>
+        <div class="herb-row-latin">ID: ${m.id} · ${hasImg?'✅ Picha ipo':'⚠️ Bado emoji'}</div>
+      </div>
+      <div class="herb-row-status ${hasImg?'has':'empty'}" id="herb-status-${m.id}">${hasImg?'Picha ipo':'Bila picha'}</div>
+      <div class="herb-row-actions">
+        <label style="cursor:pointer;" class="btn btn-sm btn-v" title="Pakia picha">
+          📷 Pakia
+          <input type="file" accept="image/*" style="display:none" onchange="uploadHerbImg(this,${m.id})">
+        </label>
+        ${hasImg?`<button class="btn btn-sm btn-r" onclick="removeHerbImg(${m.id})" title="Ondoa picha">🗑️</button>`:''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function uploadHerbImg(inp,herbId){
+  if(!inp.files[0])return;
+  const reader=new FileReader();
+  reader.onload=e=>{
+    const img=new Image();
+    img.onload=()=>{
+      const canvas=document.createElement('canvas');
+      canvas.width=400;canvas.height=300;
+      const ctx=canvas.getContext('2d');
+      ctx.imageSmoothingQuality='high';
+      const srcR=img.width/img.height,tR=4/3;
+      let sx=0,sy=0,sw=img.width,sh=img.height;
+      if(srcR>tR){sw=img.height*tR;sx=(img.width-sw)/2;}
+      else{sh=img.width/tR;sy=(img.height-sh)/2;}
+      ctx.drawImage(img,sx,sy,sw,sh,0,0,400,300);
+      const data=canvas.toDataURL('image/jpeg',0.85);
+      const imgs=getHerbImgs();imgs[herbId]=data;saveHerbImgs(imgs);
+      // Update row preview
+      const imgEl=document.getElementById('herb-img-'+herbId);
+      if(imgEl)imgEl.innerHTML=`<img src="${data}">`;
+      const statusEl=document.getElementById('herb-status-'+herbId);
+      if(statusEl){statusEl.textContent='Picha ipo';statusEl.className='herb-row-status has';}
+      // Add remove button if not there
+      renderHerbList();
+      toast('✅ Picha ya '+MIMEA_NAMES.find(m=>m.id===herbId)?.name+' imehifadhiwa!','ok');
+    };
+    img.src=e.target.result;
+  };
+  reader.readAsDataURL(inp.files[0]);
+}
+
+function removeHerbImg(herbId){
+  const imgs=getHerbImgs();delete imgs[herbId];saveHerbImgs(imgs);
+  renderHerbList();
+  toast('Picha imeondolewa','err');
+}
+
+// ═══════════════════════ NOTIFY ═══════════════════════
+function setTarget(t,btn){
+  notifyTarget=t;
+  document.querySelectorAll('.ntgt').forEach(el=>el.classList.remove('on'));
+  btn.classList.add('on');
+}
+function sendBulk(){
+  const msg=document.getElementById('notify-msg')?.value.trim();
+  if(!msg){toast('Andika ujumbe kwanza','err');return;}
+  let users=getUsers();
+  if(notifyTarget==='premium')users=users.filter(u=>u.premium);
+  else if(notifyTarget==='free')users=users.filter(u=>!u.premium);
+  if(!users.length){toast('Hakuna watumiaji','err');return;}
+  const toNotify=users.filter(u=>u.phone).slice(0,5);
+  toNotify.forEach((u,i)=>setTimeout(()=>openWA(u.phone,msg),i*700));
+  toast('📤 Arifa imetumwa kwa '+toNotify.length+' watumiaji','ok');
+}
+
+// ═══════════════════════ SETTINGS ═══════════════════════
+function saveSettings(){
+  saveStg({
+    priceM:Number(document.getElementById('stg-pm')?.value||5000),
+    price3:Number(document.getElementById('stg-p6')?.value||25000),
+    mpesa:document.getElementById('stg-mpesa')?.value||'67363327',
+    wa:document.getElementById('stg-wa')?.value||WA,
+  });
+  toast('✅ Mipangilio imehifadhiwa!','ok');
+}
+function clearData(type){
+  if(!confirm('Una uhakika wa kufuta '+(type==='all'?'data ZOTE':type)+'?'))return;
+  if(type==='all')localStorage.removeItem(DB);
+  else if(type==='payments')setPays([]);
+  else if(type==='users')setUsers([]);
+  toast('Imefutwa','err');admRefresh();
+}
+
+// ═══════════════════════ TOAST ═══════════════════════
+function toast(msg,type=''){
+  const t=document.getElementById('toast');
+  t.textContent=msg;
+  t.className='toast show'+(type?' '+type:'');
+  clearTimeout(toastT);
+  toastT=setTimeout(()=>t.classList.remove('show'),3500);
+}
+
+// ═══════════════════════ INIT ═══════════════════════
+try{
+  const ses=sessionStorage.getItem('jos_adm');
+  if(ses==='1'){showAdmin();}
+}catch{}
+</script>
+</body>
+</html>
