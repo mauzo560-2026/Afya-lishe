@@ -1,17 +1,15 @@
 <!DOCTYPE html>
 <html lang="sw">
 <head>
-  <link rel="manifest" href="manifest.json?v=2">
-<script>
-  if ('serviceWorker' in navigator) {
-    window.addEventListener('load', () => {
-      navigator.serviceWorker.register('./sw.js');
-    });
-  }
-</script>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
 <title>AFYA-LISHE SMART — Herbal Academy</title>
+<meta name="theme-color" content="#1a6b3c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="AFYA-LISHE">
+<meta name="mobile-web-app-capable" content="yes">
+<link rel="manifest" href="data:application/json,{%22name%22:%22AFYA-LISHE%20SMART%22,%22short_name%22:%22Afya-Lishe%22,%22description%22:%22Tiba%20ya%20Asili%20-%20JOS%20Natural%20Herbs%22,%22start_url%22:%22.%2F%22,%22display%22:%22standalone%22,%22background_color%22:%22%231a6b3c%22,%22theme_color%22:%22%231a6b3c%22,%22orientation%22:%22portrait%22,%22icons%22:[{%22src%22:%22data:image/svg+xml,%3Csvg%20xmlns='http://www.w3.org/2000/svg'%20viewBox='0%200%20100%20100'%3E%3Ccircle%20cx='50'%20cy='50'%20r='50'%20fill='%231a6b3c'/%3E%3Ctext%20y='.9em'%20font-size='70'%20x='10'%3E%F0%9F%8C%BF%3C/text%3E%3C/svg%3E%22,%22sizes%22:%22192x192%22,%22type%22:%22image/svg+xml%22}]}">
 <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
 <style>
 *{margin:0;padding:0;box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
@@ -581,9 +579,9 @@ body.dark .bnav{background:rgba(22,26,20,.96);}
       </div>
     </div>
     <div class="quick-grid">
-      <div class="quick-card" onclick="goto('s-maktaba')"><div class="qc-icon">🌱</div><div class="qc-title">Maktaba ya Mimea</div><div class="qc-sub">6 mimea ya tiba asili</div></div>
-      <div class="quick-card" onclick="goto('s-ratiba')"><div class="qc-icon">📅</div><div class="qc-title">Ratiba ya Siku 7</div><div class="qc-sub" id="ratiba-home-sub">🔒 Inagusa malipo</div></div>
-      <div class="quick-card accent-am" onclick="goto('s-malipo')"><div class="qc-icon">💳</div><div class="qc-title">Lipa &amp; Fungua</div><div class="qc-sub am">TSh 5,000 / mwezi</div></div>
+      <div class="quick-card" onclick="gotoScreen('s-maktaba')"><div class="qc-icon">🌱</div><div class="qc-title">Maktaba ya Mimea</div><div class="qc-sub">6 mimea ya tiba asili</div></div>
+      <div class="quick-card" onclick="gotoScreen('s-ratiba')"><div class="qc-icon">📅</div><div class="qc-title">Ratiba ya Siku 7</div><div class="qc-sub" id="ratiba-home-sub">🔒 Inagusa malipo</div></div>
+      <div class="quick-card accent-am" onclick="gotoScreen('s-malipo')"><div class="qc-icon">💳</div><div class="qc-title">Lipa &amp; Fungua</div><div class="qc-sub am">TSh 5,000 / mwezi</div></div>
       <div class="quick-card accent-gr" onclick="goto('s-uchunguzi');startDiag()"><div class="qc-icon">🔬</div><div class="qc-title">Uchunguzi Mpya</div><div class="qc-sub gr">Bure · Dakika 5</div></div>
     </div>
     <div class="section-title">🌿 Mimea Maarufu</div>
@@ -639,7 +637,7 @@ body.dark .bnav{background:rgba(22,26,20,.96);}
 <!-- ══ MMEA DETAIL ══ -->
 <div class="sc" id="s-mmea">
   <nav class="topbar">
-    <button class="tb-back" onclick="goto('s-maktaba')">← Maktaba</button>
+    <button class="tb-back" onclick="gotoScreen('s-maktaba')">← Maktaba</button>
     <div style="font-size:16px;font-weight:700;color:var(--gr)" id="mmea-header">Mmea</div>
     <button class="icon-btn" onclick="toast('Imehifadhiwa ❤️','ok')">❤️</button>
   </nav>
@@ -694,8 +692,8 @@ body.dark .bnav{background:rgba(22,26,20,.96);}
     <div style="margin-bottom:18px;">
       <div class="msec-lbl" style="margin-bottom:8px;">Akaunti</div>
       <div class="mitem" onclick="goto('s-uchunguzi');startDiag()"><div class="mi-ic">🔬</div><div class="mi-body"><div class="mi-title">Uchunguzi Mpya wa Afya</div><div class="mi-sub">Maswali 10 ya kitaalamu · bure</div></div><div class="mi-arr">›</div></div>
-      <div class="mitem" onclick="goto('s-ratiba')"><div class="mi-ic">📅</div><div class="mi-body"><div class="mi-title">Ratiba Yangu ya Siku 7</div><div class="mi-sub" id="ak-ratiba-sub">🔒 Inagusa malipo</div></div><div class="mi-arr">›</div></div>
-      <div class="mitem" onclick="goto('s-malipo')"><div class="mi-ic am">💳</div><div class="mi-body"><div class="mi-title">Uanachama wa Premium</div><div class="mi-sub">Fungua maudhui yote</div></div><div class="mi-arr">›</div></div>
+      <div class="mitem" onclick="gotoScreen('s-ratiba')"><div class="mi-ic">📅</div><div class="mi-body"><div class="mi-title">Ratiba Yangu ya Siku 7</div><div class="mi-sub" id="ak-ratiba-sub">🔒 Inagusa malipo</div></div><div class="mi-arr">›</div></div>
+      <div class="mitem" onclick="gotoScreen('s-malipo')"><div class="mi-ic am">💳</div><div class="mi-body"><div class="mi-title">Uanachama wa Premium</div><div class="mi-sub">Fungua maudhui yote</div></div><div class="mi-arr">›</div></div>
     </div>
     <div style="margin-bottom:18px;">
       <div class="msec-lbl" style="margin-bottom:8px;">Msaada</div>
@@ -875,7 +873,7 @@ body.dark .bnav{background:rgba(22,26,20,.96);}
           </div>
           <div class="setting-arr">›</div>
         </div>
-        <div class="setting-row" onclick="goto('s-malipo')">
+        <div class="setting-row" onclick="gotoScreen('s-malipo')">
           <div class="setting-ic am">💳</div>
           <div class="setting-body">
             <div class="setting-title" data-sw>Uanachama</div>
@@ -1270,7 +1268,7 @@ function genRipoti(){
       </div>`:''}
       <div style="margin-bottom:18px;">
         <div class="ripoti-sec-title">🌿 Mimea Inayopendekezwa</div>
-        <div class="mimea-chips">${mimeaRec.map(m=>`<div class="mmea-chip" onclick="goto('s-maktaba')">${m.emoji} ${m.name}</div>`).join('')}</div>
+        <div class="mimea-chips">${mimeaRec.map(m=>`<div class="mmea-chip" onclick="gotoScreen('s-maktaba')">${m.emoji} ${m.name}</div>`).join('')}</div>
       </div>
       <div style="margin-bottom:18px;">
         <div class="ripoti-sec-title">📅 Hatua Zinazofuata</div>
@@ -1285,8 +1283,8 @@ function genRipoti(){
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:10px;">
-        <button class="btn btn-gr btn-full" onclick="goto('s-maktaba')">🌱 Angalia Maktaba ya Mimea</button>
-        <button class="btn btn-out btn-full" onclick="goto('s-malipo')">📅 Fungua Ratiba ya Siku 7</button>
+        <button class="btn btn-gr btn-full" onclick="gotoScreen('s-maktaba')">🌱 Angalia Maktaba ya Mimea</button>
+        <button class="btn btn-out btn-full" onclick="gotoScreen('s-malipo')">📅 Fungua Ratiba ya Siku 7</button>
       </div>
     </div>`;
   if(CU){CU.uchunguzi=(CU.uchunguzi||0)+1;
@@ -1472,7 +1470,7 @@ function openMmea(id){
         </div>
         <p style="font-size:14px;color:var(--sub);line-height:1.7;font-weight:500;margin-bottom:14px;">${m.matumizi}</p>
         ${m.onyo?`<div class="onyo-box"><div class="onyo-title">⚠️ Tahadhari</div><div class="onyo-text">${m.onyo}</div></div>`:''}
-        <button class="btn btn-gr btn-full" style="margin-top:16px;" onclick="goto('s-malipo')">📅 Pata Ratiba ya Matumizi →</button>
+        <button class="btn btn-gr btn-full" style="margin-top:16px;" onclick="gotoScreen('s-malipo')">📅 Pata Ratiba ya Matumizi →</button>
       </div>
       <div class="mmea-sec" id="ms-mcha">
         <div style="font-size:13px;font-weight:600;color:var(--sub);margin-bottom:16px;padding:10px 14px;background:var(--gr3);border-radius:var(--rs);">👨‍🍳 Mchakato wa Kitaalamu wa Kutengeneza Nyumbani</div>
@@ -1480,7 +1478,7 @@ function openMmea(id){
       </div>
       <div class="mmea-sec" id="ms-faid">
         ${m.faida.map(f=>`<div class="faida-item"><span style="font-size:16px;flex-shrink:0;">✅</span><span style="font-size:13px;font-weight:600;">${f}</span></div>`).join('')}
-        <button class="btn btn-gr btn-full" style="margin-top:10px;" onclick="goto('s-malipo')">📅 Pata Ratiba ya Matumizi →</button>
+        <button class="btn btn-gr btn-full" style="margin-top:10px;" onclick="gotoScreen('s-malipo')">📅 Pata Ratiba ya Matumizi →</button>
       </div>
     </div>`;
   goto('s-mmea');
@@ -1585,39 +1583,54 @@ function getRatibaForCondition(){
 
 function renderRatiba(){
   const el=document.getElementById('ratiba-body');
+  if(!el)return;
   const prem=CU?.premium||false;
   const stg=getStg();
   const ratibaData=getRatibaForCondition();
-  const RATIBA_CURRENT=ratibaData.days;
+  const DAYS=ratibaData.days;
+
+  const condBtns=`<div style="display:flex;gap:7px;flex-wrap:wrap;margin-top:14px;justify-content:center;">
+    <button onclick="switchRatibaCondition('nguvu')" style="padding:6px 12px;border-radius:var(--pill);border:1.5px solid var(--line);background:var(--card);font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--sub);transition:all .2s;">💪 Nguvu</button>
+    <button onclick="switchRatibaCondition('usingizi')" style="padding:6px 12px;border-radius:var(--pill);border:1.5px solid var(--line);background:var(--card);font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--sub);transition:all .2s;">😴 Usingizi</button>
+    <button onclick="switchRatibaCondition('shinikizo')" style="padding:6px 12px;border-radius:var(--pill);border:1.5px solid var(--line);background:var(--card);font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--sub);transition:all .2s;">❤️ Shinikizo</button>
+    <button onclick="switchRatibaCondition('uchovu')" style="padding:6px 12px;border-radius:var(--pill);border:1.5px solid var(--line);background:var(--card);font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--sub);transition:all .2s;">⚡ Uchovu</button>
+    <button onclick="switchRatibaCondition('jumla')" style="padding:6px 12px;border-radius:var(--pill);border:1.5px solid var(--gr4);background:var(--gr3);font-size:11px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--gr2);transition:all .2s;">🌿 Jumla</button>
+  </div>`;
+
   if(!prem){
     el.innerHTML=`
       <div class="ratiba-locked">
         <span class="ratiba-lock-icon">🔒</span>
-        <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px;">Ratiba ya Siku 7 — Imefungwa</div>
-        <p style="font-size:14px;color:var(--sub);font-weight:500;line-height:1.6;margin-bottom:20px;">Ratiba hii inakuonyesha hatua kwa hatua jinsi ya kutumia mimea ya asili — asubuhi, mchana, na jioni — kwa matokeo bora zaidi.</p>
-        <div class="ratiba-price-box">
-          <div class="ratiba-price-lbl">Bei ya Premium ya Uanachama</div>
-          <div class="ratiba-price-val">TSh ${Number(stg.priceM||5000).toLocaleString()} <span style="font-size:14px;color:var(--muted);font-weight:500;">/ mwezi</span></div>
-          <div class="ratiba-price-include">✅ Ratiba ya Siku 7 · ✅ Maktaba Yote · ✅ Mshauri wa WhatsApp</div>
+        <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px;text-align:center;">Ratiba ya Siku 7 — Imefungwa</div>
+        <p style="font-size:14px;color:var(--sub);font-weight:500;line-height:1.6;margin-bottom:16px;text-align:center;">Kila ugonjwa una ratiba yake maalum ya mimea. Lipa kuona ratiba kamili.</p>
+        <div style="background:linear-gradient(135deg,var(--gr3),var(--am3));border:1.5px solid var(--gr4);border-radius:var(--r);padding:18px;margin-bottom:18px;text-align:center;">
+          <div style="font-size:11px;font-weight:700;color:var(--sub);margin-bottom:5px;text-transform:uppercase;">Bei ya Uanachama</div>
+          <div style="font-family:'Playfair Display',serif;font-size:32px;font-weight:700;color:var(--gr2);">TSh ${Number(stg.priceM||5000).toLocaleString()} <span style="font-size:14px;color:var(--muted);font-weight:500;">/ mwezi</span></div>
+          <div style="font-size:12px;color:var(--sub);margin-top:5px;font-weight:500;">✅ Ratiba 5 tofauti · ✅ Maktaba Yote · ✅ Dr. Revo AI</div>
         </div>
-        <button class="btn btn-am btn-full" onclick="goto('s-malipo')">💳 Lipa Sasa — Fungua Ratiba →</button>
-        <button class="btn btn-out btn-full" style="margin-top:10px;" onclick="goto('s-uchunguzi');startDiag()">🔬 Fanya Uchunguzi Bure Kwanza</button>
+        <button class="btn btn-am btn-full" style="margin-bottom:10px;" onclick="gotoScreen('s-malipo')">💳 Lipa Sasa — Fungua Ratiba →</button>
+        <button class="btn btn-out btn-full" onclick="gotoScreen('s-uchunguzi');startDiag()">🔬 Fanya Uchunguzi Bure Kwanza</button>
       </div>
-      <div style="opacity:.5;pointer-events:none;">
-        ${RATIBA_CURRENT.slice(0,2).map(d=>ratibaDay(d)).join('')}
+      <div style="opacity:.45;pointer-events:none;margin-top:16px;">
+        ${DAYS.slice(0,1).map(d=>ratibaDay(d)).join('')}
       </div>
-      <div style="text-align:center;padding:16px;color:var(--muted);font-size:13px;font-weight:600;">🔒 Siku ${RATIBA_CURRENT.length-2} zaidi zinasubiri kukufunguliwa...</div>`;
+      <div style="text-align:center;padding:14px;color:var(--muted);font-size:13px;font-weight:600;">🔒 Siku ${DAYS.length-1} zaidi zinasubiri...</div>`;
   } else {
+    const cur=CU?.lastDiagCondition||'jumla';
     el.innerHTML=`
-      <div style="background:linear-gradient(135deg,var(--gr3),var(--am3));border:1.5px solid var(--gr4);border-radius:var(--r);padding:16px 18px;margin-bottom:20px;text-align:center;">
-        <div style="font-size:22px;margin-bottom:5px;">🏆</div>
-        <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--gr2);">Una Ufikiaji Kamili!</div>
-        <div style="font-size:13px;color:var(--sub);font-weight:500;margin-top:3px;">Ratiba yako ya Siku 7 ipo hapa</div>
+      <div style="background:linear-gradient(135deg,var(--gr3),var(--am3));border:1.5px solid var(--gr4);border-radius:var(--r);padding:18px;margin-bottom:20px;">
+        <div style="font-size:22px;text-align:center;margin-bottom:6px;">🏆</div>
+        <div style="font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--gr2);text-align:center;">${ratibaData.title}</div>
+        <div style="font-size:13px;color:var(--sub);font-weight:500;margin-top:4px;text-align:center;">${ratibaData.desc}</div>
+        ${condBtns}
       </div>
-      ${RATIBA.map(d=>ratibaDay(d)).join('')}`;
+      ${DAYS.map(d=>ratibaDay(d)).join('')}`;
   }
-  document.getElementById('ak-ratiba-sub').textContent=prem?'✅ Ratiba ipo tayari':'🔒 Inagusa malipo';
-  document.getElementById('ratiba-home-sub').textContent=prem?'✅ Fungua Ratiba':'🔒 Inagusa malipo';
+
+  const akSub=document.getElementById('ak-ratiba-sub');
+  if(akSub)akSub.textContent=prem?'✅ Ratiba ipo tayari':'🔒 Inagusa malipo';
+  const homeSub=document.getElementById('ratiba-home-sub');
+  if(homeSub)homeSub.textContent=prem?'✅ Fungua Ratiba yako':'🔒 Inagusa malipo';
 }
 
 function ratibaDay(d){
@@ -2664,6 +2677,92 @@ document.addEventListener('click',function(e){
     panel.style.display='none';
   }
 });
+
+
+
+// ═══════════════════════════════════════════
+// PWA — INSTALL PROMPT
+// ═══════════════════════════════════════════
+let deferredPrompt = null;
+
+window.addEventListener('beforeinstallprompt', (e) => {
+  e.preventDefault();
+  deferredPrompt = e;
+  // Show install banner after 3 seconds
+  setTimeout(showInstallBanner, 3000);
+});
+
+function showInstallBanner() {
+  if (!deferredPrompt) return;
+  const existing = document.getElementById('pwa-banner');
+  if (existing) return;
+  
+  const banner = document.createElement('div');
+  banner.id = 'pwa-banner';
+  banner.style.cssText = 'position:fixed;bottom:' + (document.getElementById('bnav')?.classList.contains('show') ? '78px' : '16px') + ';left:12px;right:12px;background:linear-gradient(135deg,#0d3520,#1a6b3c);color:#fff;border-radius:14px;padding:14px 16px;display:flex;align-items:center;gap:12px;z-index:400;box-shadow:0 8px 32px rgba(0,0,0,.3);animation:slideUp .3s ease;';
+  banner.innerHTML = `
+    <div style="font-size:28px;">🌿</div>
+    <div style="flex:1">
+      <div style="font-size:14px;font-weight:800;margin-bottom:2px;">Sakinisha App</div>
+      <div style="font-size:12px;color:rgba(255,255,255,.75);font-weight:500;">Weka AFYA-LISHE kwenye simu yako</div>
+    </div>
+    <button onclick="installPWA()" style="background:#fff;color:#1a6b3c;border:none;padding:8px 16px;border-radius:20px;font-size:12px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;flex-shrink:0;">Sakinisha</button>
+    <button onclick="document.getElementById('pwa-banner').remove()" style="background:rgba(255,255,255,.2);border:none;color:#fff;width:28px;height:28px;border-radius:50%;cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;flex-shrink:0;">✕</button>`;
+  document.body.appendChild(banner);
+}
+
+async function installPWA() {
+  if (!deferredPrompt) {
+    // iOS instructions
+    toast('Bonyeza "Share" kisha "Add to Home Screen" 📱', 'ok');
+    document.getElementById('pwa-banner')?.remove();
+    return;
+  }
+  deferredPrompt.prompt();
+  const { outcome } = await deferredPrompt.userChoice;
+  deferredPrompt = null;
+  document.getElementById('pwa-banner')?.remove();
+  if (outcome === 'accepted') {
+    toast('✅ App imesanikishwa! Angalia Home Screen yako.', 'ok');
+    addNotif('App Imesanikishwa! 📱', 'AFYA-LISHE iko kwenye Home Screen yako sasa.', '📱', '');
+  }
+}
+
+window.addEventListener('appinstalled', () => {
+  deferredPrompt = null;
+  document.getElementById('pwa-banner')?.remove();
+  toast('✅ Hongera! App imesanikishwa kikamilifu!', 'ok');
+});
+
+// iOS detection
+if (/iphone|ipad|ipod/i.test(navigator.userAgent) && !window.navigator.standalone) {
+  setTimeout(() => {
+    const existing = document.getElementById('pwa-banner');
+    if (existing) return;
+    const banner = document.createElement('div');
+    banner.id = 'pwa-banner';
+    banner.style.cssText = 'position:fixed;bottom:80px;left:12px;right:12px;background:linear-gradient(135deg,#0d3520,#1a6b3c);color:#fff;border-radius:14px;padding:14px 16px;z-index:400;box-shadow:0 8px 32px rgba(0,0,0,.3);';
+        banner.innerHTML = `<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;"><div style="font-size:24px;">🌿</div><div style="font-size:14px;font-weight:800;">Sakinisha App kwenye iPhone</div><button onclick="document.getElementById('pwa-banner').remove()" style="background:rgba(255,255,255,.2);border:none;color:#fff;width:26px;height:26px;border-radius:50%;cursor:pointer;font-size:14px;margin-left:auto;flex-shrink:0;">✕</button></div><div style="font-size:12px;color:rgba(255,255,255,.8);line-height:1.6;">1. Bonyeza Share (📤) chini ya browser<br>2. Chagua Add to Home Screen<br>3. Bonyeza Add</div>`;    document.body.appendChild(banner);
+  }, 4000);
+}
+
+// Service Worker registration
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', () => {
+    const swCode = `
+const CACHE = 'afya-lishe-v1';
+const ASSETS = [location.origin + location.pathname];
+self.addEventListener('install', e => e.waitUntil(caches.open(CACHE).then(c => c.addAll(ASSETS))));
+self.addEventListener('fetch', e => e.respondWith(caches.match(e.request).then(r => r || fetch(e.request).catch(() => caches.match(e.request)))));
+self.addEventListener('push', e => {
+  const data = e.data ? e.data.json() : {title:'AFYA-LISHE', body:'Una arifa mpya'};
+  e.waitUntil(self.registration.showNotification(data.title, {body: data.body, icon: '/favicon.ico'}));
+});`;
+    const blob = new Blob([swCode], {type: 'application/javascript'});
+    const swUrl = URL.createObjectURL(blob);
+    navigator.serviceWorker.register(swUrl).catch(() => {});
+  });
+}
 
 
 // ── TOAST ──
