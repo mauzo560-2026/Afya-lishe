@@ -990,6 +990,19 @@ body.dark .bnav{background:rgba(22,26,20,.96);}
   </div>
 </div>
 
+
+<!-- NOTIFICATION PANEL -->
+<div id="notif-panel" style="display:none;position:fixed;top:64px;right:12px;width:min(320px,calc(100vw-24px));background:var(--card);border:1px solid var(--line);border-radius:16px;box-shadow:0 8px 32px rgba(0,0,0,.18);z-index:300;max-height:60vh;overflow:hidden;flex-direction:column;">
+  <div style="padding:14px 16px;border-bottom:1px solid var(--line);display:flex;align-items:center;justify-content:space-between;">
+    <div style="font-size:15px;font-weight:800;color:var(--text);">🔔 Arifa</div>
+    <div style="display:flex;gap:8px;">
+      <span style="font-size:11px;font-weight:600;color:var(--gr);cursor:pointer;" onclick="markAllRead()">Soma Zote</span>
+      <span style="font-size:16px;cursor:pointer;color:var(--muted);" onclick="toggleNotifications()">✕</span>
+    </div>
+  </div>
+  <div id="notif-list" style="overflow-y:auto;max-height:50vh;"></div>
+</div>
+
 <!-- TESTIMONY MODAL -->
 <div class="testi-modal-wrap" id="testi-modal" onclick="closeTestiModal(event)">
   <div class="testi-modal">
@@ -1137,9 +1150,9 @@ function afterLogin(){
   goto('s-home');
   toast('Karibu '+CU.name.split(' ')[0]+'! 🌿','ok');
 }
-function saveSession(){try{sessionStorage.setItem(SES,JSON.stringify(CU));}catch{}}
-function loadSession(){try{const s=sessionStorage.getItem(SES);if(s){CU=JSON.parse(s);return true;}}catch{}return false;}
-function doLogout(){CU=null;try{sessionStorage.removeItem(SES);}catch{}goto('s-welcome');toast('Umetoka salama 👋');}
+function saveSession(){try{localStorage.setItem(SES,JSON.stringify(CU));}catch{}}
+function loadSession(){try{const s=localStorage.getItem(SES);if(s){CU=JSON.parse(s);return true;}}catch{}return false;}
+function doLogout(){CU=null;try{localStorage.removeItem(SES);}catch{}goto('s-welcome');toast('Umetoka salama 👋');}
 function doAdmLogin(){
   const em=document.getElementById('adm-em').value.trim();
   const pw=document.getElementById('adm-pw').value.trim();
@@ -1268,7 +1281,14 @@ function genRipoti(){
         <button class="btn btn-out btn-full" onclick="goto('s-malipo')">📅 Fungua Ratiba ya Siku 7</button>
       </div>
     </div>`;
-  if(CU){CU.uchunguzi=(CU.uchunguzi||0)+1;const us=getUsers();const ix=us.findIndex(u=>u.email===CU.email);if(ix>=0)us[ix].uchunguzi=CU.uchunguzi;setUsers(us);saveSession();}
+  if(CU){CU.uchunguzi=(CU.uchunguzi||0)+1;
+    // Auto-set ratiba condition based on worst symptoms
+    const worstIdx=Object.entries(diagAns).sort((a,b)=>a[1]-b[1])[0];
+    if(worstIdx){
+      const idx=Number(worstIdx[0]);
+      const condMap={0:'uchovu',1:'shinikizo',2:'msongo',3:'nguvu',4:'usingizi',5:'jumla',6:'jumla',7:'jumla',8:'jumla',9:'jumla'};
+      CU.lastDiagCondition=condMap[idx]||'jumla';
+    }const us=getUsers();const ix=us.findIndex(u=>u.email===CU.email);if(ix>=0)us[ix].uchunguzi=CU.uchunguzi;setUsers(us);saveSession();}
   goto('s-ripoti');
 }
 function getMimeaRec(ans){
@@ -1466,20 +1486,101 @@ function switchMTab(t){
 // ══════════════════════════════════
 // RATIBA
 // ══════════════════════════════════
-const RATIBA=[
-  {siku:'Siku 1',sub:'Kuanza kwa utulivu',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Chai ya Tangawizi + Asali',text:'Chemsha tangawizi na asali. Kunywa kabla ya kula.',pill:'🫚 Tangawizi · 🍯 Asali'},{t:'12:30',lbl:'Mchana',title:'Mbegu za Maboga (Raw)',text:'Gramu 30 za mbegu zisizokaangwa pamoja na mlo wa mchana.',pill:'🎃 Mbegu za Maboga'},{t:'19:00',lbl:'Jioni',title:'Chai ya Moringa + Mdalasini',text:'Kijiko 1 cha poda ya moringa na nusu kijiko cha mdalasini kwenye maji ya moto.',pill:'🌿 Moringa · 🍂 Mdalasini'}]},
-  {siku:'Siku 2',sub:'Kuimarisha msingi',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Vitunguu Saumu + Asali',text:'Kata vitunguu 2-3. Changanya na asali. Kula kabla ya kula chochote.',pill:'🧄 Vitunguu Saumu'},{t:'12:30',lbl:'Mchana',title:'Fenugreek Iliyolowekwa',text:'Mbegu za fenugreek zilizolowekwa usiku. Kula pamoja na maji yake.',pill:'🌾 Fenugreek'},{t:'19:00',lbl:'Jioni',title:'Chai ya Tangawizi + Limao',text:'Inaboresha mzunguko wa damu na kulala vizuri.',pill:'🫚 Tangawizi · 🍋 Limao'}]},
-  {siku:'Siku 3',sub:'Nguvu za Mwili',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Smoothie ya Moringa + Ndizi',text:'Blender: ndizi 1, kijiko 2 cha moringa, maji. Kunywa badala ya chai.',pill:'🌿 Moringa · 🍌 Ndizi'},{t:'12:30',lbl:'Mchana',title:'Mbegu za Maboga + Matunda',text:'Gramu 30 mbegu na matunda ya aina mbalimbali kwa vitamini.',pill:'🎃 Mbegu za Maboga'},{t:'19:00',lbl:'Jioni',title:'Mchanganyiko wa Nguvu',text:'Tangawizi + mdalasini + asali kwenye maji ya moto.',pill:'🫚+🍂+🍯 Mchanganyiko'}]},
-  {siku:'Siku 4',sub:'Usawa wa Homoni',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Maji ya Vitunguu + Limao',text:'Piga vitunguu 3 kwenye maji. Chuja, ongeza limao. Kunywa polepole.',pill:'🧄 Vitunguu Saumu'},{t:'12:30',lbl:'Mchana',title:'Supu ya Moringa',text:'Ongeza majani ya moringa kwenye supu yako ya kawaida.',pill:'🌿 Moringa'},{t:'19:00',lbl:'Jioni',title:'Chai ya Fenugreek + Mdalasini',text:'Inaboresha usawa wa sukari ya damu.',pill:'🌾+🍂 Mchanganyiko'}]},
-  {siku:'Siku 5',sub:'Kuimarisha Kinga',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Tangawizi Raw',text:'Kula kipande kidogo cha tangawizi mbichi — antioxidant ya moja kwa moja.',pill:'🫚 Tangawizi Mbichi'},{t:'12:30',lbl:'Mchana',title:'Mbegu + Vitunguu Saladi',text:'Saladi ya mbegu za maboga, vitunguu, na limao.',pill:'🎃+🧄 Mchanganyiko'},{t:'19:00',lbl:'Jioni',title:'Chai ya Nguvu',text:'Moringa + asali + limao. Antioxidants nyingi kabla ya kulala.',pill:'🌿+🍯+🍋 Chai ya Nguvu'}]},
-  {siku:'Siku 6',sub:'Utakaso wa Mwili',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Maji ya Joto + Limao + Asali',text:'Mwanzo wa siku — inasafisha mfumo wa mmengenyo.',pill:'💧 Maji ya Utakaso'},{t:'12:30',lbl:'Mchana',title:'Fenugreek + Mbegu za Maboga',text:'Mchanganyiko huu unaimarisha nguvu za kiume na usawa wa homoni.',pill:'🌾+🎃 Nguvu Kamili'},{t:'19:00',lbl:'Jioni',title:'Chai ya Mdalasini + Tangawizi',text:'Inaboresha kulala na mzunguko wa damu usiku.',pill:'🍂+🫚 Usiku wa Afya'}]},
-  {siku:'Siku 7',sub:'Siku ya Tathmini',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Chaguo Lako',text:'Chagua kinywaji unachokipenda zaidi kutoka siku 6 zilizopita.',pill:'🌿 Chaguo Lako'},{t:'12:30',lbl:'Mchana',title:'Mlo Kamili wa Lishe',text:'Mboga, matunda, nafaka, na protini ya asili. Epuka chakula cha viwandani.',pill:'🍽️ Lishe Kamili'},{t:'19:00',lbl:'Jioni',title:'Tathmini na Kuendelea',text:'Angalia jinsi unavyohisi ikilinganishwa na siku ya kwanza. Endelea kwa wiki nyingine!',pill:'📊 Tathmini ya Wiki'}]},
-];
+const RATIBA_ALL = {
+  nguvu: {
+    title: '💪 Ratiba ya Nguvu za Kiume',
+    desc: 'Programu ya siku 7 kwa nguvu za mwili na kiume — mimea iliyochaguliwa na Dr. Revo',
+    days: [
+      {siku:'Siku 1',sub:'Kuanza kwa Msingi',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Mbegu za Maboga + Asali',text:'Gramu 30 mbegu za maboga (raw) na kijiko 1 cha asali. Kula kabla ya kula chochote.',pill:'🎃 Zinki kwa Testosterone'},{t:'13:00',lbl:'Mchana',title:'Fenugreek Iliyolowekwa',text:'Mbegu za fenugreek zilizolowekwa usiku — kula na maji yake.',pill:'🌾 Hulba — Hormoni'},{t:'19:00',lbl:'Jioni',title:'Ashwagandha + Maziwa',text:'Nusu kijiko poda ya ashwagandha kwenye maziwa ya joto na asali.',pill:'🌿 Stamina & Cortisol'}]},
+      {siku:'Siku 2',sub:'Nguvu za Damu',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Vitunguu Saumu + Asali',text:'Vitunguu 3 vidogo mbichi + kijiko 1 asali. Inaboresha mzunguko wa damu.',pill:'🧄 Mzunguko wa Damu'},{t:'13:00',lbl:'Mchana',title:'Moringa Smoothie',text:'Kijiko 2 poda ya moringa + ndizi + maziwa. Vitamini kamili.',pill:'🌿 Moringa — Nguvu'},{t:'19:00',lbl:'Jioni',title:'Mbegu za Maboga + Simsim',text:'Gramu 30 za mchanganyiko wa mbegu — kabla ya kulala.',pill:'🎃🌰 Zinki + Magnesiamu'}]},
+      {siku:'Siku 3',sub:'Stamina na Endurance',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Tangawizi + Pilipili Manga',text:'Chai ya tangawizi na tone 1 ya pilipili manga — inachochea mfumo wote.',pill:'🫚 Mzunguko wa Haraka'},{t:'13:00',lbl:'Mchana',title:'Maca Poda kwenye Smoothie',text:'Kijiko 1 poda ya maca + matunda + maziwa. Libido na stamina.',pill:'🟤 Maca — Libido'},{t:'19:00',lbl:'Jioni',title:'Ashwagandha + Fenugreek',text:'Nusu kijiko kila kimoja kwenye maziwa ya joto.',pill:'🌿🌾 Mchanganyiko wa Nguvu'}]},
+      {siku:'Siku 4',sub:'Usawa wa Homoni',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Saw Palmetto + Maji',text:'Mg 160 saw palmetto extract asubuhi. Inasaidia testosterone huru.',pill:'🌿 Testosterone Huru'},{t:'13:00',lbl:'Mchana',title:'Avocado + Mbegu za Chia',text:'Avocado nusu + kijiko 2 chia seeds. Healthy fats kwa homoni.',pill:'🥑🌰 Homoni Fats'},{t:'19:00',lbl:'Jioni',title:'Vitunguu Saumu Mbichi',text:'Vitunguu 2 mbichi na asali. Mzunguko wa damu kabla ya kulala.',pill:'🧄 Anti-inflammatory'}]},
+      {siku:'Siku 5',sub:'Nguvu na Uvumilivu',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Mbegu za Maboga + Moringa',text:'Mchanganyiko wa poda zote mbili kwenye maziwa au smoothie.',pill:'🎃🌿 Nguvu Kamili'},{t:'13:00',lbl:'Mchana',title:'Tongkat Ali (kama ipo)',text:'Mg 200 ya tongkat ali extract. Inaboresha testosterone na nishati.',pill:'🌿 Testosterone Booster'},{t:'19:00',lbl:'Jioni',title:'Mafuta ya Samaki + Asali',text:'Capsule 2 za omega-3 na kijiko cha asali.',pill:'🫚 Omega-3 kwa Homoni'}]},
+      {siku:'Siku 6',sub:'Detox na Nguvu',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Maji ya Limao + Asali',text:'Maji ya joto + nusu limao + asali. Inasafisha na kuandaa mwili.',pill:'🍋 Detox Asubuhi'},{t:'13:00',lbl:'Mchana',title:'Fenugreek + Vitunguu Saumu',text:'Mchanganyiko huu unaimarisha nguvu za kiume na uzazi.',pill:'🌾🧄 Nguvu Kamili'},{t:'19:00',lbl:'Jioni',title:'Ashwagandha + Lavender Tea',text:'Ashwagandha kwenye maziwa + chai ya lavender kwa utulivu.',pill:'🌿💜 Nguvu + Utulivu'}]},
+      {siku:'Siku 7',sub:'Tathmini na Kuendelea',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Smoothie ya Nguvu',text:'Moringa + mbegu za maboga + maca + ndizi + maziwa — nguvu ya wiki.',pill:'🌿 Smoothie ya Nguvu'},{t:'13:00',lbl:'Mchana',title:'Mlo Kamili wa Protein',text:'Mayai, maharagwe, mboga za kijani, na nafaka. Lishe kamili.',pill:'🍽️ Lishe ya Nguvu'},{t:'19:00',lbl:'Jioni',title:'Tathmini ya Wiki',text:'Angalia mabadiliko. Endelea kwa wiki nyingine — matokeo yanaonekana wiki 4-6.',pill:'📊 Wiki 1 Imekamilika'}]}
+    ]
+  },
+  usingizi: {
+    title: '😴 Ratiba ya Usingizi Bora',
+    desc: 'Programu ya siku 7 kwa usingizi mzuri na mapumziko ya kweli',
+    days: [
+      {siku:'Siku 1',sub:'Kuanza Polepole',sessions:[{t:'07:00',lbl:'Asubuhi',title:'Chai ya Chamomile',text:'Kijiko 1 chamomile kwenye maji ya moto. Inakuandaa kwa siku nzuri.',pill:'🌼 Utulivu wa Akili'},{t:'15:00',lbl:'Mchana',title:'Punguza Kahawa na Chai Nyeusi',text:'Baada ya saa 3 mchana, epuka caffeine yote.',pill:'⚠️ Epuka Caffeine'},{t:'21:00',lbl:'Jioni',title:'Valerian Root + Asali',text:'Mg 300 valerian root kwenye maji ya moto + kijiko asali. Dakika 30-45 kabla ya kulala.',pill:'🪴 Kulala Haraka'}]},
+      {siku:'Siku 2',sub:'Mazingira ya Kulala',sessions:[{t:'07:00',lbl:'Asubuhi',title:'Maji ya Joto + Limao',text:'Inaweka mwili katika hali nzuri tangu asubuhi.',pill:'🍋 Mwili Safi'},{t:'15:00',lbl:'Mchana',title:'Mazoezi ya Wastani',text:'Dakika 30 za kutembea au kufanya mazoezi — kuboresha usingizi wa usiku.',pill:'🏃 Mazoezi = Usingizi Bora'},{t:'21:00',lbl:'Jioni',title:'Chai ya Chamomile + Lavender',text:'Mchanganyiko wa chamomile na lavender — nguvu mara mbili.',pill:'🌼💜 Utulivu Mkubwa'}]},
+      {siku:'Siku 3',sub:'Akili Tulivu',sessions:[{t:'07:00',lbl:'Asubuhi',title:'Tafakari Dakika 10',text:'Pumzika, piga pumzi polepole. Inaboresha hali ya akili siku nzima.',pill:'🧘 Akili Tulivu'},{t:'15:00',lbl:'Mchana',title:'Chai ya Kijani (Decaf)',text:'Chai ya kijani (bila caffeine) — theanine inaboresha utulivu bila usingizi.',pill:'🍵 L-Theanine'},{t:'21:00',lbl:'Jioni',title:'Valerian + Lemon Balm',text:'Mchanganyiko huu ni nguvu sana kwa insomnia. Dakika 45 kabla ya kulala.',pill:'🪴🌿 Nguvu ya Usingizi'}]},
+      {siku:'Siku 4',sub:'Homoni za Usingizi',sessions:[{t:'07:00',lbl:'Asubuhi',title:'Moringa Smoothie',text:'Kijiko 1 moringa + ndizi. Magnesium ya moringa inasaidia homoni za usingizi.',pill:'🌿 Magnesium Asili'},{t:'15:00',lbl:'Mchana',title:'Kiwi 2 au Ndizi',text:'Matunda haya yana tryptophan — inaboresha uzalishaji wa melatonin.',pill:'🥝🍌 Melatonin Asili'},{t:'21:00',lbl:'Jioni',title:'Bafu ya Lavender + Chai',text:'Mafuta ya lavender 3 drops kwenye bafu ya joto + chai ya chamomile.',pill:'💜 Utulivu wa Mwili Wote'}]},
+      {siku:'Siku 5',sub:'Kupunguza Msongo',sessions:[{t:'07:00',lbl:'Asubuhi',title:'Ashwagandha Asubuhi',text:'Nusu kijiko ashwagandha kwenye maziwa. Inapunguza cortisol — adui wa usingizi.',pill:'🌿 Cortisol Chini'},{t:'15:00',lbl:'Mchana',title:'Epuka Skrini Usiku',text:'Weka simu mbali saa 1 kabla ya kulala — blue light inaathiri melatonin.',pill:'📵 Epuka Blue Light'},{t:'21:00',lbl:'Jioni',title:'Passion Flower Tea',text:'Chai ya passion flower — inazuia wasiwasi wa usiku na inaboresha ubora wa usingizi.',pill:'🌸 Anti-Anxiety'}]},
+      {siku:'Siku 6',sub:'Mazingira Kamili',sessions:[{t:'07:00',lbl:'Asubuhi',title:'Juisi ya Tart Cherry',text:'Cherry juice ina melatonin ya asili — inaboresha mzunguko wa kulala.',pill:'🍒 Melatonin Asili'},{t:'15:00',lbl:'Mchana',title:'Yoga au Stretching',text:'Dakika 20 za yoga au stretching — inaboresha ubora wa usingizi kwa 60%.',pill:'🧘 Stretching = Usingizi'},{t:'21:00',lbl:'Jioni',title:'Valerian + Hops + Chamomile',text:'Mchanganyiko huu tatu — ni nguvu zaidi. Weka mwangaza wa chini kabla ya kulala.',pill:'🌿🌼🌸 Nguvu Tatu'}]},
+      {siku:'Siku 7',sub:'Tathmini',sessions:[{t:'07:00',lbl:'Asubuhi',title:'Angalia Ubora wa Usingizi',text:'Ulijisikiaje? Una nguvu zaidi? Endelea wiki nyingine kwa matokeo bora.',pill:'📊 Tathmini'},{t:'15:00',lbl:'Mchana',title:'Rudia Mazoezi',text:'Mazoezi ya mara kwa mara yanaboresha usingizi kwa muda mrefu.',pill:'🏃 Endelea Mazoezi'},{t:'21:00',lbl:'Jioni',title:'Chai Yako Unayoipenda',text:'Chagua chai unayoipenda zaidi — chamomile, valerian, au passion flower.',pill:'🌿 Chaguo Lako'}]}
+    ]
+  },
+  shinikizo: {
+    title: '❤️ Ratiba ya Shinikizo la Damu',
+    desc: 'Programu ya siku 7 kupunguza shinikizo la damu kwa njia ya asili',
+    days: [
+      {siku:'Siku 1',sub:'Msingi wa Damu',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Vitunguu Saumu + Asali',text:'Vitunguu 3 mbichi + kijiko 1 asali. Kula kabla ya kula chochote.',pill:'🧄 Allicin — Vasodilator'},{t:'13:00',lbl:'Mchana',title:'Hibiscus Tea',text:'Chai ya hibiscus vikombe 2. ACE inhibitor ya asili.',pill:'🌺 Inapunguza BP'},{t:'19:00',lbl:'Jioni',title:'Maji ya Joto + Limao',text:'Inasaidia figo kusafisha damu na kupunguza shinikizo.',pill:'🍋 Detox ya Figo'}]},
+      {siku:'Siku 2',sub:'Magnesiamu na Potassiamu',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Ndizi + Moringa',text:'Ndizi 1 (potassium) + kijiko 1 moringa (magnesiamu). Inasaidia mishipa.',pill:'🍌🌿 K+ na Mg2+'},{t:'13:00',lbl:'Mchana',title:'Chai ya Hibiscus Baridi',text:'Hibiscus iliyotengenezwa usiku — inywe baridi kama dawa.',pill:'🌺 BP Medication ya Asili'},{t:'19:00',lbl:'Jioni',title:'Vitunguu Saumu + Zeituni',text:'Vitunguu na mafuta ya zeituni kwenye chakula. Omega-3 kwa mishipa.',pill:'🧄🫚 Mishipa Laini'}]},
+      {siku:'Siku 3',sub:'Kupunguza Chumvi',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Juisi ya Beet',text:'Beet (beetroot) ina nitrates — inaboresha mzunguko na kupunguza BP.',pill:'🔴 Nitric Oxide'},{t:'13:00',lbl:'Mchana',title:'Epuka Chumvi',text:'Tumia viungo vya asili badala ya chumvi — thyme, rosemary, turmeric.',pill:'⚠️ Na+ Chini'},{t:'19:00',lbl:'Jioni',title:'Chai ya Hibiscus + Tangawizi',text:'Mchanganyiko huu ni nguvu zaidi kwa shinikizo la juu.',pill:'🌺🫚 Nguvu Mbili'}]},
+      {siku:'Siku 4',sub:'Mazoezi na Pumzi',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Mazoezi ya Kupumua',text:'Pumua polepole: inhale kwa sekunde 4, shikilia 4, exhale 8. Mara 10.',pill:'💨 BP Chini Papo Hapo'},{t:'13:00',lbl:'Mchana',title:'Vitunguu Saumu Mlo',text:'Ongeza vitunguu vilivyokatwa kwenye kila mlo wa leo.',pill:'🧄 Kila Mlo'},{t:'19:00',lbl:'Jioni',title:'Chai ya Lavender + Hibiscus',text:'Inapunguza msongo — adui wa shinikizo la damu.',pill:'💜🌺 Msongo Chini'}]},
+      {siku:'Siku 5',sub:'Mzunguko wa Damu',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Tangawizi + Limao + Asali',text:'Chai yenye nguvu — inaboresha mzunguko wa damu mwilini wote.',pill:'🫚🍋🍯 Mzunguko Bora'},{t:'13:00',lbl:'Mchana',title:'Matunda ya Rangi Nyekundu',text:'Strawberry, cherry, watermelon — ina lycopene inayolinda moyo.',pill:'🍓 Lycopene'},{t:'19:00',lbl:'Jioni',title:'Blueberry na Viini vya Mbegu',text:'Anthocyanins inaboresha unyumbufu wa mishipa ya damu.',pill:'🫐 Mishipa Yenye Nguvu'}]},
+      {siku:'Siku 6',sub:'Detox ya Mishipa',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Juisi ya Celery',text:'Celery stalks 4 kwenye juicer. Phthalides inapunguza shinikizo.',pill:'🥬 Phthalides'},{t:'13:00',lbl:'Mchana',title:'Tofaa + Vitunguu Mlo',text:'Quercetin katika tofaa na vitunguu inaimarisha mishipa ya damu.',pill:'🍎🧅 Quercetin'},{t:'19:00',lbl:'Jioni',title:'Hibiscus + Chamomile',text:'Mchanganyiko wa usiku — inapunguza BP na inaboresha usingizi.',pill:'🌺🌼 Usiku Bora'}]},
+      {siku:'Siku 7',sub:'Tathmini na Kipimo',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Pima Shinikizo',text:'Pima shinikizo lako asubuhi kabla ya kula. Lingelikuwa limepungua.',pill:'📊 Pima BP'},{t:'13:00',lbl:'Mchana',title:'Endelea na Vitunguu + Hibiscus',text:'Hizi mbili ziendelee kila siku — ni dawa za asili za BP.',pill:'🧄🌺 Kila Siku'},{t:'19:00',lbl:'Jioni',title:'Tathmini ya Wiki',text:'Shinikizo limepungua? Hongera! Endelea kwa wiki 3-4 zaidi kwa matokeo ya kudumu.',pill:'✅ Wiki 1 Imekamilika'}]}
+    ]
+  },
+  uchovu: {
+    title: '⚡ Ratiba ya Kupigana na Uchovu',
+    desc: 'Programu ya siku 7 kuongeza nishati na kupigana na uchovu wa kudumu',
+    days: [
+      {siku:'Siku 1',sub:'Vitamini na Madini',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Moringa Smoothie',text:'Kijiko 2 poda ya moringa + matunda. Inaboresha nishati haraka.',pill:'🌿 Vitamini Kamili'},{t:'13:00',lbl:'Mchana',title:'Spirulina + Maji',text:'Kijiko 1 spirulina kwenye maji au juisi. Protini na chuma.',pill:'⭐ Protini + Chuma'},{t:'19:00',lbl:'Jioni',title:'Ashwagandha + Maziwa',text:'Nusu kijiko kwenye maziwa. Inapunguza uchovu wa muda mrefu.',pill:'🌿 Adaptogen'}]},
+      {siku:'Siku 2',sub:'Nishati ya Kudumu',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Chai ya Kijani + Limao',text:'L-theanine + caffeine kidogo = nishati bila kutetemeka.',pill:'🍵 Nishati Imara'},{t:'13:00',lbl:'Mchana',title:'Mbegu za Chia kwenye Chakula',text:'Kijiko 2 chia seeds — omega-3 na fiber kwa nishati ya muda mrefu.',pill:'🌰 Omega-3 = Nishati'},{t:'19:00',lbl:'Jioni',title:'Rhodiola Rosea',text:'Mg 200 rhodiola asubuhi au mchana. Inaboresha stamina.',pill:'🌸 Stamina +'}]},
+      {siku:'Siku 3',sub:'Chuma na Damu',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Juisi ya Moringa + Beet',text:'Inaboresha damu na uzalishaji wa seli nyekundu — uchovu unapungua.',pill:'🌿🔴 Damu Nyingi'},{t:'13:00',lbl:'Mchana',title:'Nettle (Jirsali) Chai',text:'Chai ya nettle — ina chuma nyingi zaidi ya nyama nyekundu.',pill:'🫛 Chuma Nyingi'},{t:'19:00',lbl:'Jioni',title:'Tangawizi + Mdalasini',text:'Inachochea mfumo wa kimetaboliki na nishati ya usiku.',pill:'🫚🍂 Metabolic Boost'}]},
+      {siku:'Siku 4',sub:'Ubongo na Akili',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Spirulina + Moringa',text:'Mchanganyiko huu mbili ni "super food" kwa nishati ya ubongo.',pill:'⭐🌿 Brain Energy'},{t:'13:00',lbl:'Mchana',title:'Mafuta ya Samaki',text:'Capsule 2 za omega-3 — DHA inaboresha utendaji wa ubongo.',pill:'🫚 DHA kwa Ubongo'},{t:'19:00',lbl:'Jioni',title:'Ashwagandha + Valerian',text:'Inapunguza msongo na inaboresha usingizi — mzizi wa uchovu.',pill:'🌿🪴 Pumzika Vizuri'}]},
+      {siku:'Siku 5',sub:'Nishati ya Kimwili',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Ndizi + Mbegu za Maboga',text:'Potassium + zinki. Nishati ya misuli na mfumo wa neva.',pill:'🍌🎃 Misuli + Neva'},{t:'13:00',lbl:'Mchana',title:'Chai ya Ginseng',text:'Chai ya ginseng — adaptogen inayoboresha nishati ya kimwili.',pill:'🌿 Ginseng Energy'},{t:'19:00',lbl:'Jioni',title:'Moringa + Asali',text:'Kijiko 1 moringa + asali kwenye maji ya joto. Utulivu na virutubisho.',pill:'🌿🍯 Jioni ya Nguvu'}]},
+      {siku:'Siku 6',sub:'Kuondoa Sumu',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Maji ya Joto + Limao + Tangawizi',text:'Inasafisha ini na mfumo wa mmengenyo — chanzo cha nishati.',pill:'🍋🫚 Detox = Nishati'},{t:'13:00',lbl:'Mchana',title:'Chai ya Kijani Baridi',text:'EGCG antioxidants inaboresha metabolic rate.',pill:'🍵 EGCG Boost'},{t:'19:00',lbl:'Jioni',title:'Mchanganyiko wa Madini',text:'Moringa + spirulina + asali. Madini yote muhimu kwa nishati.',pill:'⭐🌿🍯 Nguvu ya Jioni'}]},
+      {siku:'Siku 7',sub:'Tathmini ya Nishati',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Unahisi Nguvu Zaidi?',text:'Baada ya wiki 1, mwili umeanza kubadilika. Endelea kwa wiki 3-4 zaidi.',pill:'📊 Tathmini'},{t:'13:00',lbl:'Mchana',title:'Smoothie ya Nguvu Kamili',text:'Moringa + spirulina + maca + ndizi + maziwa. Smoothie bora zaidi.',pill:'🌿 Power Smoothie'},{t:'19:00',lbl:'Jioni',title:'Hongera! Wiki 1 Imekamilika',text:'Endelea kunywa maji mengi, lala vizuri, na tumia mimea kila siku.',pill:'✅ Mafanikio!'}]}
+    ]
+  },
+  jumla: {
+    title: '🌿 Ratiba ya Jumla ya Afya',
+    desc: 'Programu ya siku 7 kwa afya bora ya jumla — inafaa kwa mtu yeyote',
+    days: [
+      {siku:'Siku 1',sub:'Kuanza kwa Utulivu',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Chai ya Tangawizi + Asali',text:'Chemsha tangawizi na asali. Kunywa kabla ya kula.',pill:'🫚 Tangawizi · 🍯 Asali'},{t:'13:00',lbl:'Mchana',title:'Mbegu za Maboga (Raw)',text:'Gramu 30 za mbegu zisizokaangwa pamoja na mlo wa mchana.',pill:'🎃 Mbegu za Maboga'},{t:'19:00',lbl:'Jioni',title:'Chai ya Moringa + Mdalasini',text:'Kijiko 1 cha poda ya moringa na nusu kijiko cha mdalasini kwenye maji ya moto.',pill:'🌿 Moringa · 🍂 Mdalasini'}]},
+      {siku:'Siku 2',sub:'Kuimarisha Msingi',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Vitunguu Saumu + Asali',text:'Kata vitunguu 2-3. Changanya na asali. Kula kabla ya kula chochote.',pill:'🧄 Vitunguu Saumu'},{t:'13:00',lbl:'Mchana',title:'Fenugreek Iliyolowekwa',text:'Mbegu za fenugreek zilizolowekwa usiku. Kula pamoja na maji yake.',pill:'🌾 Fenugreek'},{t:'19:00',lbl:'Jioni',title:'Chai ya Tangawizi + Limao',text:'Inaboresha mzunguko wa damu na kulala vizuri.',pill:'🫚 Tangawizi · 🍋 Limao'}]},
+      {siku:'Siku 3',sub:'Nguvu za Mwili',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Smoothie ya Moringa + Ndizi',text:'Blender: ndizi 1, kijiko 2 poda ya moringa, maziwa/maji.',pill:'🌿 Moringa · 🍌 Ndizi'},{t:'13:00',lbl:'Mchana',title:'Mbegu za Maboga + Matunda',text:'Gramu 30 mbegu za maboga na matunda ya aina mbalimbali.',pill:'🎃 Mbegu za Maboga'},{t:'19:00',lbl:'Jioni',title:'Mchanganyiko wa Nguvu',text:'Tangawizi + mdalasini + asali kwenye maji ya moto.',pill:'🫚+🍂+🍯 Mchanganyiko'}]},
+      {siku:'Siku 4',sub:'Usawa wa Homoni',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Maji ya Vitunguu + Limao',text:'Piga vitunguu 3 kwenye maji. Chuja, ongeza limao. Kunywa polepole.',pill:'🧄 Vitunguu Saumu'},{t:'13:00',lbl:'Mchana',title:'Supu ya Moringa',text:'Ongeza majani ya moringa kwenye supu yako ya kawaida.',pill:'🌿 Moringa'},{t:'19:00',lbl:'Jioni',title:'Chai ya Fenugreek + Mdalasini',text:'Inaboresha usawa wa sukari ya damu.',pill:'🌾+🍂 Mchanganyiko'}]},
+      {siku:'Siku 5',sub:'Kuimarisha Kinga',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Tangawizi Raw',text:'Kula kipande kidogo cha tangawizi mbichi.',pill:'🫚 Tangawizi Mbichi'},{t:'13:00',lbl:'Mchana',title:'Mbegu + Vitunguu Saladi',text:'Saladi ya mbegu za maboga, vitunguu, na limao.',pill:'🎃+🧄 Mchanganyiko'},{t:'19:00',lbl:'Jioni',title:'Chai ya Nguvu',text:'Moringa + asali + limao. Antioxidants nyingi.',pill:'🌿+🍯+🍋 Chai'}]},
+      {siku:'Siku 6',sub:'Utakaso wa Mwili',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Maji ya Joto + Limao + Asali',text:'Inasafisha mfumo wa mmengenyo.',pill:'💧 Maji ya Utakaso'},{t:'13:00',lbl:'Mchana',title:'Fenugreek + Mbegu za Maboga',text:'Mchanganyiko huu unaimarisha nguvu na usawa wa homoni.',pill:'🌾+🎃 Nguvu Kamili'},{t:'19:00',lbl:'Jioni',title:'Chai ya Mdalasini + Tangawizi',text:'Inaboresha kulala na mzunguko wa damu usiku.',pill:'🍂+🫚 Usiku wa Afya'}]},
+      {siku:'Siku 7',sub:'Siku ya Tathmini',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Chaguo Lako',text:'Chagua kinywaji unachokipenda zaidi kutoka siku 6 zilizopita.',pill:'🌿 Chaguo Lako'},{t:'13:00',lbl:'Mchana',title:'Mlo Kamili wa Lishe',text:'Mboga, matunda, nafaka, na protini ya asili.',pill:'🍽️ Lishe Kamili'},{t:'19:00',lbl:'Jioni',title:'Tathmini na Kuendelea',text:'Angalia jinsi unavyohisi. Endelea kwa wiki nyingine!',pill:'📊 Tathmini ya Wiki'}]}
+    ]
+  }
+};
+
+// Build flat RATIBA for compatibility
+const RATIBA = RATIBA_ALL.jumla.days;
+
+
+function switchRatibaCondition(cond){
+  if(CU){CU.lastDiagCondition=cond;saveSession();}
+  renderRatiba();
+  // Add notification
+  const names={nguvu:'Nguvu za Kiume',usingizi:'Usingizi Bora',shinikizo:'Shinikizo la Damu',uchovu:'Uchovu',jumla:'Afya ya Jumla'};
+  addNotif('Ratiba Imebadilishwa ✅','Unaangalia ratiba ya: '+( names[cond]||cond),'📅','ratiba');
+}
+
+function getRatibaForCondition(){
+  // Match ratiba to user's diagnosis results if available
+  // Otherwise use jumla (general)
+  const lastDiag = CU?.lastDiagCondition;
+  if(lastDiag && RATIBA_ALL[lastDiag]) return RATIBA_ALL[lastDiag];
+  return RATIBA_ALL.jumla;
+}
+
 
 function renderRatiba(){
   const el=document.getElementById('ratiba-body');
   const prem=CU?.premium||false;
   const stg=getStg();
+  const ratibaData=getRatibaForCondition();
+  const RATIBA_CURRENT=ratibaData.days;
   if(!prem){
     el.innerHTML=`
       <div class="ratiba-locked">
@@ -1495,9 +1596,9 @@ function renderRatiba(){
         <button class="btn btn-out btn-full" style="margin-top:10px;" onclick="goto('s-uchunguzi');startDiag()">🔬 Fanya Uchunguzi Bure Kwanza</button>
       </div>
       <div style="opacity:.5;pointer-events:none;">
-        ${RATIBA.slice(0,2).map(d=>ratibaDay(d)).join('')}
+        ${RATIBA_CURRENT.slice(0,2).map(d=>ratibaDay(d)).join('')}
       </div>
-      <div style="text-align:center;padding:16px;color:var(--muted);font-size:13px;font-weight:600;">🔒 Siku ${RATIBA.length-2} zaidi zinasubiri kukufunguliwa...</div>`;
+      <div style="text-align:center;padding:16px;color:var(--muted);font-size:13px;font-weight:600;">🔒 Siku ${RATIBA_CURRENT.length-2} zaidi zinasubiri kukufunguliwa...</div>`;
   } else {
     el.innerHTML=`
       <div style="background:linear-gradient(135deg,var(--gr3),var(--am3));border:1.5px solid var(--gr4);border-radius:var(--r);padding:16px 18px;margin-bottom:20px;text-align:center;">
@@ -1532,13 +1633,20 @@ let selMethod='mpesa',selPkg=5000;
 function renderMalipo(){
   const el=document.getElementById('malipo-body');
   if(CU?.premium){
+    const expiry = CU.premiumExpiry ? new Date(CU.premiumExpiry).toLocaleDateString('sw') : 'Milele';
     el.innerHTML=`<div class="malipo-card">
       <div style="text-align:center;padding:20px 0;">
-        <span class="success-icon">🏆</span>
+        <span style="font-size:60px;display:block;margin-bottom:13px;">🏆</span>
         <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--gr2);margin-bottom:7px;">Una Uanachama wa Premium!</div>
-        <div style="font-size:14px;color:var(--sub);font-weight:500;line-height:1.6;margin-bottom:20px;">Hongera! Una ufikiaji kamili wa maudhui yote ya Herbal Academy.</div>
-        <button class="btn btn-gr btn-full" onclick="goto('s-ratiba')">📅 Angalia Ratiba yako →</button>
-        <button class="btn btn-out btn-full" style="margin-top:10px;" onclick="goto('s-maktaba')">🌱 Tembelea Maktaba →</button>
+        <div style="font-size:14px;color:var(--sub);font-weight:500;line-height:1.6;margin-bottom:6px;">Muda wa kumalizika: <strong style="color:var(--gr)">${expiry}</strong></div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:20px;">Unatumia maudhui yote ya JOS Natural Herbs</div>
+        <button class="btn btn-gr btn-full" onclick="gotoScreen('s-ratiba')">📅 Angalia Ratiba yako →</button>
+        <button class="btn btn-out btn-full" style="margin-top:10px;" onclick="gotoScreen('s-maktaba')">🌱 Tembelea Maktaba →</button>
+      </div>
+      <div style="border-top:1px solid var(--line);margin-top:20px;padding-top:20px;">
+        <div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">🔄 Ongeza Muda wa Uanachama</div>
+        <div style="font-size:13px;color:var(--muted);margin-bottom:16px;font-weight:500;">Lipa tena kuongeza wiki, mwezi, au share na mwenzako</div>
+        <button class="btn btn-am btn-full" onclick="CU.premium=false;renderMalipo()">💳 Ongeza / Renew Premium →</button>
       </div>
     </div>`;
     return;
@@ -1568,15 +1676,12 @@ function renderMalipo(){
         <div class="malipo-method" id="mth-tigo" onclick="selMeth('tigo')"><div class="method-icon">💳</div><div><div class="method-name">Tigo Pesa</div><div class="method-sub">Namba: ${stg.tigo||'255652421286'}</div></div></div>
         <div class="malipo-method" id="mth-airtel" onclick="selMeth('airtel')"><div class="method-icon">📲</div><div><div class="method-name">Airtel Money</div><div class="method-sub">Namba ya Lipa Namba: 67363327 (JOS NATURAL HERBS)</div></div></div>
       </div>
-      <div class="malipo-steps">
-        <div class="malipo-step"><div class="step-dot">1</div>Chagua njia ya malipo hapo juu</div>
-        <div class="malipo-step"><div class="step-dot">2</div>Tuma pesa: M-Pesa Lipa Namba <strong>67363327</strong> — JOS NATURAL HERBS</div>
-        <div class="malipo-step"><div class="step-dot">3</div>Jaza namba ya muamala hapa chini</div>
-        <div class="malipo-step"><div class="step-dot">4</div>Bonyeza "Wasilisha" — Admin atakuambia hivi karibuni</div>
+      <div style="background:var(--gr3);border:1px solid var(--gr4);border-radius:var(--rs);padding:14px;margin-bottom:16px;">
+        <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:9px;font-size:13px;color:var(--sub);font-weight:500;"><div style="width:22px;height:22px;border-radius:50%;background:var(--gr);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</div>Tuma pesa: <strong>M-Pesa Lipa Namba 67363327</strong> — JOS NATURAL HERBS</div>
+        <div style="display:flex;align-items:flex-start;gap:10px;margin-bottom:9px;font-size:13px;color:var(--sub);font-weight:500;"><div style="width:22px;height:22px;border-radius:50%;background:var(--gr);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</div>Bonyeza "Niambie Admin" hapa chini — ujumbe wa WhatsApp unafunguliwa kiotomatiki</div>
+        <div style="display:flex;align-items:flex-start;gap:10px;font-size:13px;color:var(--sub);font-weight:500;"><div style="width:22px;height:22px;border-radius:50%;background:var(--gr);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</div>Admin atatumia Msimbo wa Ufikiaji kwa WhatsApp — weka msimbo kwenye sehemu ya chini</div>
       </div>
-      <div class="malipo-txn-input"><input type="text" id="txn-inp" placeholder="Weka Namba ya Muamala (ABC123456...)"></div>
-      <div class="fg"><label>Namba ya Simu Uliyolipa</label><input class="inp" type="tel" id="pay-phone-inp" placeholder="+255 7XX XXX XXX"></div>
-      <button class="btn btn-am btn-full" style="font-size:15px;" onclick="submitPay()">📤 Wasilisha Malipo →</button>
+      <button class="btn btn-am btn-full" style="font-size:15px;margin-bottom:12px;" onclick="submitPay()">📱 Niambie Admin — WhatsApp →</button>
       <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted);">Una msimbo? <span style="color:var(--gr);font-weight:700;cursor:pointer;" onclick="document.getElementById('code-area').style.display='block'">Weka hapa</span></div>
       <div id="code-area" style="display:none;margin-top:14px;">
         <div class="fg"><label>Msimbo wa Ufikiaji (Access Code)</label><input class="inp" type="text" id="code-inp" placeholder="HERB-XXXX-XXXX" style="letter-spacing:2px;text-transform:uppercase;font-weight:800;"></div>
@@ -1592,28 +1697,26 @@ function selMeth(m){
 }
 
 function submitPay(){
-  const txn=(document.getElementById('txn-inp')?.value||'').trim();
-  const phone=(document.getElementById('pay-phone-inp')?.value||'').trim();
-  if(!txn){toast('Weka namba ya muamala','err');return;}
-  if(!phone){toast('Weka namba ya simu uliyolipa','err');return;}
-  const p={id:Date.now(),userId:CU?.email,name:CU?.name,phone,method:selMethod,txnCode:txn,amount:selPkg,date:new Date().toISOString(),status:'pending'};
-  const pays=getPays();pays.unshift(p);setPays(pays);
   const stg=getStg();
-  const msg=`🌿 MALIPO MAPYA — AFYA-LISHE SMART\n\nMteja: ${CU?.name}\nBarua Pepe: ${CU?.email}\nSimu: ${phone}\nNjia: ${selMethod.toUpperCase()}\nNamba: ${txn}\nKiasi: TSh ${Number(selPkg).toLocaleString()}\nTarehe: ${new Date().toLocaleString('sw')}\n\nThibitisha na tuma msimbo wa ufikiaji.`;
+  const pkgName=selPkg===(stg.price3||25000)?'Miezi 6':'Mwezi 1';
+  const msg='🌿 OMBI LA UANACHAMA — JOS NATURAL HERBS\n\nMteja: '+(CU?.name||'Mgeni')+'\nBarua Pepe: '+(CU?.email||'—')+'\nSimu: '+(CU?.phone||'—')+'\nPackage: '+pkgName+' (TSh '+Number(selPkg).toLocaleString()+')\n\nNimetuma pesa kwa Lipa Namba 67363327 (JOS NATURAL HERBS).\n\nTafadhali nitumie Msimbo wa Ufikiaji. Asante!';
+  const p={id:Date.now(),userId:CU?.email,name:CU?.name,phone:CU?.phone||'',method:'mpesa',txnCode:'WhatsApp-'+Date.now(),amount:selPkg,date:new Date().toISOString(),status:'pending'};
+  const pays=getPays();pays.unshift(p);setPays(pays);
   window.open('https://wa.me/255652421286?text='+encodeURIComponent(msg),'_blank');
   document.getElementById('malipo-body').innerHTML=`
     <div class="malipo-card" style="text-align:center;padding:30px 24px;">
-      <span class="success-icon">⏳</span>
-      <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px;">Malipo Yamewasilishwa!</div>
-      <p style="font-size:14px;color:var(--sub);font-weight:500;line-height:1.6;margin-bottom:16px;">Admin wa Herbal Academy ataangalia na kukutumia msimbo wa ufikiaji hivi karibuni (saa 1-24).</p>
-      <div style="background:var(--am3);border:1.5px solid var(--am4);border-radius:var(--r);padding:16px;margin:16px 0;text-align:center;">
-        <div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;">Namba ya Muamala Wako</div>
-        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--am2);letter-spacing:2px;">${txn}</div>
+      <span style="font-size:60px;display:block;margin-bottom:13px;">📱</span>
+      <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px;">Ujumbe Umefunguliwa!</div>
+      <p style="font-size:14px;color:var(--sub);font-weight:500;line-height:1.6;margin-bottom:16px;">WhatsApp ya Dr. Revo imefunguliwa na ujumbe wako. Tuma ujumbe — utapokea Msimbo wa Ufikiaji hivi karibuni (saa 1-24).</p>
+      <div style="background:var(--gr3);border:1px solid var(--gr4);border-radius:var(--rs);padding:14px;margin-bottom:16px;font-size:13px;color:var(--sub);font-weight:500;">📞 <strong>+255 652 421 286</strong> — Dr. Revo, JOS Natural Herbs</div>
+      <button class="btn btn-gr btn-full" style="margin-bottom:10px;" onclick="document.getElementById('code-area').style.display='block';this.style.display='none'">🔑 Nina Msimbo — Weka Hapa</button>
+      <div id="code-area" style="display:none;margin-top:4px;">
+        <div class="fg"><label>Msimbo wa Ufikiaji</label><input class="inp" type="text" id="code-inp" placeholder="HERB-XXXX-XXXX" style="letter-spacing:2px;text-transform:uppercase;font-weight:800;text-align:center;font-size:18px;"></div>
+        <button class="btn btn-gr btn-full" onclick="activateCode()">🔑 Fungua Premium →</button>
       </div>
-      <p style="font-size:12px;color:var(--muted);margin-bottom:16px;font-weight:500;">Hifadhi namba hii. Ukipokea msimbo, urudi hapa na uweke kwenye "Msimbo wa Ufikiaji".</p>
-      <button class="btn btn-gr btn-full" onclick="renderMalipo()">🔑 Weka Msimbo wa Ufikiaji →</button>
+      <button class="btn btn-out btn-full" style="margin-top:8px;" onclick="renderMalipo()">← Rudi</button>
     </div>`;
-  toast('✅ Malipo yamewasilishwa kwa Admin!','ok');
+  toast('📱 WhatsApp imefunguliwa! Tuma ujumbe kwa Dr. Revo','ok');
 }
 
 function activateCode(){
@@ -1624,7 +1727,7 @@ function activateCode(){
   if(!found){toast('Msimbo huu si sahihi au umetumika ❌','err');return;}
   found.used=true;found.usedBy=CU?.email;found.usedDate=new Date().toISOString();
   setCodes(codes);
-  if(CU){CU.premium=true;saveSession();const us=getUsers();const ix=us.findIndex(u=>u.email===CU.email);if(ix>=0){us[ix].premium=true;setUsers(us);}}
+  if(CU){const days=found.days||30;const now=Date.now();const curExp=CU.premiumExpiry?Math.max(now,new Date(CU.premiumExpiry).getTime()):now;const newExp=new Date(curExp+(days*86400000));CU.premium=true;CU.premiumExpiry=newExp.toISOString();saveSession();const us=getUsers();const ix=us.findIndex(u=>u.email===CU.email);if(ix>=0){us[ix].premium=true;us[ix].premiumExpiry=CU.premiumExpiry;setUsers(us);}addNotif('Premium Imewezeshwa! 🏆','Uanachama wako unaisha: '+newExp.toLocaleDateString("sw"),'🏆','ratiba');}
   toast('✅ Msimbo umekubaliwa! Umefungua Premium!','ok');
   setTimeout(()=>{renderMalipo();},800);
 }
@@ -2157,7 +2260,7 @@ function getAIReply(msg) {
   if (m.includes('sukari') || m.includes('diabetes') || m.includes('kisukari') ||
       m.includes('glucose') || m.includes('insulini'))
     return DR_REVO_REPLIES.sukari;
-  // Tumbo na mmeng'enyo
+  // Tumbo na mmengenyo
   if (m.includes('tumbo') || m.includes('mmengenyo') || m.includes('stomach') ||
       m.includes('kichefuchefu') || m.includes('ulcer') || m.includes('gesi') ||
       m.includes('kuhara') || m.includes('constipation') || m.includes('choo'))
@@ -2437,6 +2540,122 @@ function goto(id) {
   if (id === 's-chat') renderTestis();
   if (id === 's-chat-room') setTimeout(() => { const a = document.getElementById('chat-msgs-area'); if(a) a.scrollTop = a.scrollHeight; }, 100);
 }
+
+
+
+// ═══════════════════════════════════════════════════════
+// NOTIFICATIONS
+// ═══════════════════════════════════════════════════════
+function getNotifs(){try{return JSON.parse(localStorage.getItem('afya_notifs')||'[]');}catch{return[];}}
+function saveNotifs(n){try{localStorage.setItem('afya_notifs',JSON.stringify(n.slice(0,50)));}catch{}}
+
+function addNotif(title,body,icon='🌿',action=''){
+  const notifs=getNotifs();
+  notifs.unshift({id:Date.now(),title,body,icon,action,read:false,time:new Date().toISOString()});
+  saveNotifs(notifs);
+  updateNotifBadge();
+  // Native push notification if permitted
+  if(Notification.permission==='granted'){
+    try{
+      new Notification('AFYA-LISHE: '+title,{body,icon:'/favicon.ico',badge:'/favicon.ico'});
+    }catch(e){}
+  }
+}
+
+function updateNotifBadge(){
+  const notifs=getNotifs();
+  const unread=notifs.filter(n=>!n.read).length;
+  const dot=document.getElementById('notif-dot');
+  const btn=document.getElementById('notif-btn');
+  if(dot)dot.style.display=unread>0?'block':'none';
+  if(btn)btn.style.display=CU?'flex':'none';
+  if(btn&&unread>0)btn.textContent='🔔';
+}
+
+function toggleNotifications(){
+  const panel=document.getElementById('notif-panel');
+  if(!panel)return;
+  const isOpen=panel.style.display==='flex';
+  panel.style.display=isOpen?'none':'flex';
+  panel.style.flexDirection='column';
+  if(!isOpen){renderNotifs();markAllRead();}
+}
+
+function renderNotifs(){
+  const list=document.getElementById('notif-list');
+  if(!list)return;
+  const notifs=getNotifs();
+  if(!notifs.length){
+    list.innerHTML='<div style="text-align:center;padding:30px;color:var(--muted);font-size:13px;">📭 Hakuna arifa bado</div>';
+    return;
+  }
+  list.innerHTML=notifs.map(n=>`
+    <div class="notif-item ${n.read?'':'unread'}" onclick="handleNotifClick('${n.action}')">
+      <div class="notif-ic">${n.icon}</div>
+      <div style="flex:1">
+        <div class="notif-title">${n.title}</div>
+        <div class="notif-body">${n.body}</div>
+        <div class="notif-time">${n.time?timeAgo(n.time):''}</div>
+      </div>
+    </div>`).join('');
+}
+
+function markAllRead(){
+  const notifs=getNotifs();
+  notifs.forEach(n=>n.read=true);
+  saveNotifs(notifs);
+  updateNotifBadge();
+}
+
+function handleNotifClick(action){
+  document.getElementById('notif-panel').style.display='none';
+  if(action==='ratiba')gotoScreen('s-ratiba');
+  else if(action==='maktaba')gotoScreen('s-maktaba');
+  else if(action==='malipo')gotoScreen('s-malipo');
+  else if(action==='chat')gotoScreen('s-chat');
+}
+
+function timeAgo(iso){
+  const diff=Date.now()-new Date(iso).getTime();
+  const mins=Math.floor(diff/60000);
+  if(mins<1)return 'Sasa hivi';
+  if(mins<60)return mins+' dakika zilizopita';
+  const hrs=Math.floor(mins/60);
+  if(hrs<24)return hrs+' saa zilizopita';
+  return Math.floor(hrs/24)+' siku zilizopita';
+}
+
+function requestNotifPermission(){
+  if(!('Notification' in window))return;
+  if(Notification.permission==='default'){
+    Notification.requestPermission().then(perm=>{
+      if(perm==='granted'){
+        addNotif('Karibu! 🌿','Arifa za AFYA-LISHE zimeruhuiwa. Utapata taarifa za muhimu.','🌿','');
+        toast('✅ Arifa zimewezeshwa!','ok');
+      }
+    });
+  }
+}
+
+// Send default welcome notifications after login
+function sendWelcomeNotifs(){
+  const notifs=getNotifs();
+  if(notifs.length>0)return; // Already has notifs
+  setTimeout(()=>addNotif('Karibu '+CU.name.split(' ')[0]+'! 🌿','Tafuta mimea 100 kwenye maktaba yetu ya asili.','🌿','maktaba'),500);
+  if(!CU?.premium){
+    setTimeout(()=>addNotif('Fungua Premium 💳','Lipa TSh 5,000 tu — pata Ratiba ya Siku 7 na ushauri wa Dr. Revo!','💳','malipo'),2000);
+  }
+  setTimeout(()=>addNotif('Dr. Revo anakusubiri 🤖','Uliza swali lolote la afya — jibu linakuja haraka!','🤖',''),4000);
+}
+
+// Close notification panel when clicking outside
+document.addEventListener('click',function(e){
+  const panel=document.getElementById('notif-panel');
+  const btn=document.getElementById('notif-btn');
+  if(panel&&panel.style.display==='flex'&&!panel.contains(e.target)&&!btn?.contains(e.target)){
+    panel.style.display='none';
+  }
+});
 
 
 // ── TOAST ──
