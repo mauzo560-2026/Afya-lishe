@@ -2779,5 +2779,39 @@ loadPrefs();
 if(loadSession()&&CU){afterLogin();}
 else{goto('s-welcome');}
 </script>
+  <script type="module">
+  // 1. Tunaita huduma za Firebase (App, Analytics na Database)
+  import { initializeApp } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-app.js";
+  import { getAnalytics } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-analytics.js";
+  import { getFirestore, collection, addDoc } from "https://www.gstatic.com/firebasejs/10.0.0/firebase-firestore.js";
+
+  // 2. Siri zako za kuunganisha seva (Hizi zisibadilike)
+  const firebaseConfig = {
+    apiKey: "AIzaSyCLHgEqSOLg7w69K-y1urIyWQrKTbKu1w8",
+    authDomain: "jos-natural-herbs.firebaseapp.com",
+    projectId: "jos-natural-herbs",
+    storageBucket: "jos-natural-herbs.firebasestorage.app",
+    messagingSenderId: "279251990552",
+    appId: "1:279251990552:web:1f6d208f523effb7adeb6d",
+    measurementId: "G-YK1T302JQX"
+  };
+
+  // 3. Washa Firebase kitalamu
+  const app = initializeApp(firebaseConfig);
+  const analytics = getAnalytics(app);
+  const db = getFirestore(app);
+
+  // 4. Hii ndiyo kazi kubwa: Kutuma oda kwenda Firebase
+  window.tumaOdaKwaFirebase = async function(dataYaOda) {
+      try {
+          const docRef = await addDoc(collection(db, "oda_za_wateja"), dataYaOda);
+          console.log("Oda imefika! ID: ", docRef.id);
+          alert("Shukrani! Oda yako ya JOS Natural Herbs imepokelewa.");
+      } catch (e) {
+          console.error("Kuna shida kidogo: ", e);
+          alert("Samahani, jaribu tena kutuma oda.");
+      }
+  }
+</script>
 </body>
 </html>
