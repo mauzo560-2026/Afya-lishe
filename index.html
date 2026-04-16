@@ -104,7 +104,7 @@ textarea.inp{resize:vertical;min-height:88px;line-height:1.6;}
 .auth-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text);text-align:center;margin-bottom:3px;}
 .auth-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:24px;font-weight:500;}
 .auth-link{color:var(--gr);font-weight:700;cursor:pointer;}
-.form-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+.form-2{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px;}
 @media(max-width:440px){.form-2{grid-template-columns:1fr;}}
 
 /* ══ HOME ══ */
@@ -781,8 +781,9 @@ body.dark .bnav{background:rgba(22,26,20,.96);}
           <div class="adm-panel-card-title">💰 Mipangilio ya Malipo</div>
           <div class="adm-panel-card-sub">Weka bei na namba za kupokelea malipo</div>
           <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
-            <div><div style="font-size:11px;font-weight:700;color:#5a7a5c;margin-bottom:6px;text-transform:uppercase;">Bei ya Mwezi (TSh)</div><input class="adm-inp" id="stg-priceM" value="5000" type="number" style="margin:0;"></div>
-            <div><div style="font-size:11px;font-weight:700;color:#5a7a5c;margin-bottom:6px;text-transform:uppercase;">Bei ya Miezi 3 (TSh)</div><input class="adm-inp" id="stg-price3" value="25000" type="number" style="margin:0;"></div>
+            <div><div style="font-size:11px;font-weight:700;color:#5a7a5c;margin-bottom:6px;text-transform:uppercase;">Mwezi 1 (TSh)</div><input class="adm-inp" id="stg-priceM" value="3000" type="number" style="margin:0;"></div>
+            <div><div style="font-size:11px;font-weight:700;color:#5a7a5c;margin-bottom:6px;text-transform:uppercase;">Miezi 6 (TSh)</div><input class="adm-inp" id="stg-price6" value="15000" type="number" style="margin:0;"></div>
+            <div><div style="font-size:11px;font-weight:700;color:#5a7a5c;margin-bottom:6px;text-transform:uppercase;">Mwaka 1 (TSh)</div><input class="adm-inp" id="stg-priceY" value="25000" type="number" style="margin:0;"></div>
           </div>
           <div style="margin-top:12px;font-size:11px;font-weight:700;color:#5a7a5c;margin-bottom:6px;text-transform:uppercase;">Namba ya M-Pesa</div>
           <input class="adm-inp" id="stg-mpesa" value="255652421286">
@@ -1072,7 +1073,7 @@ const getPays=()=>db().payments||[];
 const setPays=p=>{const d=db();d.payments=p;saveDb(d);};
 const getCodes=()=>db().codes||[];
 const setCodes=c=>{const d=db();d.codes=c;saveDb(d);};
-const getStg=()=>db().settings||{priceM:5000,price3:25000,mpesa:'255652421286',tigo:'255652421286',wa:'255652421286'};
+const getStg=()=>db().settings||{priceM:3000,price6:15000,priceY:25000,mpesa:'67363327',tigo:'255652421286',wa:'255652421286'};
 const saveStg=s=>{const d=db();d.settings=s;saveDb(d);};
 
 let CU=null,toastT=null;
@@ -1121,21 +1122,92 @@ function doRegister(){
   const users=getUsers();
   if(users.find(u=>u.email===em)){toast('Barua pepe hii tayari imesajiliwa','err');return;}
   CU={name:fn+' '+ln,email:em,phone:ph,pw,premium:false,joinDate:new Date().toISOString(),uchunguzi:0};
-  users.push({...CU});setUsers(users);saveSession();afterLogin();
+  users.push({...CU});setUsers(users);saveSession();afterLogin(true);
 }
-function afterLogin(){
+function afterLogin(isNew){
   document.getElementById('home-greeting').textContent=CU.name.split(' ')[0];
   const havEl=document.getElementById('home-av');
   if(CU.avatar){havEl.innerHTML=`<img src="${CU.avatar}" style="width:36px;height:36px;object-fit:cover;border-radius:50%;">`;}
   else{havEl.textContent=CU.name[0].toUpperCase();}
   aiUnlocked = CU.premium || false;
+  aiMsgCount = CU.premium ? 0 : aiMsgCount;
   loadPrefs();
   updateAIAvatar();
   // Load app logo from admin settings
   const stg2=getStg();
   if(stg2.appLogo){const logoEl=document.getElementById('app-logo-el');if(logoEl)logoEl.innerHTML=`<img src="${stg2.appLogo}" style="width:28px;height:28px;object-fit:cover;border-radius:50%;margin-right:5px;"> <span data-sw>AFYA-LISHE</span>`;}
+  if(isNew){
+    // New user — show onboarding welcome modal
+    showOnboarding();
+  } else {
+    goto('s-home');
+    toast('Karibu tena '+CU.name.split(' ')[0]+'! 🌿','ok');
+  }
+}
+
+function showOnboarding(){
+  // Show a friendly welcome & quick health question modal
+  const modal=document.createElement('div');
+  modal.id='onboarding-modal';
+  modal.style.cssText='position:fixed;inset:0;background:rgba(0,0,0,.7);z-index:9000;display:flex;align-items:center;justify-content:center;padding:20px;backdrop-filter:blur(6px);';
+  modal.innerHTML=`
+    <div style="background:var(--card);border-radius:20px;padding:30px 24px;width:100%;max-width:400px;box-shadow:0 24px 80px rgba(0,0,0,.3);animation:pageIn .3s ease;">
+      <div style="text-align:center;margin-bottom:18px;">
+        <span style="font-size:48px;">🌿</span>
+        <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text);margin-top:8px;">Karibu, ${CU.name.split(' ')[0]}!</div>
+        <div style="font-size:13px;color:var(--muted);margin-top:5px;font-weight:500;">Herbal Academy iko hapa kukusaidia. Tuambie kidogo kuhusu lengo lako.</div>
+      </div>
+      <div style="font-size:13px;font-weight:700;color:var(--sub);margin-bottom:10px;text-align:center;">🎯 Unataka kuboresha nini zaidi?</div>
+      <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:18px;" id="ob-opts">
+        <button class="ob-btn" onclick="selectGoal(this,'nguvu')" style="background:var(--card2);border:2px solid var(--line);border-radius:12px;padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;text-align:left;transition:all .2s;">💪 Nguvu za Kiume / Stamina</button>
+        <button class="ob-btn" onclick="selectGoal(this,'damu')" style="background:var(--card2);border:2px solid var(--line);border-radius:12px;padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;text-align:left;transition:all .2s;">❤️ Shinikizo la Damu / Moyo</button>
+        <button class="ob-btn" onclick="selectGoal(this,'sukari')" style="background:var(--card2);border:2px solid var(--line);border-radius:12px;padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;text-align:left;transition:all .2s;">🩸 Sukari ya Damu / Kisukari</button>
+        <button class="ob-btn" onclick="selectGoal(this,'akili')" style="background:var(--card2);border:2px solid var(--line);border-radius:12px;padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;text-align:left;transition:all .2s;">🧠 Afya ya Akili / Msongo</button>
+        <button class="ob-btn" onclick="selectGoal(this,'uzito')" style="background:var(--card2);border:2px solid var(--line);border-radius:12px;padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;text-align:left;transition:all .2s;">⚖️ Uzito / Afya ya Jumla</button>
+        <button class="ob-btn" onclick="selectGoal(this,'ngozi')" style="background:var(--card2);border:2px solid var(--line);border-radius:12px;padding:12px 16px;font-family:'DM Sans',sans-serif;font-size:13px;font-weight:600;color:var(--text);cursor:pointer;text-align:left;transition:all .2s;">✨ Ngozi / Nywele / Uzuri</button>
+      </div>
+      <button onclick="finishOnboarding()" id="ob-done" style="display:none;background:var(--gr);color:#fff;border:none;border-radius:12px;padding:14px;width:100%;font-family:'DM Sans',sans-serif;font-size:14px;font-weight:800;cursor:pointer;">🌿 Anza Safari Yako →</button>
+      <button onclick="skipOnboarding()" style="background:none;border:none;color:var(--muted);font-size:12px;font-weight:600;cursor:pointer;width:100%;margin-top:10px;font-family:'DM Sans',sans-serif;">Ruka kwa sasa →</button>
+    </div>`;
+  document.body.appendChild(modal);
+}
+
+let selectedGoal='';
+function selectGoal(btn,goal){
+  selectedGoal=goal;
+  document.querySelectorAll('.ob-btn').forEach(b=>{b.style.border='2px solid var(--line)';b.style.background='var(--card2)';b.style.color='var(--text)';});
+  btn.style.border='2px solid var(--gr)';btn.style.background='var(--gr3)';btn.style.color='var(--gr2)';
+  document.getElementById('ob-done').style.display='block';
+}
+
+function finishOnboarding(){
+  if(CU){CU.goal=selectedGoal;saveSession();const us=getUsers();const ix=us.findIndex(u=>u.email===CU.email);if(ix>=0){us[ix].goal=selectedGoal;setUsers(us);}}
+  closeOnboarding();
+  // Show personalized recommendations
+  const goalMimea={
+    nguvu:[0,3,4,12,38,39,41],damu:[3,5,6,20,28,60],
+    sukari:[5,20,4,98,31],akili:[12,22,32,50,70,87],
+    uzito:[2,15,17,22,26,95],ngozi:[8,20,21,27,75,77]
+  }[selectedGoal]||[0,2,3];
+  const mea=goalMimea.slice(0,3).map(id=>{const m=MIMEA.find(x=>x.id===id);return m?`<div style="display:flex;align-items:center;gap:10px;background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;cursor:pointer;" onclick="openMmea(${m.id});goto('s-maktaba')"><span style="font-size:24px;">${m.emoji}</span><div><div style="font-size:13px;font-weight:700;">${m.name}</div><div style="font-size:11px;color:var(--muted);">${m.faida[0]}</div></div></div>`:''}).join('');
+  const toast2=document.createElement('div');
+  toast2.style.cssText='position:fixed;bottom:100px;left:16px;right:16px;background:var(--card);border:1.5px solid var(--gr4);border-radius:16px;padding:16px;z-index:8000;box-shadow:0 8px 32px rgba(0,0,0,.15);animation:pageIn .3s ease;';
+  toast2.innerHTML=`<div style="font-size:13px;font-weight:800;color:var(--gr2);margin-bottom:10px;">🌿 Mimea Iliyopendekezwa Kwako:</div>${mea}<button onclick="this.parentElement.remove()" style="background:none;border:none;color:var(--muted);font-size:11px;font-weight:600;cursor:pointer;margin-top:8px;font-family:'DM Sans',sans-serif;">✕ Funga</button>`;
+  document.body.appendChild(toast2);
+  setTimeout(()=>{toast2.remove();},8000);
+  goto('s-home');
+  toast('Karibu '+CU.name.split(' ')[0]+'! Ratiba yako imewekwa tayari. 🌿','ok');
+}
+
+function skipOnboarding(){
+  closeOnboarding();
   goto('s-home');
   toast('Karibu '+CU.name.split(' ')[0]+'! 🌿','ok');
+}
+
+function closeOnboarding(){
+  const m=document.getElementById('onboarding-modal');
+  if(m)m.remove();
 }
 function saveSession(){try{sessionStorage.setItem(SES,JSON.stringify(CU));}catch{}}
 function loadSession(){try{const s=sessionStorage.getItem(SES);if(s){CU=JSON.parse(s);return true;}}catch{}return false;}
@@ -1214,10 +1286,14 @@ function genRipoti(){
   const symptoms=[];
   MASWALI.forEach((q,i)=>{
     const a=diagAns[i]??4;
-    if(a<=1)symptoms.push({type:'crit',ic:q.ic,cat:q.cat});
-    else if(a<=2)symptoms.push({type:'warn',ic:q.ic,cat:q.cat});
+    if(a<=1)symptoms.push({type:'crit',ic:q.ic,cat:q.cat,idx:i});
+    else if(a<=2)symptoms.push({type:'warn',ic:q.ic,cat:q.cat,idx:i});
   });
+
+  // Generate personalized guide based on worst answers
   const mimeaRec=getMimeaRec(diagAns);
+  const muelengo=getPersonalizedGuide(diagAns,pct,mimeaRec);
+
   document.getElementById('ripoti-body').innerHTML=`
     <div class="ripoti-card">
       <div class="ripoti-head">
@@ -1229,34 +1305,121 @@ function genRipoti(){
         <div class="ripoti-title">${level}</div>
         <div class="ripoti-sub">Ripoti hii imetokana na majibu yako ya uchunguzi. Wasiliana na mtaalamu kwa ushauri wa kina.</div>
       </div>
+
       ${symptoms.length?`
       <div style="margin-bottom:18px;">
         <div class="ripoti-sec-title">⚠️ Maeneo Yanayohitaji Umakini</div>
-        ${symptoms.map(s=>`<div class="symptom-item ${s.type}"><div class="symptom-ic">${s.ic}</div><div><div class="symptom-title">${s.type==='crit'?'Tatizo Kubwa':'Inahitaji Umakini'} — ${s.cat}</div><div class="symptom-text">Wasiliana na mtaalamu wa Herbal Academy kwa ushauri wa kina.</div></div></div>`).join('')}
+        ${symptoms.map(s=>`<div class="symptom-item ${s.type}"><div class="symptom-ic">${s.ic}</div><div><div class="symptom-title">${s.type==='crit'?'Tatizo Kubwa':'Inahitaji Umakini'} — ${s.cat}</div><div class="symptom-text">Angalia muongozo wa mimea iliyopendekezwa hapa chini.</div></div></div>`).join('')}
       </div>`:''}
+
+      <!-- PERSONALIZED GUIDE -->
+      <div style="background:linear-gradient(135deg,var(--gr3),var(--am3));border:1.5px solid var(--gr4);border-radius:var(--r);padding:18px;margin-bottom:18px;">
+        <div style="font-size:13px;font-weight:800;color:var(--gr2);margin-bottom:12px;display:flex;align-items:center;gap:7px;">🌿 Muongozo Wako wa Kibinafsi</div>
+        ${muelengo.map(g=>`
+          <div style="background:var(--card);border-radius:var(--rs);padding:13px 15px;margin-bottom:10px;border-left:3px solid ${g.color||'var(--gr)'};">
+            <div style="font-size:13px;font-weight:800;color:var(--text);margin-bottom:5px;">${g.emoji} ${g.tatizo}</div>
+            <div style="font-size:12px;color:var(--sub);line-height:1.6;font-weight:500;margin-bottom:8px;">${g.suluhisho}</div>
+            <div style="display:flex;gap:6px;flex-wrap:wrap;">
+              ${g.mimea.map(m=>`<div class="mmea-chip" onclick="openMmea(${m.id})">${m.emoji} ${m.name.split('(')[0].trim()}</div>`).join('')}
+            </div>
+            ${g.ratiba?`<div style="margin-top:8px;font-size:11px;color:var(--gr2);font-weight:700;background:var(--gr3);padding:6px 10px;border-radius:var(--rxs);">⏰ ${g.ratiba}</div>`:''}
+          </div>`).join('')}
+      </div>
+
       <div style="margin-bottom:18px;">
         <div class="ripoti-sec-title">🌿 Mimea Inayopendekezwa</div>
-        <div class="mimea-chips">${mimeaRec.map(m=>`<div class="mmea-chip" onclick="goto('s-maktaba')">${m.emoji} ${m.name}</div>`).join('')}</div>
+        <div class="mimea-chips">${mimeaRec.map(m=>`<div class="mmea-chip" onclick="openMmea(${m.id})">${m.emoji} ${m.name}</div>`).join('')}</div>
       </div>
+
       <div style="margin-bottom:18px;">
         <div class="ripoti-sec-title">📅 Hatua Zinazofuata</div>
         <div style="background:var(--gr3);border:1px solid var(--gr4);border-radius:var(--rs);padding:14px;">
           <div style="font-size:13px;color:var(--sub);line-height:1.8;font-weight:500;">
-            1. 🌿 Anza kutumia mimea iliyopendekezwa hapo juu<br>
+            1. 🌿 Anza mimea iliyopendekezwa kutoka muongozo wako<br>
             2. 📅 Fuata Ratiba ya Siku 7 (Premium) kwa matumizi sahihi<br>
-            3. 💧 Kunywa maji mengi zaidi kila siku<br>
-            4. 😴 Jaribu kulala saa 7-8 kila usiku<br>
-            5. 💬 Wasiliana na mtaalamu kwa ushauri wa ziada
+            3. 💧 Kunywa maji glasi 8+ kila siku<br>
+            4. 😴 Lala saa 7-8 kila usiku<br>
+            5. 💬 Wasiliana na Dr. Revo kwa ushauri zaidi
           </div>
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:10px;">
         <button class="btn btn-gr btn-full" onclick="goto('s-maktaba')">🌱 Angalia Maktaba ya Mimea</button>
-        <button class="btn btn-out btn-full" onclick="goto('s-malipo')">📅 Fungua Ratiba ya Siku 7</button>
+        <button class="btn btn-out btn-full" onclick="goto('s-malipo')">📅 Fungua Ratiba ya Siku 7 ${CU&&!CU.premium?'(Mwezi wa Bure)':''}</button>
       </div>
     </div>`;
   if(CU){CU.uchunguzi=(CU.uchunguzi||0)+1;const us=getUsers();const ix=us.findIndex(u=>u.email===CU.email);if(ix>=0)us[ix].uchunguzi=CU.uchunguzi;setUsers(us);saveSession();}
   goto('s-ripoti');
+}
+
+function getPersonalizedGuide(ans,pct,mimeaRec){
+  const guides=[];
+  const a=ans;
+
+  // Uchovu/Nguvu
+  if((a[0]??4)<=2){
+    guides.push({
+      emoji:'😴',tatizo:'Uchovu na Upungufu wa Nguvu',color:'var(--am)',
+      suluhisho:'Mwili wako unahitaji virutubisho vya kuzindua nguvu. Moringa na Ashwagandha zinafaa sana — zinaboresha nishati bila kusababisha utegemezi.',
+      mimea:MIMEA.filter(m=>[2,12,4].includes(m.id)).slice(0,3),
+      ratiba:'Moringa asubuhi + Ashwagandha jioni kabla ya kulala'
+    });
+  }
+  // Mzunguko wa Damu
+  if((a[1]??4)<=2){
+    guides.push({
+      emoji:'❤️',tatizo:'Mzunguko wa Damu Hafifu',color:'var(--red)',
+      suluhisho:'Tangawizi na Vitunguu Saumu ni dawa bora kwa mzunguko. Pia Hibiscus inasaidia shinikizo la damu. Anza na chai ya tangawizi kila asubuhi.',
+      mimea:MIMEA.filter(m=>[1,3,6].includes(m.id)).slice(0,3),
+      ratiba:'Chai ya tangawizi + limao asubuhi, vitunguu saumu 2-3 kabla ya chakula'
+    });
+  }
+  // Msongo wa Mawazo
+  if((a[2]??4)<=2){
+    guides.push({
+      emoji:'🧠',tatizo:'Msongo wa Mawazo na Wasiwasi',color:'#8b5cf6',
+      suluhisho:'Ashwagandha ni adaptogen — inaboresha jinsi mwili unavyoshughulikia msongo. Chamomile na Tulsi pia zinasaidia utulivu wa akili bila dawa za kemikali.',
+      mimea:MIMEA.filter(m=>[12,7,11].includes(m.id)).slice(0,3),
+      ratiba:'Chai ya chamomile jioni + ashwagandha kabla ya kulala'
+    });
+  }
+  // Nguvu za Kiume
+  if((a[3]??4)<=2){
+    guides.push({
+      emoji:'💪',tatizo:'Nguvu za Kiume na Uzazi',color:'var(--gr)',
+      suluhisho:'Mbegu za Maboga, Fenugreek na Ashwagandha ni mchanganyiko bora wa kuzindua nguvu za kiume kwa njia ya asili. Zinaboresha testosterone bila madhara ya kemikali.',
+      mimea:MIMEA.filter(m=>[0,4,12].includes(m.id)).slice(0,3),
+      ratiba:'Mbegu za maboga asubuhi + fenugreek iliyolowekwa usiku'
+    });
+  }
+  // Usingizi
+  if((a[4]??4)<=2){
+    guides.push({
+      emoji:'🌙',tatizo:'Usingizi Mbaya',color:'#6366f1',
+      suluhisho:'Chamomile na Ashwagandha zinasaidia utulivu wa akili na kulala vizuri. Epuka chai/kahawa baada ya saa 2 jioni.',
+      mimea:MIMEA.filter(m=>[7,12,11].includes(m.id)).slice(0,3),
+      ratiba:'Chai ya chamomile dakika 30 kabla ya kulala — kila usiku'
+    });
+  }
+  // Lishe
+  if((a[5]??4)<=2){
+    guides.push({
+      emoji:'🍽️',tatizo:'Lishe Duni',color:'var(--am)',
+      suluhisho:'Moringa ni "superfood" ya Afrika — ina virutubisho zaidi ya matunda mengi. Ongeza poda ya moringa kwenye kila mlo kama nyongeza ya lishe.',
+      mimea:MIMEA.filter(m=>[2,13,14].includes(m.id)).slice(0,3),
+      ratiba:'Kijiko 1 poda ya moringa kwenye chakula cha asubuhi'
+    });
+  }
+  // Hakuna tatizo kubwa — guide ya jumla
+  if(guides.length===0){
+    guides.push({
+      emoji:'🌿',tatizo:'Kudumisha Afya Nzuri',color:'var(--gr)',
+      suluhisho:`Afya yako ni nzuri (${pct}%)! Endelea kudumisha na mimea ifuatayo ya kinga na nguvu.`,
+      mimea:mimeaRec.slice(0,3),
+      ratiba:'Chai ya mimea mchanganyiko mara moja kwa siku'
+    });
+  }
+  return guides.slice(0,4);
 }
 function getMimeaRec(ans){
   const worst=Object.entries(ans).sort((a,b)=>a[1]-b[1]).slice(0,3).map(([i])=>Number(i));
@@ -1380,16 +1543,16 @@ function renderMimea(){
   let data=MIMEA;
   if(mmeaFilt!=='all')data=data.filter(m=>m.cats.includes(mmeaFilt));
   if(mmeaQ)data=data.filter(m=>m.name.toLowerCase().includes(mmeaQ)||m.latin.toLowerCase().includes(mmeaQ));
-  document.getElementById('mimea-grid').innerHTML=data.map(m=>{const hImg=getHerbImg(m.id);return`
+  document.getElementById('mimea-grid').innerHTML=data.map(m=>`
     <div class="mmea-card" onclick="openMmea(${m.id})">
-      <div class="mmea-card-img">${hImg?`<img src="${hImg}" style="width:100%;height:100%;object-fit:cover;">`:`<span style="font-size:52px">${m.emoji}</span>`}<div class="mmea-verified">✓ Imehakikiwa</div></div>
+      <div class="mmea-card-img"><span style="font-size:52px">${m.emoji}</span><div class="mmea-verified">✓ Imehakikiwa</div></div>
       <div class="mmea-body">
         <div class="mmea-name">${m.name}</div>
         <div class="mmea-latin">${m.latin}</div>
         <div class="mmea-tags">${m.cats.map(c=>`<span class="mmea-tag">${{nguvu:'💪 Nguvu',uzazi:'🌸 Uzazi',damu:'❤️ Damu',akili:'🧠 Akili',lishe:'🍽️ Lishe'}[c]}</span>`).join('')}</div>
         <div class="mmea-rating">⭐ ${m.rating} (${m.reviews} maoni)</div>
       </div>
-    </div>`;}).join('')||'<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)"><div style="font-size:42px;margin-bottom:10px;">🔍</div>Hakuna mmea unaolingana</div>';
+    </div>`).join('')||'<div style="grid-column:1/-1;text-align:center;padding:40px;color:var(--muted)"><div style="font-size:42px;margin-bottom:10px;">🔍</div>Hakuna mmea unaolingana</div>';
 }
 function filterMimea(q){mmeaQ=q.toLowerCase();renderMimea();}
 function setFilter(f,btn){
@@ -1422,7 +1585,7 @@ function openMmea(id){
         </div>
         <p style="font-size:14px;color:var(--sub);line-height:1.7;font-weight:500;margin-bottom:14px;">${m.matumizi}</p>
         ${m.onyo?`<div class="onyo-box"><div class="onyo-title">⚠️ Tahadhari</div><div class="onyo-text">${m.onyo}</div></div>`:''}
-        <button class="btn btn-gr btn-full" style="margin-top:16px;" onclick="openMmeaRatiba(${m.id})">📅 Angalia Ratiba ya ${m.name} →</button>
+        <button class="btn btn-gr btn-full" style="margin-top:16px;" onclick="openMmeaRatiba(${m.id})">📅 Angalia Ratiba ya ${m.name.split('(')[0].trim()} →</button>
       </div>
       <div class="mmea-sec" id="ms-mcha">
         <div style="font-size:13px;font-weight:600;color:var(--sub);margin-bottom:16px;padding:10px 14px;background:var(--gr3);border-radius:var(--rs);">👨‍🍳 Mchakato wa Kitaalamu wa Kutengeneza Nyumbani</div>
@@ -1430,7 +1593,7 @@ function openMmea(id){
       </div>
       <div class="mmea-sec" id="ms-faid">
         ${m.faida.map(f=>`<div class="faida-item"><span style="font-size:16px;flex-shrink:0;">✅</span><span style="font-size:13px;font-weight:600;">${f}</span></div>`).join('')}
-        <button class="btn btn-gr btn-full" style="margin-top:10px;" onclick="openMmeaRatiba(${m.id})">📅 Angalia Ratiba ya ${m.name} →</button>
+        <button class="btn btn-gr btn-full" style="margin-top:10px;" onclick="openMmeaRatiba(${m.id})">📅 Angalia Ratiba ya ${m.name.split('(')[0].trim()} →</button>
       </div>
     </div>`;
   goto('s-mmea');
@@ -1442,93 +1605,168 @@ function switchMTab(t){
 }
 
 // ══════════════════════════════════
-// RATIBA
+// RATIBA — IMEBORESHWA KIKAMILIFU
 // ══════════════════════════════════
 const RATIBA=[
   {siku:'Siku 1',sub:'Kuanza kwa utulivu',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Chai ya Tangawizi + Asali',text:'Chemsha tangawizi na asali. Kunywa kabla ya kula.',pill:'🫚 Tangawizi · 🍯 Asali'},{t:'12:30',lbl:'Mchana',title:'Mbegu za Maboga (Raw)',text:'Gramu 30 za mbegu zisizokaangwa pamoja na mlo wa mchana.',pill:'🎃 Mbegu za Maboga'},{t:'19:00',lbl:'Jioni',title:'Chai ya Moringa + Mdalasini',text:'Kijiko 1 cha poda ya moringa na nusu kijiko cha mdalasini kwenye maji ya moto.',pill:'🌿 Moringa · 🍂 Mdalasini'}]},
   {siku:'Siku 2',sub:'Kuimarisha msingi',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Vitunguu Saumu + Asali',text:'Kata vitunguu 2-3. Changanya na asali. Kula kabla ya kula chochote.',pill:'🧄 Vitunguu Saumu'},{t:'12:30',lbl:'Mchana',title:'Fenugreek Iliyolowekwa',text:'Mbegu za fenugreek zilizolowekwa usiku. Kula pamoja na maji yake.',pill:'🌾 Fenugreek'},{t:'19:00',lbl:'Jioni',title:'Chai ya Tangawizi + Limao',text:'Inaboresha mzunguko wa damu na kulala vizuri.',pill:'🫚 Tangawizi · 🍋 Limao'}]},
   {siku:'Siku 3',sub:'Nguvu za Mwili',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Smoothie ya Moringa + Ndizi',text:'Blender: ndizi 1, kijiko 2 cha moringa, maji. Kunywa badala ya chai.',pill:'🌿 Moringa · 🍌 Ndizi'},{t:'12:30',lbl:'Mchana',title:'Mbegu za Maboga + Matunda',text:'Gramu 30 mbegu na matunda ya aina mbalimbali kwa vitamini.',pill:'🎃 Mbegu za Maboga'},{t:'19:00',lbl:'Jioni',title:'Mchanganyiko wa Nguvu',text:'Tangawizi + mdalasini + asali kwenye maji ya moto.',pill:'🫚+🍂+🍯 Mchanganyiko'}]},
   {siku:'Siku 4',sub:'Usawa wa Homoni',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Maji ya Vitunguu + Limao',text:'Piga vitunguu 3 kwenye maji. Chuja, ongeza limao. Kunywa polepole.',pill:'🧄 Vitunguu Saumu'},{t:'12:30',lbl:'Mchana',title:'Supu ya Moringa',text:'Ongeza majani ya moringa kwenye supu yako ya kawaida.',pill:'🌿 Moringa'},{t:'19:00',lbl:'Jioni',title:'Chai ya Fenugreek + Mdalasini',text:'Inaboresha usawa wa sukari ya damu.',pill:'🌾+🍂 Mchanganyiko'}]},
-  {siku:'Siku 5',sub:'Kuimarisha Kinga',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Tangawizi Raw',text:'Kula kipande kidogo cha tangawizi mbichi — antioxidant ya moja kwa moja.',pill:'🫚 Tangawizi Mbichi'},{t:'12:30',lbl:'Mchana',title:'Mbegu + Vitunguu Saladi',text:'Saladi ya mbegu za maboga, vitunguu, na limao.',pill:'🎃+🧄 Mchanganyiko'},{t:'19:00',lbl:'Jioni',title:'Chai ya Nguvu',text:'Moringa + asali + limao. Antioxidants nyingi kabla ya kulala.',pill:'🌿+🍯+🍋 Chai ya Nguvu'}]},
-  {siku:'Siku 6',sub:'Utakaso wa Mwili',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Maji ya Joto + Limao + Asali',text:'Mwanzo wa siku — inasafisha mfumo wa mmengenyo.',pill:'💧 Maji ya Utakaso'},{t:'12:30',lbl:'Mchana',title:'Fenugreek + Mbegu za Maboga',text:'Mchanganyiko huu unaimarisha nguvu za kiume na usawa wa homoni.',pill:'🌾+🎃 Nguvu Kamili'},{t:'19:00',lbl:'Jioni',title:'Chai ya Mdalasini + Tangawizi',text:'Inaboresha kulala na mzunguko wa damu usiku.',pill:'🍂+🫚 Usiku wa Afya'}]},
-  {siku:'Siku 7',sub:'Siku ya Tathmini',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Chaguo Lako',text:'Chagua kinywaji unachokipenda zaidi kutoka siku 6 zilizopita.',pill:'🌿 Chaguo Lako'},{t:'12:30',lbl:'Mchana',title:'Mlo Kamili wa Lishe',text:'Mboga, matunda, nafaka, na protini ya asili. Epuka chakula cha viwandani.',pill:'🍽️ Lishe Kamili'},{t:'19:00',lbl:'Jioni',title:'Tathmini na Kuendelea',text:'Angalia jinsi unavyohisi ikilinganishwa na siku ya kwanza. Endelea kwa wiki nyingine!',pill:'📊 Tathmini ya Wiki'}]},
+  {siku:'Siku 5',sub:'Kuimarisha Kinga',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Tangawizi Raw',text:'Kula kipande kidogo cha tangawizi mbichi.',pill:'🫚 Tangawizi Mbichi'},{t:'12:30',lbl:'Mchana',title:'Mbegu + Vitunguu Saladi',text:'Saladi ya mbegu za maboga, vitunguu, na limao.',pill:'🎃+🧄 Mchanganyiko'},{t:'19:00',lbl:'Jioni',title:'Chai ya Nguvu',text:'Moringa + asali + limao. Antioxidants kabla ya kulala.',pill:'🌿+🍯+🍋 Chai ya Nguvu'}]},
+  {siku:'Siku 6',sub:'Utakaso wa Mwili',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Maji ya Joto + Limao + Asali',text:'Inasafisha mfumo wa mmengenyo.',pill:'💧 Maji ya Utakaso'},{t:'12:30',lbl:'Mchana',title:'Fenugreek + Mbegu za Maboga',text:'Unaimarisha nguvu za kiume na usawa wa homoni.',pill:'🌾+🎃 Nguvu Kamili'},{t:'19:00',lbl:'Jioni',title:'Chai ya Mdalasini + Tangawizi',text:'Inaboresha kulala na mzunguko wa damu usiku.',pill:'🍂+🫚 Usiku wa Afya'}]},
+  {siku:'Siku 7',sub:'Siku ya Tathmini',sessions:[{t:'06:30',lbl:'Asubuhi',title:'Chaguo Lako',text:'Chagua kinywaji unachokipenda zaidi kutoka siku 6 zilizopita.',pill:'🌿 Chaguo Lako'},{t:'12:30',lbl:'Mchana',title:'Mlo Kamili wa Lishe',text:'Mboga, matunda, nafaka, na protini ya asili.',pill:'🍽️ Lishe Kamili'},{t:'19:00',lbl:'Jioni',title:'Tathmini na Kuendelea',text:'Angalia jinsi unavyohisi. Endelea kwa wiki nyingine!',pill:'📊 Tathmini ya Wiki'}]},
 ];
 
-let currentRatibaHerbId = null;
+let currentRatibaHerbId=null;
 
 function getMmeaRatiba(herbId){
-  // Generate a unique 7-day schedule based on the herb's own steps data
-  const m = MIMEA.find(x=>x.id===herbId);
-  if(!m) return RATIBA;
-  const steps = m.steps||[];
-  const siku_labels = [
-    {siku:'Siku 1',sub:'Kuanza kwa utulivu'},
-    {siku:'Siku 2',sub:'Kuimarisha msingi'},
-    {siku:'Siku 3',sub:'Nguvu za '+m.name},
-    {siku:'Siku 4',sub:'Usawa wa Homoni'},
-    {siku:'Siku 5',sub:'Kuimarisha Kinga'},
-    {siku:'Siku 6',sub:'Utakaso wa Mwili'},
-    {siku:'Siku 7',sub:'Siku ya Tathmini'},
+  const m=MIMEA.find(x=>x.id===herbId);
+  if(!m)return RATIBA;
+  const nm=m.name.split('(')[0].trim();
+  const st=m.steps||[];
+  const g=(i)=>{const s=st[i%st.length]||st[0];return {t:s.t,tx:s.tx};};
+  // Nyakati tofauti kwa kila mmea kulingana na ID yake
+  const times=[
+    [{t:'06:00',lbl:'Alfajiri'},{t:'12:30',lbl:'Mchana'},{t:'20:00',lbl:'Usiku'}],
+    [{t:'06:30',lbl:'Asubuhi'},{t:'13:00',lbl:'Mchana'},{t:'19:30',lbl:'Jioni'}],
+    [{t:'07:00',lbl:'Asubuhi'},{t:'12:00',lbl:'Mchana'},{t:'18:30',lbl:'Jioni'}],
+    [{t:'06:00',lbl:'Alfajiri'},{t:'14:00',lbl:'Mchana'},{t:'21:00',lbl:'Usiku'}],
+  ][m.id%4];
+  const gharama=m.gharama||'Bei inayofaa';
+  return [
+    {siku:'Siku 1',sub:`Kuanza: ${nm} kwa mara ya kwanza`,
+     sessions:[
+      {t:times[0].t,lbl:times[0].lbl,title:`Hatua 1: ${g(0).t}`,
+       text:`${g(0).tx} Anza na NUSU ya kipimo cha kawaida — mwili wako unahitaji kuzoea ${nm}.`,
+       pill:`${m.emoji} ${nm} — Kipimo cha Kuanza (Nusu)`},
+      {t:times[1].t,lbl:times[1].lbl,title:'Mlo wa Kuimarisha',
+       text:`Kula mlo wenye mboga za kijani, protini ya asili, na maji mengi. ${nm} hufanya kazi vizuri na chakula bora.`,
+       pill:`🥗 Lishe + ${m.emoji} ${nm}`},
+      {t:times[2].t,lbl:times[2].lbl,title:'Rekodi Hisia Zako',
+       text:`Andika jinsi unavyohisi baada ya ${nm} kwa mara ya kwanza. Je, kuna mabadiliko? Hii itakusaidia kupanga wiki nzima.`,
+       pill:`📝 Kumbukumbu ya Siku 1`},
+     ]},
+    {siku:'Siku 2',sub:`Kuimarisha utaratibu wa ${nm}`,
+     sessions:[
+      {t:times[0].t,lbl:times[0].lbl,title:`${g(1).t} — Kipimo Kamili`,
+       text:`${g(1).tx} Leo unaweza kutumia kipimo kamili — mwili wako umejua ${nm}.`,
+       pill:`${m.emoji} ${nm} — Kipimo Kamili`},
+      {t:times[1].t,lbl:times[1].lbl,title:`Mchanganyiko Mzuri`,
+       text:`${g(2).tx} Ongeza maji mengi — angalau glasi 2 kabla ya ${nm}.`,
+       pill:`💧 Maji + ${m.emoji} ${nm}`},
+      {t:times[2].t,lbl:times[2].lbl,title:`Usiku wa Utulivu`,
+       text:`${g(3).tx} Kabla ya kulala ni wakati bora kwa ${nm} — mwili unafanya kazi usiku.`,
+       pill:`🌙 ${nm} — Usiku wa Afya`},
+     ]},
+    {siku:'Siku 3',sub:`Nguvu za ${nm} zinaonekana`,
+     sessions:[
+      {t:times[0].t,lbl:times[0].lbl,title:`Nguvu ya Alfajiri — ${g(4).t}`,
+       text:`${g(4).tx} Siku ya tatu — mwili unaanza kujisikia athari za ${nm}.`,
+       pill:`⚡ ${m.emoji} ${nm} — Nguvu`},
+      {t:times[1].t,lbl:times[1].lbl,title:'Tathmini ya Nusu ya Awali',
+       text:`Linganisha hali yako ya leo na Siku 1. Athari za ${m.gharama||'bei nzuri'} — gharama ndogo kwa matokeo makubwa!`,
+       pill:`📊 Maendeleo ya Siku 3`},
+      {t:times[2].t,lbl:times[2].lbl,title:`${g(0).t} — Marudio`,
+       text:`${g(0).tx} Kurudia hatua ya msingi kunaimarisha athari za ${nm} mwilini.`,
+       pill:`🔄 ${nm} — Imarisha`},
+     ]},
+    {siku:'Siku 4',sub:`Usawa kamili wa ${nm} mwilini`,
+     sessions:[
+      {t:times[0].t,lbl:times[0].lbl,title:`Mchanganyiko Maalum — ${g(1).t}`,
+       text:`${g(1).tx} Unaweza sasa kuongeza mmea mwingine sambamba na ${nm} kwa matokeo bora zaidi.`,
+       pill:`${m.emoji} ${nm} — Mchanganyiko`},
+      {t:times[1].t,lbl:times[1].lbl,title:`Chakula na ${nm}`,
+       text:`${g(2).tx} Tumia ${nm} pamoja na mlo wa mchana leo — inafyonzwa vizuri zaidi na chakula.`,
+       pill:`🍽️ ${nm} + Chakula`},
+      {t:times[2].t,lbl:times[2].lbl,title:'Pumzika na Usawa',
+       text:`${g(3).tx} Usiku wa 4 — mwili wako unajua jinsi ya kutumia ${nm} kikamilifu.`,
+       pill:`🌿 ${nm} — Usawa wa Siku 4`},
+     ]},
+    {siku:'Siku 5',sub:`${nm} inaonyesha matokeo mazuri`,
+     sessions:[
+      {t:times[0].t,lbl:times[0].lbl,title:`Nguvu ya Juu — ${g(4).t}`,
+       text:`${g(4).tx} Siku ya 5 — kipimo kikubwa zaidi kinaweza kutumika sasa kwa usalama.`,
+       pill:`💪 ${nm} — Nguvu ya Siku 5`},
+      {t:times[1].t,lbl:times[1].lbl,title:`Lishe ya Kuimarisha`,
+       text:`${g(0).tx} Kula matunda, mboga, na maji mengi. ${nm} inafanya kazi bora na lishe kamili.`,
+       pill:`🥦 Lishe Bora + ${m.emoji}`},
+      {t:times[2].t,lbl:times[2].lbl,title:`${g(1).t} — Jioni ya Nguvu`,
+       text:`${g(1).tx} Kabla ya kulala, ${nm} inasaidia mwili kufanya kazi usiku.`,
+       pill:`✨ ${nm} — Siku 5 Imekamilika`},
+     ]},
+    {siku:'Siku 6',sub:`Utakaso wa kina na ${nm}`,
+     sessions:[
+      {t:times[0].t,lbl:times[0].lbl,title:'Maji ya Moto + '+nm,
+       text:`Anza na glasi 2 za maji ya moto, kisha ${g(2).tx} Utakaso wa asubuhi ni wa nguvu zaidi.`,
+       pill:`💧 Maji Moto → ${m.emoji} ${nm}`},
+      {t:times[1].t,lbl:times[1].lbl,title:`${g(3).t} — Mchana`,
+       text:`${g(3).tx} Utaratibu wa siku 6 unaimarisha mfumo wako wa kinga na nguvu.`,
+       pill:`${m.emoji} ${nm} — Uimarishaji`},
+      {t:times[2].t,lbl:times[2].lbl,title:`${g(4).t} — Usiku wa Utakaso`,
+       text:`${g(4).tx} Usiku wa 6 — mwili wako unafanya utakaso wa kina ukiwa umelala.`,
+       pill:`🌿 ${nm} Utakaso wa Usiku`},
+     ]},
+    {siku:'Siku 7',sub:`🏆 Tathmini ya Wiki — ${nm} imefanya kazi!`,
+     sessions:[
+      {t:times[0].t,lbl:times[0].lbl,title:'Chaguo Bora la Wiki',
+       text:`Chagua hatua uliyoipenda zaidi kutoka siku 6 zilizopita. ${g(0).tx}`,
+       pill:`🏆 ${m.emoji} ${nm} — Chaguo Lako`},
+      {t:times[1].t,lbl:times[1].lbl,title:'Tathmini ya Maendeleo',
+       text:`Linganisha hali yako ya leo na Siku 1. Faida za ${nm} (${m.faida[0]}, ${m.faida[1]}) zinaonekana. Endelea wiki nyingine!`,
+       pill:`📈 Maendeleo ya Wiki 1`},
+      {t:times[2].t,lbl:times[2].lbl,title:'Panga Wiki Inayokuja',
+       text:`Wiki inayokuja, ongeza kipimo kidogo au jumuisha mmea mwingine. ${g(1).tx} Hongera kwa wiki yako ya kwanza!`,
+       pill:`🗓️ Mpango wa Wiki 2`},
+     ]},
   ];
-  // Build sessions using herb-specific steps, cycling through them
-  return siku_labels.map((lbl,i)=>{
-    const s1 = steps[i % steps.length] || steps[0];
-    const s2 = steps[(i+1) % steps.length] || steps[0];
-    const s3 = steps[(i+2) % steps.length] || steps[0];
-    return {
-      siku: lbl.siku,
-      sub: lbl.sub,
-      sessions:[
-        {t:'06:30',lbl:'Asubuhi',title:s1.t,text:s1.tx,pill:`${m.emoji} ${m.name}`},
-        {t:'12:30',lbl:'Mchana',title:s2.t,text:s2.tx,pill:`${m.emoji} ${m.name} — Mchana`},
-        {t:'19:00',lbl:'Jioni',title:s3.t,text:s3.tx,pill:`${m.emoji} ${m.name} — Jioni`},
-      ]
-    };
-  });
 }
 
 function openMmeaRatiba(herbId){
-  currentRatibaHerbId = herbId;
+  currentRatibaHerbId=herbId;
   goto('s-ratiba');
 }
 
 function renderRatiba(){
   const el=document.getElementById('ratiba-body');
+  if(!el)return;
   const prem=CU?.premium||false;
   const stg=getStg();
-  // Use herb-specific schedule if coming from a herb page, else use default
-  const activeRatiba = currentRatibaHerbId ? getMmeaRatiba(currentRatibaHerbId) : RATIBA;
-  const activeHerb = currentRatibaHerbId ? MIMEA.find(x=>x.id===currentRatibaHerbId) : null;
+  const priceM=Number(stg.priceM||3000);
+  const activeRatiba=currentRatibaHerbId?getMmeaRatiba(currentRatibaHerbId):RATIBA;
+  const activeHerb=currentRatibaHerbId?MIMEA.find(x=>x.id===currentRatibaHerbId):null;
+
   if(!prem){
     el.innerHTML=`
       <div class="ratiba-locked">
-        <span class="ratiba-lock-icon">🔒</span>
-        <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px;">Ratiba ya Siku 7 — Imefungwa</div>
-        <p style="font-size:14px;color:var(--sub);font-weight:500;line-height:1.6;margin-bottom:20px;">Ratiba hii inakuonyesha hatua kwa hatua jinsi ya kutumia mimea ya asili — asubuhi, mchana, na jioni — kwa matokeo bora zaidi.</p>
+        <span class="ratiba-lock-icon">🎁</span>
+        <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px;">Ratiba ya Siku 7${activeHerb?' — '+activeHerb.name.split('(')[0].trim():''}</div>
+        <p style="font-size:14px;color:var(--sub);font-weight:500;line-height:1.6;margin-bottom:16px;">Ratiba hii inakuonyesha hatua kwa hatua jinsi ya kutumia ${activeHerb?activeHerb.name:'mimea'} — asubuhi, mchana, na jioni — kwa matokeo bora.</p>
         <div class="ratiba-price-box">
-          <div class="ratiba-price-lbl">Bei ya Premium ya Uanachama</div>
-          <div class="ratiba-price-val">TSh ${Number(stg.priceM||5000).toLocaleString()} <span style="font-size:14px;color:var(--muted);font-weight:500;">/ mwezi</span></div>
-          <div class="ratiba-price-include">✅ Ratiba ya Siku 7 · ✅ Maktaba Yote · ✅ Mshauri wa WhatsApp</div>
+          <div class="ratiba-price-lbl">🎁 Mwezi wa Kwanza ni BURE!</div>
+          <div class="ratiba-price-val" style="font-size:24px;">Jaribu Bila Kulipa</div>
+          <div class="ratiba-price-include">✅ Ratiba · ✅ Maktaba · ✅ Muongozo wa Kibinafsi · Baadaye TSh ${priceM.toLocaleString()}/mwezi</div>
         </div>
-        <button class="btn btn-am btn-full" onclick="goto('s-malipo')">💳 Lipa Sasa — Fungua Ratiba →</button>
-        <button class="btn btn-out btn-full" style="margin-top:10px;" onclick="goto('s-uchunguzi');startDiag()">🔬 Fanya Uchunguzi Bure Kwanza</button>
+        <button class="btn btn-gr btn-full" onclick="goto('s-malipo')">🎁 Activate Mwezi wa Bure →</button>
+        <button class="btn btn-out btn-full" style="margin-top:10px;" onclick="goto('s-uchunguzi');startDiag()">🔬 Fanya Uchunguzi Kwanza</button>
       </div>
-      <div style="opacity:.5;pointer-events:none;">
-        ${activeRatiba.slice(0,2).map(d=>ratibaDay(d)).join('')}
+      <div style="opacity:.45;pointer-events:none;">
+        ${activeRatiba.slice(0,1).map(d=>ratibaDay(d)).join('')}
       </div>
-      <div style="text-align:center;padding:16px;color:var(--muted);font-size:13px;font-weight:600;">🔒 Siku ${activeRatiba.length-2} zaidi zinasubiri kukufunguliwa...</div>`;
+      <div style="text-align:center;padding:16px;color:var(--muted);font-size:13px;font-weight:600;">🔒 Siku 6 zaidi zinasubiri — Jiunge bure leo!</div>`;
   } else {
     el.innerHTML=`
       <div style="background:linear-gradient(135deg,var(--gr3),var(--am3));border:1.5px solid var(--gr4);border-radius:var(--r);padding:16px 18px;margin-bottom:20px;text-align:center;">
-        <div style="font-size:22px;margin-bottom:5px;">${activeHerb?activeHerb.emoji:'🏆'}</div>
-        <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--gr2);">Una Ufikiaji Kamili!</div>
-        <div style="font-size:13px;color:var(--sub);font-weight:500;margin-top:3px;">Ratiba yako ya Siku 7${activeHerb?' — '+activeHerb.name:''} ipo hapa</div>
+        <div style="font-size:26px;margin-bottom:5px;">${activeHerb?activeHerb.emoji:'🏆'}</div>
+        <div style="font-family:'Playfair Display',serif;font-size:16px;font-weight:700;color:var(--gr2);">Ratiba Yako ya Siku 7${activeHerb?' — '+activeHerb.name.split('(')[0].trim():''}</div>
+        <div style="font-size:12px;color:var(--sub);font-weight:500;margin-top:3px;">Fuata ratiba hii kwa wiki moja kupata matokeo bora</div>
         ${activeHerb?`<button class="btn btn-out btn-sm" style="margin-top:10px;" onclick="currentRatibaHerbId=null;renderRatiba()">← Ratiba ya Jumla</button>`:''}
       </div>
       ${activeRatiba.map(d=>ratibaDay(d)).join('')}`;
   }
-  if(document.getElementById('ak-ratiba-sub')) document.getElementById('ak-ratiba-sub').textContent=prem?'✅ Ratiba ipo tayari':'🔒 Inagusa malipo';
-  if(document.getElementById('ratiba-home-sub')) document.getElementById('ratiba-home-sub').textContent=prem?'✅ Fungua Ratiba':'🔒 Inagusa malipo';
+  const akEl=document.getElementById('ak-ratiba-sub');
+  if(akEl)akEl.textContent=prem?'✅ Ratiba ipo tayari':'🎁 Mwezi wa Bure';
+  const hrEl=document.getElementById('ratiba-home-sub');
+  if(hrEl)hrEl.textContent=prem?'✅ Fungua Ratiba':'🎁 Mwezi wa Bure';
 }
 
 function ratibaDay(d){
@@ -1547,62 +1785,137 @@ function ratibaDay(d){
 // ══════════════════════════════════
 // MALIPO
 // ══════════════════════════════════
-let selMethod='mpesa',selPkg=5000;
+let selMethod='mpesa',selPkg=0,selPkgLabel='Jaribu Bure (Mwezi 1)';
 
 function renderMalipo(){
   const el=document.getElementById('malipo-body');
   if(CU?.premium){
+    // Check if user can upgrade (has plan info)
+    const planInfo = CU.planInfo||{};
+    const canUpgrade = planInfo.pkg !== 'mwaka';
     el.innerHTML=`<div class="malipo-card">
       <div style="text-align:center;padding:20px 0;">
         <span class="success-icon">🏆</span>
         <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--gr2);margin-bottom:7px;">Una Uanachama wa Premium!</div>
-        <div style="font-size:14px;color:var(--sub);font-weight:500;line-height:1.6;margin-bottom:20px;">Hongera! Una ufikiaji kamili wa maudhui yote ya Herbal Academy.</div>
+        <div style="font-size:14px;color:var(--sub);font-weight:500;line-height:1.6;margin-bottom:5px;">Hongera! Una ufikiaji kamili wa maudhui yote ya Herbal Academy.</div>
+        ${planInfo.pkg?`<div style="display:inline-flex;align-items:center;gap:6px;background:var(--gr3);border:1px solid var(--gr4);color:var(--gr2);font-size:12px;font-weight:700;padding:5px 14px;border-radius:100px;margin-bottom:16px;">📦 Mpango wako: ${planInfo.pkgLabel||planInfo.pkg} ${planInfo.expiry?'· Mwisho: '+new Date(planInfo.expiry).toLocaleDateString('sw'):''}</div>`:''}
         <button class="btn btn-gr btn-full" onclick="goto('s-ratiba')">📅 Angalia Ratiba yako →</button>
         <button class="btn btn-out btn-full" style="margin-top:10px;" onclick="goto('s-maktaba')">🌱 Tembelea Maktaba →</button>
+        ${canUpgrade?`<div style="margin-top:18px;padding-top:18px;border-top:1px solid var(--line);">
+          <div style="font-size:13px;font-weight:700;color:var(--text);margin-bottom:10px;">⬆️ Boresha Mpango Wako</div>
+          <div style="font-size:12px;color:var(--muted);margin-bottom:12px;">Pata miezi zaidi kwa bei nzuri zaidi!</div>
+          <button class="btn btn-am btn-full" onclick="CU.premium=false;CU.planInfo={};saveSession();renderMalipo()">💳 Upgrade Mpango →</button>
+        </div>`:''}
       </div>
     </div>`;
     return;
   }
   const stg=getStg();
+  const priceM=Number(stg.priceM||3000);
+  const price6=Number(stg.price6||15000);
+  const priceY=Number(stg.priceY||25000);
+
   el.innerHTML=`
     <div class="malipo-card">
-      <div class="malipo-title">Lipa Uanachama wa Premium</div>
-      <div class="malipo-sub">Fungua Ratiba ya Siku 7, Maktaba yote, na ushauri wa wataalamu wa Herbal Academy.</div>
+      <div class="malipo-title">Jiunge na Premium</div>
+      <div class="malipo-sub">Fungua Ratiba ya Siku 7 iliyobinafsishwa, Maktaba yote ya mimea 99+, na muongozo wa kibinafsi wa afya.</div>
+
+      <!-- FREE TRIAL NOTICE -->
+      <div style="background:linear-gradient(135deg,#e8f5e8,#fff8e6);border:2px solid var(--gr4);border-radius:var(--r);padding:14px 16px;margin-bottom:16px;text-align:center;">
+        <div style="font-size:22px;margin-bottom:4px;">🎁</div>
+        <div style="font-size:14px;font-weight:800;color:var(--gr2);margin-bottom:2px;">Mwezi wa Kwanza ni BURE!</div>
+        <div style="font-size:12px;color:var(--sub);font-weight:500;">Jaribu Premium bila kulipa — uanze leo!</div>
+      </div>
+
+      <!-- PACKAGES — 3 options -->
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:18px;">
+        <div class="pkg-opt sel" id="pkg-free" onclick="selPkg=0;selPkgLabel='Jaribu Bure (Mwezi 1)';document.querySelectorAll('.pkg-opt').forEach(e=>e.classList.remove('sel'));this.classList.add('sel');document.getElementById('pay-amt-display').textContent='TSh 0 (BURE)';" style="border:2px solid var(--gr);background:var(--gr3);position:relative;">
+          <div style="position:absolute;top:-9px;right:12px;background:var(--gr);color:#fff;font-size:9px;font-weight:700;padding:2px 10px;border-radius:100px;">JARIBU BURE</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div class="pkg-opt-name">🎁 Mwezi 1 wa Kwanza</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px;">Baadaye TSh ${priceM.toLocaleString()}/mwezi</div>
+            </div>
+            <div class="pkg-opt-price" style="color:var(--gr);">BURE</div>
+          </div>
+        </div>
+        <div class="pkg-opt" id="pkg-m1" onclick="selPkg=${priceM};selPkgLabel='Mwezi 1';document.querySelectorAll('.pkg-opt').forEach(e=>e.classList.remove('sel'));this.classList.add('sel');document.getElementById('pay-amt-display').textContent='TSh ${priceM.toLocaleString()}';">
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div class="pkg-opt-name">📅 Mwezi 1</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px;">Uanachama wa mwezi mmoja</div>
+            </div>
+            <div class="pkg-opt-price">TSh ${priceM.toLocaleString()}</div>
+          </div>
+        </div>
+        <div class="pkg-opt" id="pkg-m6" onclick="selPkg=${price6};selPkgLabel='Miezi 6';document.querySelectorAll('.pkg-opt').forEach(e=>e.classList.remove('sel'));this.classList.add('sel');document.getElementById('pay-amt-display').textContent='TSh ${price6.toLocaleString()}';" style="position:relative;">
+          <div style="position:absolute;top:-9px;right:12px;background:var(--am);color:#fff;font-size:9px;font-weight:700;padding:2px 10px;border-radius:100px;">POPULAR 🔥</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div class="pkg-opt-name">📦 Miezi 6</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px;">TSh ${Math.round(price6/6).toLocaleString()}/mwezi · Okoa ${Math.round(100-(price6/(priceM*6)*100))}%</div>
+            </div>
+            <div class="pkg-opt-price">TSh ${price6.toLocaleString()}</div>
+          </div>
+        </div>
+        <div class="pkg-opt" id="pkg-yr" onclick="selPkg=${priceY};selPkgLabel='Mwaka 1';document.querySelectorAll('.pkg-opt').forEach(e=>e.classList.remove('sel'));this.classList.add('sel');document.getElementById('pay-amt-display').textContent='TSh ${priceY.toLocaleString()}';" style="position:relative;">
+          <div style="position:absolute;top:-9px;right:12px;background:#8b5cf6;color:#fff;font-size:9px;font-weight:700;padding:2px 10px;border-radius:100px;">BORA ZAIDI ⭐</div>
+          <div style="display:flex;justify-content:space-between;align-items:center;">
+            <div>
+              <div class="pkg-opt-name">🌟 Mwaka 1 Kamili</div>
+              <div style="font-size:11px;color:var(--muted);margin-top:2px;">TSh ${Math.round(priceY/12).toLocaleString()}/mwezi · Okoa ${Math.round(100-(priceY/(priceM*12)*100))}%</div>
+            </div>
+            <div class="pkg-opt-price">TSh ${priceY.toLocaleString()}</div>
+          </div>
+        </div>
+      </div>
+
       <div class="malipo-amount-box">
         <div class="malipo-amount-lbl">Kiasi cha Kulipa</div>
-        <div class="malipo-amount-val" id="pay-amt-display">TSh ${Number(stg.priceM||5000).toLocaleString()}</div>
+        <div class="malipo-amount-val" id="pay-amt-display" style="color:var(--gr)">TSh 0 (BURE)</div>
       </div>
-      <div class="pkg-grid">
-        <div class="pkg-opt sel" onclick="selPkg=Number('${stg.priceM||5000}');document.querySelectorAll('.pkg-opt').forEach(e=>e.classList.remove('sel'));this.classList.add('sel');document.getElementById('pay-amt-display').textContent='TSh '+Number(this.getAttribute('data-p')).toLocaleString();" data-p="${stg.priceM||5000}">
-          <div class="pkg-opt-name">Mwezi 1</div>
-          <div class="pkg-opt-price">TSh ${Number(stg.priceM||5000).toLocaleString()}</div>
+
+      <div id="pay-form-wrap">
+        <div id="free-notice" style="background:var(--gr3);border:1px solid var(--gr4);border-radius:var(--rs);padding:13px;margin-bottom:14px;font-size:13px;color:var(--sub);font-weight:500;">
+          🎁 Kwa mpango wa BURE — bonyeza "Activate" hapa chini, huhitaji kulipa sasa!
         </div>
-        <div class="pkg-opt" onclick="selPkg=Number('${stg.price3||25000}');document.querySelectorAll('.pkg-opt').forEach(e=>e.classList.remove('sel'));this.classList.add('sel');document.getElementById('pay-amt-display').textContent='TSh '+Number(this.getAttribute('data-p')).toLocaleString();" data-p="${stg.price3||25000}" style="position:relative;">
-          <div style="position:absolute;top:-8px;right:8px;background:var(--am);color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:var(--pill);">POPULAR</div>
-          <div class="pkg-opt-name">Miezi 3</div>
-          <div class="pkg-opt-price">TSh ${Number(stg.price3||25000).toLocaleString()}</div>
+        <div id="paid-form" style="display:none;">
+          <div class="malipo-methods">
+            <div class="malipo-method sel" id="mth-mpesa" onclick="selMeth('mpesa')"><div class="method-icon">📱</div><div><div class="method-name">M-Pesa (Vodacom)</div><div class="method-sub">Lipa Namba: <strong>67363327</strong> — JOS NATURAL HERBS</div></div></div>
+            <div class="malipo-method" id="mth-tigo" onclick="selMeth('tigo')"><div class="method-icon">💳</div><div><div class="method-name">Tigo Pesa</div><div class="method-sub">Namba: ${stg.tigo||'255652421286'}</div></div></div>
+            <div class="malipo-method" id="mth-airtel" onclick="selMeth('airtel')"><div class="method-icon">📲</div><div><div class="method-name">Airtel Money</div><div class="method-sub">Lipa Namba: <strong>67363327</strong> — JOS NATURAL HERBS</div></div></div>
+          </div>
+          <div class="malipo-steps">
+            <div class="malipo-step"><div class="step-dot">1</div>Chagua njia ya malipo</div>
+            <div class="malipo-step"><div class="step-dot">2</div>Tuma pesa: M-Pesa Lipa Namba <strong>67363327</strong></div>
+            <div class="malipo-step"><div class="step-dot">3</div>Jaza namba ya muamala hapa chini</div>
+            <div class="malipo-step"><div class="step-dot">4</div>Bonyeza "Wasilisha" — Admin atakuambia hivi karibuni</div>
+          </div>
+          <div class="malipo-txn-input"><input type="text" id="txn-inp" placeholder="Weka Namba ya Muamala (ABC123456...)"></div>
+          <div class="fg"><label>Namba ya Simu Uliyolipa</label><input class="inp" type="tel" id="pay-phone-inp" placeholder="+255 7XX XXX XXX"></div>
         </div>
+        <button class="btn btn-am btn-full" style="font-size:15px;" id="pay-submit-btn" onclick="submitPay()">🎁 Activate Mwezi wa Bure →</button>
       </div>
-      <div class="malipo-methods">
-        <div class="malipo-method sel" id="mth-mpesa" onclick="selMeth('mpesa')"><div class="method-icon">📱</div><div><div class="method-name">M-Pesa (Vodacom)</div><div class="method-sub">Namba ya Lipa Namba: 67363327 (JOS NATURAL HERBS)</div></div></div>
-        <div class="malipo-method" id="mth-tigo" onclick="selMeth('tigo')"><div class="method-icon">💳</div><div><div class="method-name">Tigo Pesa</div><div class="method-sub">Namba: ${stg.tigo||'255652421286'}</div></div></div>
-        <div class="malipo-method" id="mth-airtel" onclick="selMeth('airtel')"><div class="method-icon">📲</div><div><div class="method-name">Airtel Money</div><div class="method-sub">Namba ya Lipa Namba: 67363327 (JOS NATURAL HERBS)</div></div></div>
-      </div>
-      <div class="malipo-steps">
-        <div class="malipo-step"><div class="step-dot">1</div>Chagua njia ya malipo hapo juu</div>
-        <div class="malipo-step"><div class="step-dot">2</div>Tuma pesa: M-Pesa Lipa Namba <strong>67363327</strong> — JOS NATURAL HERBS</div>
-        <div class="malipo-step"><div class="step-dot">3</div>Jaza namba ya muamala hapa chini</div>
-        <div class="malipo-step"><div class="step-dot">4</div>Bonyeza "Wasilisha" — Admin atakuambia hivi karibuni</div>
-      </div>
-      <div class="malipo-txn-input"><input type="text" id="txn-inp" placeholder="Weka Namba ya Muamala (ABC123456...)"></div>
-      <div class="fg"><label>Namba ya Simu Uliyolipa</label><input class="inp" type="tel" id="pay-phone-inp" placeholder="+255 7XX XXX XXX"></div>
-      <button class="btn btn-am btn-full" style="font-size:15px;" onclick="submitPay()">📤 Wasilisha Malipo →</button>
+
       <div style="text-align:center;margin-top:14px;font-size:12px;color:var(--muted);">Una msimbo? <span style="color:var(--gr);font-weight:700;cursor:pointer;" onclick="document.getElementById('code-area').style.display='block'">Weka hapa</span></div>
       <div id="code-area" style="display:none;margin-top:14px;">
         <div class="fg"><label>Msimbo wa Ufikiaji (Access Code)</label><input class="inp" type="text" id="code-inp" placeholder="HERB-XXXX-XXXX" style="letter-spacing:2px;text-transform:uppercase;font-weight:800;"></div>
         <button class="btn btn-gr btn-full" onclick="activateCode()">🔑 Fungua kwa Msimbo →</button>
       </div>
     </div>`;
+
+  // Watch pkg selection to show/hide paid form
+  document.querySelectorAll('.pkg-opt').forEach(el=>{
+    el.addEventListener('click',()=>{
+      const isFree=(selPkg===0);
+      const paidForm=document.getElementById('paid-form');
+      const freeNote=document.getElementById('free-notice');
+      const btn=document.getElementById('pay-submit-btn');
+      if(paidForm)paidForm.style.display=isFree?'none':'block';
+      if(freeNote)freeNote.style.display=isFree?'block':'none';
+      if(btn)btn.textContent=isFree?'🎁 Activate Mwezi wa Bure →':'📤 Wasilisha Malipo →';
+    });
+  });
 }
 
 function selMeth(m){
@@ -1612,31 +1925,114 @@ function selMeth(m){
 }
 
 function submitPay(){
+  // FREE TRIAL
+  if(selPkg===0){
+    if(!CU){toast('Ingia kwanza','err');return;}
+    // Check if already used free trial
+    const users=getUsers();
+    const u=users.find(x=>x.email===CU.email);
+    if(u&&u.usedFreeTrial){toast('Umeshakuwa na mwezi wa bure. Chagua mpango wa malipo.','err');return;}
+    // Activate free trial
+    const expiry=new Date();expiry.setMonth(expiry.getMonth()+1);
+    CU.premium=true;
+    CU.planInfo={pkg:'bure',pkgLabel:'Mwezi wa Bure 🎁',expiry:expiry.toISOString()};
+    CU.usedFreeTrial=true;
+    saveSession();
+    if(u){u.premium=true;u.planInfo=CU.planInfo;u.usedFreeTrial=true;setUsers(users);}
+    renderMalipo();
+    goto('s-ratiba');
+    toast('🎉 Mwezi wa bure umeanza! Furahia Premium!','ok');
+    return;
+  }
+  // PAID
   const txn=(document.getElementById('txn-inp')?.value||'').trim();
   const phone=(document.getElementById('pay-phone-inp')?.value||'').trim();
   if(!txn){toast('Weka namba ya muamala','err');return;}
   if(!phone){toast('Weka namba ya simu uliyolipa','err');return;}
-  const p={id:Date.now(),userId:CU?.email,name:CU?.name,phone,method:selMethod,txnCode:txn,amount:selPkg,date:new Date().toISOString(),status:'pending'};
+  const stg2=getStg();const priceM2=Number(stg2.priceM||3000);const price62=Number(stg2.price6||15000);const priceY2=Number(stg2.priceY||25000);const pkgDays=selPkg>=priceY2?365:selPkg>=price62?180:30;
+  const p={id:Date.now(),userId:CU?.email,name:CU?.name,phone,method:selMethod,txnCode:txn,amount:selPkg,pkgLabel:selPkgLabel,pkgDays,date:new Date().toISOString(),status:'pending'};
   const pays=getPays();pays.unshift(p);setPays(pays);
   const stg=getStg();
-  const msg=`🌿 MALIPO MAPYA — AFYA-LISHE SMART\n\nMteja: ${CU?.name}\nBarua Pepe: ${CU?.email}\nSimu: ${phone}\nNjia: ${selMethod.toUpperCase()}\nNamba: ${txn}\nKiasi: TSh ${Number(selPkg).toLocaleString()}\nTarehe: ${new Date().toLocaleString('sw')}\n\nThibitisha na tuma msimbo wa ufikiaji.`;
+  const msg=`🌿 MALIPO MAPYA — AFYA-LISHE SMART\n\nMteja: ${CU?.name}\nBarua Pepe: ${CU?.email}\nSimu: ${phone}\nNjia: ${selMethod.toUpperCase()}\nNamba: ${txn}\nMpango: ${selPkgLabel}\nKiasi: TSh ${Number(selPkg).toLocaleString()}\nTarehe: ${new Date().toLocaleString('sw')}\n\nThibitisha na tuma msimbo wa ufikiaji.`;
   window.open('https://wa.me/255652421286?text='+encodeURIComponent(msg),'_blank');
   document.getElementById('malipo-body').innerHTML=`
     <div class="malipo-card" style="text-align:center;padding:30px 24px;">
       <span class="success-icon">⏳</span>
       <div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px;">Malipo Yamewasilishwa!</div>
-      <p style="font-size:14px;color:var(--sub);font-weight:500;line-height:1.6;margin-bottom:16px;">Admin wa Herbal Academy ataangalia na kukutumia msimbo wa ufikiaji hivi karibuni (saa 1-24).</p>
-      <div style="background:var(--am3);border:1.5px solid var(--am4);border-radius:var(--r);padding:16px;margin:16px 0;text-align:center;">
-        <div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;">Namba ya Muamala Wako</div>
+      <p style="font-size:14px;color:var(--sub);font-weight:500;line-height:1.6;margin-bottom:12px;">Admin wa Herbal Academy ataangalia na kukutumia msimbo wa ufikiaji hivi karibuni.</p>
+      <div style="background:var(--gr3);border:1.5px solid var(--gr4);border-radius:var(--r);padding:14px;margin-bottom:14px;">
+        <div id="pay-countdown" style="font-size:13px;font-weight:800;color:var(--gr2);font-family:monospace;">⏰ Inahesabu...</div>
+        <div style="font-size:11px;color:var(--muted);margin-top:4px;">Muda wa kusubiri jibu la Admin</div>
+      </div>
+      <div style="background:var(--am3);border:1.5px solid var(--am4);border-radius:var(--r);padding:16px;margin:14px 0;text-align:center;">
+        <div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:7px;">Namba ya Muamala · ${selPkgLabel}</div>
         <div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--am2);letter-spacing:2px;">${txn}</div>
       </div>
-      <p style="font-size:12px;color:var(--muted);margin-bottom:16px;font-weight:500;">Hifadhi namba hii. Ukipokea msimbo, urudi hapa na uweke kwenye "Msimbo wa Ufikiaji".</p>
-      <button class="btn btn-gr btn-full" onclick="renderMalipo()">🔑 Weka Msimbo wa Ufikiaji →</button>
+      <p style="font-size:12px;color:var(--muted);margin-bottom:16px;font-weight:500;">Hifadhi namba hii. Ukipokea msimbo, uweke hapa chini.</p>
+      <button class="btn btn-gr btn-full" onclick="document.getElementById('code-area-2').style.display='block'">🔑 Weka Msimbo wa Ufikiaji →</button>
+      <div id="code-area-2" style="display:none;margin-top:14px;text-align:left;">
+        <div class="fg"><label>Msimbo wa Ufikiaji</label><input class="inp" type="text" id="code-inp-2" placeholder="HERB-XXXX-XXXX" style="letter-spacing:2px;text-transform:uppercase;font-weight:800;"></div>
+        <button class="btn btn-gr btn-full" onclick="activateCode2()">✅ Fungua Premium →</button>
+      </div>
     </div>`;
   toast('✅ Malipo yamewasilishwa kwa Admin!','ok');
+  startPayCountdown();
 }
 
-function activateCode(){
+// ── COUNTDOWN after payment ──
+let payCountdownInterval=null;
+function startPayCountdown(){
+  if(payCountdownInterval)clearInterval(payCountdownInterval);
+  // 24hr countdown from now
+  const endTime=Date.now()+(24*60*60*1000);
+  try{localStorage.setItem('afya_pay_countdown',endTime);}catch{}
+  updateCountdownDisplay(endTime);
+  payCountdownInterval=setInterval(()=>updateCountdownDisplay(endTime),1000);
+}
+function updateCountdownDisplay(endTime){
+  const el=document.getElementById('pay-countdown');
+  if(!el){if(payCountdownInterval)clearInterval(payCountdownInterval);return;}
+  const diff=Math.max(0,endTime-Date.now());
+  if(diff===0){clearInterval(payCountdownInterval);el.textContent='⏰ Muda umekwisha — wasiliana na Admin';return;}
+  const h=Math.floor(diff/3600000);
+  const m=Math.floor((diff%3600000)/60000);
+  const s=Math.floor((diff%60000)/1000);
+  el.textContent=`⏰ Muda uliobaki: ${String(h).padStart(2,'0')}:${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+}
+function checkSavedCountdown(){
+  try{
+    const saved=localStorage.getItem('afya_pay_countdown');
+    if(saved){
+      const end=Number(saved);
+      if(end>Date.now()){
+        payCountdownInterval=setInterval(()=>updateCountdownDisplay(end),1000);
+      }
+    }
+  }catch{}
+}
+
+function activateCode2(){
+  const code=(document.getElementById('code-inp-2')?.value||'').trim().toUpperCase();
+  if(!code){toast('Weka msimbo wa ufikiaji','err');return;}
+  const codes=getCodes();
+  const found=codes.find(c=>c.code===code&&!c.used);
+  if(!found){toast('Msimbo huu si sahihi au umetumika ❌','err');return;}
+  found.used=true;found.usedBy=CU?.email;found.usedDate=new Date().toISOString();
+  setCodes(codes);
+  if(CU){
+    const days=found.days||30;
+    const expiry=new Date();expiry.setDate(expiry.getDate()+days);
+    const pkgLabel=days>=365?'Mwaka 1 🌟':days>=180?'Miezi 6 📦':'Mwezi 1 📅';
+    CU.premium=true;
+    CU.planInfo={pkg:days>=365?'mwaka':days>=180?'miezi6':'mwezi1',pkgLabel,expiry:expiry.toISOString(),days};
+    saveSession();
+    const us=getUsers();const ix=us.findIndex(u=>u.email===CU.email);
+    if(ix>=0){us[ix].premium=true;us[ix].planInfo=CU.planInfo;setUsers(us);}
+  }
+  try{localStorage.removeItem('afya_pay_countdown');}catch{}
+  toast('✅ Msimbo umekubaliwa! Umefungua Premium!','ok');
+  setTimeout(()=>{goto('s-ratiba');},900);
+}
   const code=(document.getElementById('code-inp')?.value||'').trim().toUpperCase();
   if(!code){toast('Weka msimbo wa ufikiaji','err');return;}
   const codes=getCodes();
@@ -1644,9 +2040,18 @@ function activateCode(){
   if(!found){toast('Msimbo huu si sahihi au umetumika ❌','err');return;}
   found.used=true;found.usedBy=CU?.email;found.usedDate=new Date().toISOString();
   setCodes(codes);
-  if(CU){CU.premium=true;saveSession();const us=getUsers();const ix=us.findIndex(u=>u.email===CU.email);if(ix>=0){us[ix].premium=true;setUsers(us);}}
+  if(CU){
+    const days=found.days||30;
+    const expiry=new Date();expiry.setDate(expiry.getDate()+days);
+    const pkgLabel=days>=365?'Mwaka 1 🌟':days>=180?'Miezi 6 📦':'Mwezi 1 📅';
+    CU.premium=true;
+    CU.planInfo={pkg:days>=365?'mwaka':days>=180?'miezi6':'mwezi1',pkgLabel,expiry:expiry.toISOString(),days};
+    saveSession();
+    const us=getUsers();const ix=us.findIndex(u=>u.email===CU.email);
+    if(ix>=0){us[ix].premium=true;us[ix].planInfo=CU.planInfo;setUsers(us);}
+  }
   toast('✅ Msimbo umekubaliwa! Umefungua Premium!','ok');
-  setTimeout(()=>{renderMalipo();},800);
+  setTimeout(()=>{goto('s-ratiba');toast('🎁 Ratiba Imefunguliwa!','ok');},800);
 }
 
 // ══════════════════════════════════
@@ -1733,11 +2138,12 @@ function admRefresh(){
     </tr>`).join('')||'<tr><td colspan="5" style="text-align:center;padding:24px;color:#5a7a5c">Hakuna msimbo bado</td></tr>';
   // Settings
   const stg=getStg();
-  ['stg-priceM','stg-price3','stg-mpesa','stg-tigo','stg-wa'].forEach(id=>{
+  ['stg-priceM','stg-price6','stg-priceY','stg-mpesa','stg-tigo','stg-wa'].forEach(id=>{
     const el=document.getElementById(id);
     if(!el)return;
-    if(id==='stg-priceM')el.value=stg.priceM||5000;
-    if(id==='stg-price3')el.value=stg.price3||25000;
+    if(id==='stg-priceM')el.value=stg.priceM||3000;
+    if(id==='stg-price6')el.value=stg.price6||15000;
+    if(id==='stg-priceY')el.value=stg.priceY||25000;
     if(id==='stg-mpesa')el.value=stg.mpesa||'255652421286';
     if(id==='stg-tigo')el.value=stg.tigo||'255652421286';
     if(id==='stg-wa')el.value=stg.wa||'255652421286';
@@ -1819,8 +2225,9 @@ function admDelUser(email){
 
 function saveAdmSettings(){
   saveStg({
-    priceM:Number(document.getElementById('stg-priceM')?.value||5000),
-    price3:Number(document.getElementById('stg-price3')?.value||25000),
+    priceM:Number(document.getElementById('stg-priceM')?.value||3000),
+    price6:Number(document.getElementById('stg-price6')?.value||15000),
+    priceY:Number(document.getElementById('stg-priceY')?.value||25000),
     mpesa:document.getElementById('stg-mpesa')?.value||'255652421286',
     tigo:document.getElementById('stg-tigo')?.value||'255652421286',
     wa:document.getElementById('stg-wa')?.value||'255652421286',
@@ -1929,13 +2336,14 @@ For your question, I'm sorry I can't help. Do you have a health question I can a
       };
     }
     
-    // Check if premium or trial remaining
+    // Check if premium or trial remaining — premium users get unlimited access
     if (!CU?.premium && aiMsgCount >= 3) {
+      const stgAI=getStg();const prAI=Number(stgAI.priceM||3000);
       return {
         type: 'locked',
         text: currentLang === 'sw'
-          ? `Umefika mipaka ya maswali ya bure (3/3). Lipa uanachama wa **TSh 5,000/mwezi** ili kuendelea kupata ushauri wa kitaalamu wa Dr. Revo bila kikwazo.`
-          : `You've reached the free question limit (3/3). Pay **TSh 5,000/month** membership to continue getting unlimited expert advice from Dr. Revo.`,
+          ? `Umefika mipaka ya maswali ya bure (3/3). Jiunge na **Premium TSh ${prAI.toLocaleString()}/mwezi** (au **Mwezi wa Kwanza BURE!**) ili kuendelea kupata ushauri wa kitaalamu wa Dr. Revo bila kikwazo.`
+          : `You've reached the free question limit (3/3). Join **Premium TSh ${prAI.toLocaleString()}/month** (or **First Month FREE!**) to continue getting unlimited expert advice.`,
         showUpgrade: true
       };
     }
@@ -2035,6 +2443,111 @@ For your question, I'm sorry I can't help. Do you have a health question I can a
 🌸 **Rhodiola Rosea** — Powerful adaptogen for energy.
 
 ⭐ **Spirulina** — Rich protein for sustained energy.` };
+    }
+    if (m.includes('uzito') || m.includes('unene') || m.includes('weight') || m.includes('konda')) {
+      return { type: 'answer', text: currentLang === 'sw'
+        ? `**Uzito Bora — Ushauri wa Dr. Revo:**
+
+🌿 **Moringa** — Kijiko 1-2 asubuhi. Inaboresha metabolism.
+
+🍋 **Maji ya Joto + Limao** — Kila asubuhi kabla ya kula. Inasaidia kuchoma mafuta.
+
+🍵 **Chai ya Kijani** — Vikombe 2-3 kwa siku badala ya kahawa. EGCG inachoma mafuta.
+
+🌾 **Fenugreek** — Inapunguza hamu ya chakula na inaboresha usagaji.
+
+⚠️ Usile chakula cha jioni baada ya saa 12 usiku.`
+        : `**Weight Management — Dr. Revo:**
+
+🌿 **Moringa** — 1-2 tsp morning. Boosts metabolism.
+
+🍋 **Warm Water + Lemon** — Every morning before eating. Burns fat.
+
+🍵 **Green Tea** — 2-3 cups daily. EGCG burns fat.` };
+    }
+    if (m.includes('ngozi') || m.includes('skin') || m.includes('vipele') || m.includes('upele')) {
+      return { type: 'answer', text: currentLang === 'sw'
+        ? `**Ngozi Bora — Dr. Revo Anashauri:**
+
+🌱 **Aloe Vera** — Gel ya moja kwa moja kutoka kwenye mmea. Weka ngozini usiku.
+
+🧡 **Turmeric (Manjano)** — Nusu kijiko kwa siku. Ina curcumin kwa ngozi safi.
+
+🥕 **Karoti** — Beta-carotene inaboresha ngozi. Juisi ya karoti kila asubuhi.
+
+🌿 **Neem (Mwarubaini)** — Mafuta kwa ngozi yenye matatizo. Anti-bacterial.
+
+💧 Kunywa maji glasi 8+ kwa siku — ngozi inahitaji unyevu wa kutosha.`
+        : `**Better Skin — Dr. Revo:**
+
+🌱 **Aloe Vera** — Fresh gel directly on skin at night.
+
+🧡 **Turmeric** — Half tsp daily. Curcumin for clear skin.
+
+🥕 **Carrot Juice** — Beta-carotene improves skin tone.` };
+    }
+    if (m.includes('ini') || m.includes('liver') || m.includes('figo') || m.includes('kidney') || m.includes('mkojo')) {
+      return { type: 'answer', text: currentLang === 'sw'
+        ? `**Ini na Figo Bora — Dr. Revo:**
+
+🌸 **Milk Thistle (Silymarin)** — Mg 140-200 mara tatu kwa siku. Inalinda ini.
+
+🟡 **Dandelion** — Chai vikombe 1-2 kwa siku. Inaboresha ini na figo.
+
+🌿 **Baobab (Mbuyu)** — Vitamini C nyingi, inasaidia ini na kinga.
+
+🌿 **Parsley** — Inasafisha figo. Juisi ya parsley asubuhi.
+
+💧 Maji mengi — angalau glasi 8-10 kwa siku ni muhimu kwa figo.`
+        : `**Liver & Kidney Health — Dr. Revo:**
+
+🌸 **Milk Thistle** — 140-200mg three times daily. Protects liver.
+
+🟡 **Dandelion Tea** — 1-2 cups daily. Supports liver and kidneys.
+
+💧 Drink 8-10 glasses of water daily for kidney health.` };
+    }
+    if (m.includes('uzazi') || m.includes('mimba') || m.includes('hedhi') || m.includes('fertility') || m.includes('wanawake') || m.includes('estrogen')) {
+      return { type: 'answer', text: currentLang === 'sw'
+        ? `**Afya ya Uzazi wa Wanawake — Dr. Revo:**
+
+🌺 **Red Clover** — Ina isoflavones. Inaboresha usawa wa homoni kwa wanawake.
+
+🌿 **Spearmint (Nanaa)** — Chai vikombe 2 kwa siku. Inaboresha estrogen.
+
+🌸 **Maca Root** — Inaboresha homoni na nguvu za mwili.
+
+🫘 **Flaxseed** — Kijiko 1-2 kwa siku. Ina lignans kwa usawa wa homoni.
+
+⚠️ Wajawazito wasiliane na daktari kabla ya kutumia mimea yoyote.`
+        : `**Women's Reproductive Health — Dr. Revo:**
+
+🌺 **Red Clover** — Contains isoflavones. Balances female hormones.
+
+🌿 **Spearmint Tea** — 2 cups daily. Improves estrogen levels.
+
+🌸 **Maca Root** — Balances hormones and boosts energy.` };
+    }
+    if (m.includes('kikohozi') || m.includes('mafua') || m.includes('homa') || m.includes('kinga') || m.includes('immunity') || m.includes('cold') || m.includes('flu')) {
+      return { type: 'answer', text: currentLang === 'sw'
+        ? `**Kinga na Mafua — Dr. Revo:**
+
+🌿 **Echinacea** — Chai au kapsuli wakati wa mafua. Inapunguza muda wa ugonjwa.
+
+🌿 **Black Seed (Habbatus Sauda)** — Kijiko nusu cha mafuta mara mbili kwa siku.
+
+🌺 **Hibiscus (Mrukanja)** — Vitamini C nyingi. Chai mara mbili kwa siku.
+
+🌿 **Thyme (Zaatar)** — Kwa kikohozi — chai na asali. Inaboresha upumuaji.
+
+🧄 **Vitunguu Saumu** — Kipande 2-3 mbichi kila asubuhi. Anti-bacterial yenye nguvu.`
+        : `**Immunity & Colds — Dr. Revo:**
+
+🌿 **Echinacea** — Tea or capsule during illness. Shortens duration.
+
+🌿 **Black Seed Oil** — Half tsp twice daily. Powerful immunity booster.
+
+🧄 **Raw Garlic** — 2-3 cloves every morning. Strong anti-bacterial.` };
     }
     // General health
     return { type: 'answer', text: currentLang === 'sw'
@@ -2472,6 +2985,7 @@ function toast(msg,type=''){
 loadPrefs();
 if(loadSession()&&CU){afterLogin();}
 else{goto('s-welcome');}
+checkSavedCountdown();
 </script>
 </body>
 </html>
