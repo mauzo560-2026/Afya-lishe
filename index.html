@@ -2531,7 +2531,24 @@ else{goto('s-welcome');}
 .scan-lock-feat:last-child { border-bottom:none; }
 .scan-lock-btn { width:100%; background:linear-gradient(135deg,var(--gr),var(--gr2)); color:#fff; border:none; border-radius:18px; padding:18px; font-size:16px; font-weight:800; font-family:DM Sans,sans-serif; cursor:pointer; box-shadow:0 6px 24px rgba(22,163,74,.3); }
 </style>
+<script>
+// Hii ndiyo function itakayofuta error ya "goto is not defined"
+function goto(screenId) {
+    // 1. Ficha kurasa zote kwanza
+    document.querySelectorAll('.sc').forEach(screen => {
+        screen.classList.remove('on');
+    });
 
+    // 2. Onyesha ukurasa ulioguswa
+    const target = document.getElementById(screenId);
+    if (target) {
+        target.classList.add('on');
+        window.scrollTo(0, 0); // Irudishe skrini juu
+    } else {
+        console.error("Ukurasa wenye ID '" + screenId + "' haujapatikana!");
+    }
+}
+</script>
 
 
 </body>
