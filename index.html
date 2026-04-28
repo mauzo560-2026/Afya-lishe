@@ -2550,6 +2550,16 @@ function goto(screenId) {
 }
 </script>
 
-
+<script>
+    // Hii ndio function iliyokuwa inakosekana
+    function goto(url) {
+        if (url) {
+            window.location.href = url;
+        } else {
+            console.error("Umesahau kuweka link kwenye function ya goto!");
+        }
+    }
+</script>
+  
 </body>
 </html>
