@@ -107,14 +107,13 @@ textarea.inp{resize:vertical;min-height:88px;line-height:1.6;}
 .auth-page{min-height:100vh;background:linear-gradient(160deg,#0a2e18,var(--gr));display:flex;align-items:center;justify-content:center;padding:24px;}
 .auth-box{background:var(--card);border-radius:20px;padding:36px 28px;width:100%;max-width:420px;box-shadow:0 24px 60px rgba(0,0,0,.25);}
 .auth-icon{font-size:44px;display:block;text-align:center;margin-bottom:9px;}
-.auth-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text);text-align:center;margin-bottom:3px;}
+.auth-title{font-familyPlayfair Display',serif;font-size:22px;font-weight:700;color:var(--text);text-align:center;margin-bottom:3px;}
 .auth-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:24px;font-weight:500;}
 .auth-link{color:var(--gr);font-weight:700;cursor:pointer;}
-.form-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
-@media(max-width:440px){.form-2{grid-template-columns:1fr;}}
+.form-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;@media(max-width:440px){.form-2{grid-template-columns:1fr;}}
 
 /* ══ HOME ══ */
-.page-wrap{max-width:900px;margin:0 auto;padding:22px 16px 110px;}
+.sc{max-width:900px;margin:0 auto;padding:22px 16px 110px;}
 .home-hero{background:linear-gradient(135deg,#0a2e18,var(--gr),#2a9958);border-radius:var(--r);padding:28px 24px;margin-bottom:22px;position:relative;overflow:hidden;}
 .home-hero::before{content:'';position:absolute;width:200px;height:200px;border-radius:50%;border:1px solid rgba(255,255,255,.06);top:-60px;right:-40px;}
 .home-hero-inner{position:relative;z-index:1;}
@@ -2489,7 +2488,7 @@ function showScanHistory() {
   // Function ya kuhamisha kurasa/sections
 function goto(sectionId) {
     // 1. Tafuta sections zote (hakikisha sections zako zina class ya 'page-section')
-    const sections = document.querySelectorAll('.page-wrap');
+    const sections = document.querySelectorAll('.sc');
     
     // 2. Ficha sections zote kwanza
     sections.forEach(sec => {
@@ -2507,8 +2506,12 @@ function goto(sectionId) {
     }
 }                                      
 loadPrefs();
-if(loadSession()&&CU){afterLogin();}
-else{goto('s-welcome');}
+if(loadSession() && typeof CU !== 'undefined') { 
+    afterLogin(); 
+} else { 
+    goto('welcome'); 
+}
+else{goto(welcome');}
 </script>
 </body>
 </html>
