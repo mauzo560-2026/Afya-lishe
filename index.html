@@ -107,13 +107,14 @@ textarea.inp{resize:vertical;min-height:88px;line-height:1.6;}
 .auth-page{min-height:100vh;background:linear-gradient(160deg,#0a2e18,var(--gr));display:flex;align-items:center;justify-content:center;padding:24px;}
 .auth-box{background:var(--card);border-radius:20px;padding:36px 28px;width:100%;max-width:420px;box-shadow:0 24px 60px rgba(0,0,0,.25);}
 .auth-icon{font-size:44px;display:block;text-align:center;margin-bottom:9px;}
-.auth-title{font-familyPlayfair Display',serif;font-size:22px;font-weight:700;color:var(--text);text-align:center;margin-bottom:3px;}
+.auth-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--text);text-align:center;margin-bottom:3px;}
 .auth-sub{font-size:13px;color:var(--muted);text-align:center;margin-bottom:24px;font-weight:500;}
 .auth-link{color:var(--gr);font-weight:700;cursor:pointer;}
-.form-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;@media(max-width:440px){.form-2{grid-template-columns:1fr;}}
+.form-2{display:grid;grid-template-columns:1fr 1fr;gap:12px;}
+@media(max-width:440px){.form-2{grid-template-columns:1fr;}}
 
 /* ══ HOME ══ */
-.sc{max-width:900px;margin:0 auto;padding:22px 16px 110px;}
+.page-wrap{max-width:900px;margin:0 auto;padding:22px 16px 110px;}
 .home-hero{background:linear-gradient(135deg,#0a2e18,var(--gr),#2a9958);border-radius:var(--r);padding:28px 24px;margin-bottom:22px;position:relative;overflow:hidden;}
 .home-hero::before{content:'';position:absolute;width:200px;height:200px;border-radius:50%;border:1px solid rgba(255,255,255,.06);top:-60px;right:-40px;}
 .home-hero-inner{position:relative;z-index:1;}
@@ -355,86 +356,7 @@ table.adm tr:hover td{background:rgba(255,255,255,.02);}
 .adm-login-page{min-height:100vh;background:#07100a;display:flex;align-items:center;justify-content:center;padding:24px;}
 .adm-login-box{background:#0c1a10;border:1px solid #162b1a;border-radius:20px;padding:38px 30px;width:100%;max-width:380px;box-shadow:0 24px 60px rgba(0,0,0,.5);}
 
-
-/* ══ MMEA SCANNER (AI) ══ */
-.scanner-wrap{max-width:520px;margin:0 auto;padding:20px 16px 120px;}
-.scanner-hero{background:linear-gradient(135deg,#0a2e18,var(--gr));border-radius:var(--r);padding:26px 22px;margin-bottom:20px;text-align:center;position:relative;overflow:hidden;}
-.scanner-hero::before{content:'';position:absolute;width:250px;height:250px;border-radius:50%;border:1px solid rgba(255,255,255,.06);top:-70px;right:-50px;}
-.scanner-hero-icon{font-size:52px;display:block;margin-bottom:10px;animation:sway 4s ease-in-out infinite;}
-.scanner-hero-title{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:#fff;margin-bottom:6px;}
-.scanner-hero-sub{font-size:13px;color:rgba(255,255,255,.75);font-weight:500;margin-bottom:18px;}
-.scanner-lock-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.15);border:1px solid rgba(255,255,255,.25);color:#fff;font-size:12px;font-weight:700;padding:5px 14px;border-radius:var(--pill);}
-
-/* Camera/Upload area */
-.scan-upload-area{background:var(--card);border:2.5px dashed var(--gr4);border-radius:var(--r);padding:32px 20px;text-align:center;cursor:pointer;transition:all var(--t);position:relative;margin-bottom:16px;}
-.scan-upload-area:hover{border-color:var(--gr);background:var(--gr3);}
-.scan-upload-area.has-img{border-style:solid;border-color:var(--gr);padding:0;overflow:hidden;}
-.scan-upload-icon{font-size:48px;display:block;margin-bottom:10px;}
-.scan-upload-title{font-size:15px;font-weight:800;color:var(--text);margin-bottom:4px;}
-.scan-upload-sub{font-size:12px;color:var(--muted);font-weight:500;margin-bottom:16px;}
-.scan-btn-row{display:flex;gap:10px;justify-content:center;}
-.scan-btn-cam{background:var(--gr);color:#fff;padding:10px 20px;font-size:13px;font-weight:800;border-radius:var(--rs);border:none;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:6px;transition:all var(--t);}
-.scan-btn-cam:hover{background:var(--gr2);}
-.scan-btn-gal{background:var(--card2);color:var(--text);padding:10px 18px;font-size:13px;font-weight:700;border-radius:var(--rs);border:1px solid var(--line);cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;gap:6px;transition:all var(--t);}
-.scan-btn-gal:hover{border-color:var(--gr);}
-.scan-preview{width:100%;max-height:300px;object-fit:cover;display:block;border-radius:var(--r);}
-.scan-clear{position:absolute;top:10px;right:10px;background:rgba(0,0,0,.6);color:#fff;border:none;border-radius:50%;width:30px;height:30px;font-size:16px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
-
-/* Analyze button */
-.scan-analyze-btn{width:100%;background:linear-gradient(135deg,var(--gr),var(--gr5));color:#fff;padding:16px;font-size:16px;font-weight:800;border-radius:var(--r);border:none;cursor:pointer;font-family:'DM Sans',sans-serif;display:flex;align-items:center;justify-content:center;gap:9px;box-shadow:var(--shg);transition:all var(--t);margin-bottom:16px;}
-.scan-analyze-btn:hover{transform:translateY(-2px);box-shadow:0 10px 30px rgba(26,107,60,.35);}
-.scan-analyze-btn:disabled{opacity:.5;cursor:not-allowed;transform:none;}
-
-/* Loading state */
-.scan-loading{background:var(--card);border:1px solid var(--line);border-radius:var(--r);padding:28px 20px;text-align:center;margin-bottom:16px;display:none;}
-.scan-loading.show{display:block;}
-.scan-loading-anim{display:flex;justify-content:center;gap:7px;margin-bottom:14px;}
-.scan-loading-dot{width:12px;height:12px;border-radius:50%;background:var(--gr);animation:scanPulse 1.4s ease-in-out infinite;}
-.scan-loading-dot:nth-child(2){animation-delay:.2s;}
-.scan-loading-dot:nth-child(3){animation-delay:.4s;}
-@keyframes scanPulse{0%,80%,100%{transform:scale(.7);opacity:.5;}40%{transform:scale(1);opacity:1;}}
-.scan-loading-title{font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--text);margin-bottom:5px;}
-.scan-loading-sub{font-size:13px;color:var(--muted);font-weight:500;}
-
-/* Results */
-.scan-result{background:var(--card);border:1px solid var(--line);border-radius:var(--r);overflow:hidden;margin-bottom:16px;display:none;box-shadow:var(--sh2);}
-.scan-result.show{display:block;animation:pageIn .4s ease;}
-.scan-result-header{background:linear-gradient(135deg,var(--gr3),#d4edda);padding:20px 18px;border-bottom:1px solid var(--gr4);display:flex;align-items:center;gap:14px;}
-.scan-result-icon{font-size:52px;flex-shrink:0;}
-.scan-result-name{font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--gr2);}
-.scan-result-latin{font-size:12px;color:var(--sub);font-style:italic;margin-top:2px;}
-.scan-confidence{display:inline-flex;align-items:center;gap:5px;background:var(--gr);color:#fff;font-size:11px;font-weight:800;padding:3px 10px;border-radius:var(--pill);margin-top:6px;}
-.scan-result-body{padding:18px;}
-.scan-section{margin-bottom:18px;}
-.scan-section-title{font-size:12px;font-weight:800;color:var(--gr);letter-spacing:1px;text-transform:uppercase;margin-bottom:10px;display:flex;align-items:center;gap:6px;}
-.scan-tag{display:inline-flex;align-items:center;gap:4px;background:var(--gr3);color:var(--gr2);font-size:12px;font-weight:700;padding:5px 12px;border-radius:var(--pill);margin:3px 4px 3px 0;}
-.scan-tag.disease{background:#fff3e0;color:#e65100;}
-.scan-tag.warning{background:var(--red3,#fdecea);color:var(--red,#c0392b);}
-.scan-how-step{display:flex;gap:11px;align-items:flex-start;margin-bottom:12px;padding:12px 14px;background:var(--card2);border-radius:var(--rs);}
-.scan-how-num{width:26px;height:26px;border-radius:50%;background:var(--gr);color:#fff;font-size:12px;font-weight:800;display:flex;align-items:center;justify-content:center;flex-shrink:0;}
-.scan-how-text{flex:1;font-size:13px;color:var(--sub);font-weight:500;line-height:1.5;}
-.scan-how-text strong{color:var(--text);}
-.scan-warning-box{background:var(--red3,#fdecea);border:1px solid rgba(192,57,43,.2);border-left:4px solid var(--red,#c0392b);border-radius:var(--rs);padding:12px 14px;font-size:13px;color:var(--red,#c0392b);font-weight:600;line-height:1.55;}
-.scan-product-cta{background:linear-gradient(135deg,var(--am3),#fff5e6);border:1.5px solid var(--am4);border-radius:var(--r);padding:16px;display:flex;align-items:center;gap:13px;cursor:pointer;transition:all var(--t);}
-.scan-product-cta:hover{transform:translateY(-2px);box-shadow:var(--sh2);}
-.scan-product-ico{font-size:36px;flex-shrink:0;}
-.scan-product-title{font-size:15px;font-weight:800;color:var(--am2);margin-bottom:2px;}
-.scan-product-sub{font-size:12px;color:var(--sub);font-weight:500;}
-
-/* Lock overlay for non-premium */
-.scanner-locked-card{background:var(--card);border-radius:var(--r);border:1px solid var(--line);padding:32px 22px;text-align:center;box-shadow:var(--sh2);}
-.scanner-locked-icon{font-size:60px;display:block;margin-bottom:12px;}
-.scanner-locked-title{font-family:'Playfair Display',serif;font-size:21px;font-weight:700;color:var(--text);margin-bottom:8px;}
-.scanner-locked-sub{font-size:14px;color:var(--sub);font-weight:500;line-height:1.6;margin-bottom:20px;}
-
-/* History */
-.scan-history-item{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:var(--rs);padding:12px 14px;margin-bottom:8px;cursor:pointer;transition:all var(--t);box-shadow:var(--sh);}
-.scan-history-item:hover{border-color:var(--gr4);background:var(--gr3);}
-.scan-history-thumb{width:46px;height:46px;border-radius:10px;object-fit:cover;flex-shrink:0;background:var(--gr3);display:flex;align-items:center;justify-content:center;font-size:22px;}
-.scan-history-thumb img{width:100%;height:100%;object-fit:cover;border-radius:10px;}
-.scan-history-name{font-size:14px;font-weight:700;color:var(--text);}
-.scan-history-date{font-size:11px;color:var(--muted);font-weight:500;margin-top:2px;}
-
+/* ═══ THEME SYSTEM ═══ */
 :root{--mode:light;}
 body.dark{--bg:#0f110e;--bg2:#161a14;--card:#1c211a;--card2:#232820;--line:#2a3027;--text:#eef2eb;--sub:#8a9e82;--muted:#5a6e52;}
 body.sepia{--bg:#f5f0e8;--bg2:#ede8dc;--card:#faf7f0;--card2:#f2eed8;--line:#d8d0b8;--text:#2c2416;--sub:#6b5a3c;--muted:#9a8a6a;}
@@ -579,7 +501,9 @@ body.dark .bnav{background:rgba(22,26,20,.96);}
 .cd-num{font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:#fff;line-height:1;display:block;}
 .cd-lbl{font-size:9px;color:rgba(255,255,255,.65);font-weight:700;text-transform:uppercase;letter-spacing:.5px;margin-top:5px;display:block;}
 .cd-progress{background:rgba(255,255,255,.2);border-radius:100px;height:5px;margin-top:14px;overflow:hidden;}
-.cd-progress-bar{height:100%;background:rgba(255,255,255,.85);border-radius:100px;transition:width .5s;}<!-- ══ WELCOME ══ -->
+.cd-progress-bar{height:100%;background:rgba(255,255,255,.85);border-radius:100px;transition:width .5s;}
+</style>
+<!-- ══ WELCOME ══ -->
 <div class="sc on" id="s-welcome">
   <div class="welcome">
     <div class="w-orb1"></div>
@@ -679,7 +603,7 @@ body.dark .bnav{background:rgba(22,26,20,.96);}
     <div class="quick-grid">
       <div class="quick-card" onclick="goto('s-maktaba')"><div class="qc-icon">🌱</div><div class="qc-title">Maktaba ya Mimea</div><div class="qc-sub">6 mimea ya tiba asili</div></div>
       <div class="quick-card" onclick="goto('s-ratiba')"><div class="qc-icon">📅</div><div class="qc-title">Ratiba ya Siku 7</div><div class="qc-sub" id="ratiba-home-sub">🔒 Inagusa malipo</div></div>
-      <div class="quick-card accent-am" onclick="setNb('scan',document.getElementById('nb-scan'))"><div class="qc-icon">📷</div><div class="qc-title">AI Plant Scanner</div><div class="qc-sub am">Piga picha — jua mmea</div></div>
+      <div class="quick-card accent-am" onclick="goto('s-malipo')"><div class="qc-icon">💳</div><div class="qc-title">Lipa &amp; Fungua</div><div class="qc-sub am">TSh 5,000 / mwezi</div></div>
       <div class="quick-card accent-gr" onclick="goto('s-uchunguzi');startDiag()"><div class="qc-icon">🔬</div><div class="qc-title">Uchunguzi Mpya</div><div class="qc-sub gr">Bure · Dakika 5</div></div>
     </div>
     <div class="section-title">🌿 Mimea Maarufu</div>
@@ -1167,123 +1091,300 @@ body.dark .bnav{background:rgba(22,26,20,.96);}
   </button>
 </div>
 
-<!-- ══ MMEA SCANNER AI ══ -->
-<div class="sc" id="s-scanner">
-  <nav class="topbar">
-    <button class="tb-back" onclick="goto('s-home')">← Rudi</button>
-    <div style="font-size:16px;font-weight:700;color:var(--gr);">📷 Scanner ya Mimea</div>
-    <button class="icon-btn" onclick="showScanHistory()" title="Historia">🕐</button>
-  </nav>
-  <div class="scanner-wrap">
-
-    <!-- Hero -->
-    <div class="scanner-hero">
-      <div style="position:relative;z-index:1;">
-        <span class="scanner-hero-icon">📷</span>
-        <div class="scanner-hero-title">AI Scanner ya Mimea</div>
-        <div class="scanner-hero-sub">Piga picha mmea wowote — AI itakuambia jina lake, faida za afya, na jinsi ya kutumia</div>
-        <div class="scanner-lock-badge" id="scanner-premium-badge">🏆 Premium Feature</div>
-      </div>
-    </div>
-
-    <!-- LOCKED STATE (non-premium) -->
-    <div id="scanner-locked" style="display:none;">
-      <div class="scanner-locked-card">
-        <span class="scanner-locked-icon">🔒</span>
-        <div class="scanner-locked-title">Kipengele cha Premium</div>
-        <div class="scanner-locked-sub">AI Scanner ya Mimea inatumika kwa wanachama wa Premium peke yao. Lipa uanachama wa TSh 5,000/mwezi ufungue kipengele hiki na mengi zaidi.</div>
-        <div style="background:linear-gradient(135deg,var(--gr3),var(--am3));border:1px solid var(--gr4);border-radius:var(--rs);padding:14px;margin-bottom:18px;">
-          <div style="font-size:12px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Gharama ya Uanachama</div>
-          <div style="font-family:'Playfair Display',serif;font-size:28px;font-weight:700;color:var(--gr2);">TSh 5,000 <span style="font-size:14px;font-weight:500;color:var(--sub);font-family:'DM Sans',sans-serif;">/mwezi</span></div>
-          <div style="font-size:12px;color:var(--sub);margin-top:4px;font-weight:500;">Scanner · Ratiba · Dr. Revo AI · Maktaba yote</div>
-        </div>
-        <button class="btn btn-am btn-full" style="margin-bottom:10px;font-size:15px;" onclick="goto('s-malipo')">💳 Lipa Sasa — Fungua Scanner →</button>
-        <button class="btn btn-out btn-full" onclick="goto('s-home')">← Rudi Nyumbani</button>
-      </div>
-    </div>
-
-    <!-- ACTIVE STATE (premium) -->
-    <div id="scanner-active" style="display:none;">
-
-      <!-- Upload / Camera area -->
-      <div class="scan-upload-area" id="scan-drop" onclick="if(!this.classList.contains('has-img'))document.getElementById('scan-file').click()">
-        <div id="scan-empty-state">
-          <span class="scan-upload-icon">🌿</span>
-          <div class="scan-upload-title">Piga Picha au Chagua Kutoka Gallery</div>
-          <div class="scan-upload-sub">Hakikisha mmea unajulikana vizuri kwenye picha — majani, maua, au shina lake</div>
-          <div class="scan-btn-row" onclick="event.stopPropagation()">
-            <button class="scan-btn-cam" onclick="document.getElementById('scan-camera').click()">📷 Camera</button>
-            <button class="scan-btn-gal" onclick="document.getElementById('scan-file').click()">🖼️ Gallery</button>
-          </div>
-        </div>
-        <div id="scan-preview-state" style="display:none;position:relative;">
-          <img id="scan-preview-img" class="scan-preview" src="" alt="Mmea">
-          <button class="scan-clear" onclick="event.stopPropagation();clearScan()">✕</button>
-        </div>
-        <!-- Hidden inputs -->
-        <input type="file" id="scan-camera" accept="image/*" capture="environment" style="display:none" onchange="handleScanFile(this)">
-        <input type="file" id="scan-file" accept="image/*" style="display:none" onchange="handleScanFile(this)">
-      </div>
-
-      <!-- Analyze button -->
-      <button class="scan-analyze-btn" id="scan-btn" onclick="doScanAnalyze()" disabled>
-        <span id="scan-btn-icon">🔬</span>
-        <span id="scan-btn-text">Chagua Picha Kwanza</span>
-      </button>
-
-      <!-- Loading -->
-      <div class="scan-loading" id="scan-loading">
-        <div class="scan-loading-anim">
-          <div class="scan-loading-dot"></div>
-          <div class="scan-loading-dot"></div>
-          <div class="scan-loading-dot"></div>
-        </div>
-        <div class="scan-loading-title">AI inachunguza mmea...</div>
-        <div class="scan-loading-sub" id="scan-loading-msg">Inatoa picha · Inatambua mmea · Inakusanya taarifa...</div>
-      </div>
-
-      <!-- Result -->
-      <div class="scan-result" id="scan-result">
-        <div class="scan-result-header">
-          <div class="scan-result-icon" id="res-icon">🌿</div>
-          <div>
-            <div class="scan-result-name" id="res-name">—</div>
-            <div class="scan-result-latin" id="res-latin">—</div>
-            <div class="scan-confidence" id="res-conf">✓ 95% uhakika</div>
-          </div>
-        </div>
-        <div class="scan-result-body" id="res-body"></div>
-      </div>
-
-      <!-- Scan again -->
-      <div id="scan-again-btn-wrap" style="display:none;">
-        <button class="btn btn-out btn-full" style="margin-bottom:16px;" onclick="clearScan();document.getElementById('scan-result').classList.remove('show');document.getElementById('scan-again-btn-wrap').style.display='none';">
-          📷 Scan Mmea Mwingine
-        </button>
-      </div>
-
-      <!-- History section -->
-      <div id="scan-history-section" style="margin-top:8px;">
-        <div style="font-family:'Playfair Display',serif;font-size:17px;font-weight:700;color:var(--text);margin-bottom:12px;">🕐 Scan Zilizopita</div>
-        <div id="scan-history-list"></div>
-        <div id="scan-history-empty" style="text-align:center;padding:20px;color:var(--muted);font-size:13px;font-weight:500;">Bado hujascan mmea wowote. Anza sasa! 🌿</div>
-      </div>
-
-    </div>
-  </div>
-</div>
-
 <!-- BOTTOM NAV -->
 <nav class="bnav" id="bnav">
   <button class="nb on" id="nb-home" onclick="setNb('home',this)"><span class="nbic">🏠</span><span class="nblb">Nyumbani</span></button>
   <button class="nb" id="nb-uch"  onclick="setNb('uch',this)"><span class="nbic">🔬</span><span class="nblb">Uchunguzi</span></button>
-  <button class="nb" id="nb-scan" onclick="setNb('scan',this)"><span class="nbic">📷</span><span class="nblb" style="color:var(--am)">Scanner</span></button>
+  <button class="nb" id="nb-scan" onclick="setNb('scan',this)" style="position:relative"><span class="nbic">📷</span><span class="nblb">Scanner</span><span style="position:absolute;top:4px;right:8px;background:#16a34a;color:#fff;font-size:8px;font-weight:900;padding:1px 5px;border-radius:6px;letter-spacing:.3px">AI</span></button>
   <button class="nb" id="nb-mak"  onclick="setNb('mak',this)"><span class="nbic">🌱</span><span class="nblb">Mimea</span></button>
   <button class="nb" id="nb-ak"   onclick="setNb('ak',this)"><span class="nbic">👤</span><span class="nblb">Mimi</span></button>
 </nav>
 <div class="toast" id="toast"></div>
 
 <script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
+
+// ══ SCANNER ══
+
+// ══════════════════════════════════════════
+// SCANNER YA MIMEA — AI Engine (Claude Vision)
+// ══════════════════════════════════════════
+let _scanImg      = null;
+let _scanBusy     = false;
+
+function renderScanScreen(){
+  const body = document.getElementById('scan-body');
+  if(!body) return;
+
+  const isPremium = CU && CU.premium;
+  const badge = document.getElementById('scan-prem-badge');
+  if(badge) badge.style.display = isPremium ? 'block' : 'none';
+
+  // LOCK SCREEN — wasio na uanachama
+  if(!isPremium){
+    body.innerHTML = `
+      <div class="scan-lock">
+        <div class="scan-lock-ic">🌿🔒</div>
+        <div class="scan-lock-ttl">Scanner ya Mimea<br><em style="font-style:italic;color:var(--gr)">Premium</em></div>
+        <div class="scan-lock-desc">Piga picha ya mmea wowote — AI itakuambia jina lake, faida za afya, magonjwa yanayotibiwa, na jinsi sahihi ya kutumia.</div>
+        <div class="scan-lock-feats">
+          <div class="scan-lock-feat"><span style="font-size:22px">📸</span> Piga picha au chagua kutoka gallery</div>
+          <div class="scan-lock-feat"><span style="font-size:22px">🔬</span> AI inachambua ndani ya sekunde 15</div>
+          <div class="scan-lock-feat"><span style="font-size:22px">💊</span> Magonjwa 10+ yanayotibiwa</div>
+          <div class="scan-lock-feat"><span style="font-size:22px">📋</span> Jinsi sahihi ya kuandaa na kutumia</div>
+          <div class="scan-lock-feat"><span style="font-size:22px">⚠️</span> Onyo la usalama na mzigo sahihi</div>
+        </div>
+        <button class="scan-lock-btn" onclick="goto(&quot;s-malipo&quot;)">
+          🔑 Lipa Uanachama — Fungua Sasa
+        </button>
+        <div style="margin-top:12px;font-size:12px;color:var(--muted);font-weight:600">
+          TSh 5,000/mwezi · Fungua kila kitu 🌿
+        </div>
+      </div>`;
+    return;
+  }
+
+  // PREMIUM — Scanner screen
+  _scanImg  = null;
+  _scanBusy = false;
+  body.innerHTML = `
+    <div style="background:linear-gradient(135deg,#064e3b,#065f46);border-radius:20px;padding:18px;margin-bottom:16px;display:flex;align-items:center;gap:14px;">
+      <div style="font-size:36px">🌿</div>
+      <div>
+        <div style="font-family:Playfair Display,serif;font-size:17px;font-weight:900;color:#fff">Scanner ya Dawa za Asili</div>
+        <div style="font-size:12px;color:#6ee7b7;font-weight:600;margin-top:2px">Piga picha → AI inachambua → Pata majibu kamili</div>
+      </div>
+    </div>
+
+    <div class="scan-zone" id="scan-zone" onclick="document.getElementById('scan-inp').click()">
+      <div id="scan-ph">
+        <div class="scan-ic">📷</div>
+        <div class="scan-ttl">Piga Picha ya Mmea</div>
+        <div class="scan-sub">Bonyeza kuchagua picha kutoka simu yako</div>
+        <div style="font-size:11px;color:#86efac;margin-top:8px;font-weight:500">JPG · PNG · Max 10MB</div>
+      </div>
+    </div>
+    <input type="file" id="scan-inp" accept="image/*" style="display:none" onchange="scanLoadImg(this)">
+
+    <div class="scan-row">
+      <button class="scan-btn" onclick="scanGallery()"><span style="font-size:22px">🖼️</span> Gallery</button>
+      <button class="scan-btn" onclick="scanCamera()"><span style="font-size:22px">📸</span> Camera</button>
+    </div>
+
+    <button class="scan-go" id="scan-go" onclick="scanAnalyze()" disabled>
+      <span style="font-size:22px">🔬</span>
+      <span id="scan-go-txt">Chunguza Mmea Huu — AI</span>
+    </button>
+
+    <div style="text-align:center;font-size:11px;color:var(--muted);font-weight:500;line-height:1.7;margin-bottom:16px">
+      🔒 Maswali yako yanabaki faragha · Powered by Claude AI
+    </div>
+
+    <div id="scan-result"></div>`;
+}
+
+function scanGallery(){
+  const inp = document.getElementById('scan-inp');
+  if(inp){ inp.removeAttribute('capture'); inp.click(); }
+}
+function scanCamera(){
+  const inp = document.getElementById('scan-inp');
+  if(inp){ inp.setAttribute('capture','environment'); inp.click(); }
+}
+
+function scanLoadImg(input){
+  if(!input.files||!input.files[0]) return;
+  const f = input.files[0];
+  if(f.size > 10*1024*1024){ toast('⚠️ Picha kubwa mno — Max 10MB','err'); return; }
+  const reader = new FileReader();
+  reader.onload = e => {
+    _scanImg = e.target.result;
+    const zone = document.getElementById('scan-zone');
+    if(zone){
+      zone.innerHTML = `<img src="${_scanImg}" alt="Mmea uliopigwa picha">`;
+      zone.classList.add('has-img');
+      zone.onclick = null;
+    }
+    const go = document.getElementById('scan-go');
+    const goTxt = document.getElementById('scan-go-txt');
+    if(go){ go.disabled = false; }
+    if(goTxt) goTxt.textContent = 'Chunguza Mmea Huu — AI';
+    document.getElementById('scan-result').innerHTML = '';
+  };
+  reader.readAsDataURL(f);
+}
+
+async function scanAnalyze(){
+  if(!_scanImg || _scanBusy) return;
+  _scanBusy = true;
+
+  const go   = document.getElementById('scan-go');
+  const res  = document.getElementById('scan-result');
+  if(go){ go.disabled=true; go.innerHTML='<span class="scan-leaf">🌿</span><span>AI inachambua...</span>'; }
+  if(res) res.innerHTML = `
+    <div class="scan-loading">
+      <div class="scan-leaf">🌿</div>
+      <div class="scan-load-txt">AI inachambua mmea wako...</div>
+      <div class="scan-load-sub">Inachukua sekunde 10-20 — subiri kidogo</div>
+    </div>`;
+
+  try {
+    const base64    = _scanImg.split(',')[1];
+    const mediaType = _scanImg.split(';')[0].split(':')[1] || 'image/jpeg';
+
+    const response = await fetch('https://api.anthropic.com/v1/messages',{
+      method:'POST',
+      headers:{'Content-Type':'application/json'},
+      body: JSON.stringify({
+        model:'claude-sonnet-4-20250514',
+        max_tokens:1500,
+        messages:[{
+          role:'user',
+          content:[
+            { type:'image', source:{ type:'base64', media_type:mediaType, data:base64 } },
+            { type:'text', text:`Wewe ni daktari wa mimea ya dawa wa Afrika Mashariki mwenye uzoefu wa zaidi ya miaka 30. Chunguza picha hii ya mmea kwa makini sana.
+
+Jibu KWA KISWAHILI PEKEE na muundo huu wa JSON (JSON peke yake, hakuna maandishi mengine nje ya JSON):
+
+{
+  "jina": "Jina la kawaida la mmea kwa Kiswahili",
+  "jina_kisayansi": "Jina la kisayansi (Latin)",
+  "majina_mengine": "Majina mengine yanayojulikana Tanzania",
+  "uhakika": "Juu au Wastani au Chini",
+  "sehemu": "Sehemu zinazotumiwa: majani/mizizi/gome/mbegu/maua/matunda",
+  "maelezo": "Maelezo mafupi ya mmea na historia yake Tanzania (sentensi 2-3)",
+  "faida": [
+    {"emoji":"🌿","faida":"Faida kamili ya kwanza ya afya"},
+    {"emoji":"💪","faida":"Faida ya pili"},
+    {"emoji":"❤️","faida":"Faida ya tatu"},
+    {"emoji":"🧠","faida":"Faida ya nne"},
+    {"emoji":"✨","faida":"Faida ya tano"}
+  ],
+  "magonjwa": ["Ugonjwa 1","Ugonjwa 2","Ugonjwa 3","Ugonjwa 4","Ugonjwa 5","Ugonjwa 6","Ugonjwa 7","Ugonjwa 8","Ugonjwa 9","Ugonjwa 10"],
+  "jinsi": [
+    "Chagua sehemu nzuri ya mmea — maelezo kamili ya kuandaa",
+    "Hatua ya pili ya kuandaa na kupika",
+    "Kiasi sahihi cha kutumia kwa siku",
+    "Muda wa matibabu na jinsi ya kuhifadhi"
+  ],
+  "onyo": "Onyo muhimu — nani wasitumie (wajawazito, watoto, wagonjwa wa moyo n.k.) na athari zinazowezekana",
+  "bei_ya_soko": "Bei ya wastani sokoni Tanzania (optional)"
+}
+
+Kama picha si mmea wa dawa au haionekani vizuri: {"kosa":"Maelezo ya tatizo kwa Kiswahili"}` }
+          ]
+        }]
+      })
+    });
+
+    const data = await response.json();
+    if(data.error) throw new Error(data.error.message||'API ilikataa ombi');
+
+    const raw = data.content?.[0]?.text||'';
+    let result;
+    try{
+      const m = raw.match(/\{[\s\S]*\}/);
+      result = JSON.parse(m ? m[0] : raw);
+    }catch(e){ throw new Error('Jibu la AI halikueleweka — jaribu tena'); }
+
+    if(result.kosa){
+      res.innerHTML = `
+        <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:18px;padding:22px;text-align:center;">
+          <div style="font-size:48px;margin-bottom:12px">🤔</div>
+          <div style="font-family:Playfair Display,serif;font-size:18px;font-weight:800;color:#991B1B;margin-bottom:8px">Mmea Haujapatikana</div>
+          <div style="font-size:13px;color:#B91C1C;line-height:1.6">${result.kosa}</div>
+          <button class="sr-again" style="margin-top:16px" onclick="scanReset()">📷 Jaribu Picha Nyingine</button>
+        </div>`;
+      return;
+    }
+
+    renderScanResult(result, res);
+
+  } catch(err){
+    res.innerHTML = `
+      <div style="background:#FEF2F2;border:1px solid #FECACA;border-radius:18px;padding:22px;text-align:center;">
+        <div style="font-size:42px;margin-bottom:10px">❌</div>
+        <div style="font-family:Playfair Display,serif;font-size:17px;font-weight:800;color:#991B1B;margin-bottom:8px">Hitilafu ya Mtandao</div>
+        <div style="font-size:13px;color:#B91C1C;line-height:1.6">Hakikisha una intaneti kisha bonyeza tena.</div>
+        <div style="font-size:10px;color:#9ca3af;margin-top:6px">${err.message}</div>
+        <button class="sr-again" style="margin-top:16px" onclick="scanAnalyze()">🔄 Jaribu Tena</button>
+      </div>`;
+  } finally {
+    _scanBusy = false;
+    if(go){ go.disabled=false; go.innerHTML='<span style="font-size:22px">🔄</span><span id="scan-go-txt">Chunguza Tena</span>'; }
+  }
+}
+
+function renderScanResult(r, area){
+  const cCol = r.uhakika==='Juu'?'#6ee7b7':r.uhakika==='Wastani'?'#fde68a':'#fca5a5';
+  const faida = (r.faida||[]).map(f=>`
+    <div class="sr-benefit">
+      <div class="sr-ben-ic">${f.emoji||'✅'}</div>
+      <div class="sr-ben-txt">${f.faida}</div>
+    </div>`).join('');
+  const chips = (r.magonjwa||[]).map(m=>`<span class="sr-chip">${m}</span>`).join('');
+  const hatua = (r.jinsi||[]).map((h,i)=>`
+    <div class="sr-step">
+      <div class="sr-step-n">${i+1}</div>
+      <div class="sr-step-txt">${h}</div>
+    </div>`).join('');
+
+  area.innerHTML = `
+    <div class="sr-card">
+      <div class="sr-head">
+        <div class="sr-name">${r.jina||'Mmea wa Dawa'}</div>
+        <div class="sr-latin">${r.jina_kisayansi||''} ${r.majina_mengine?'· '+r.majina_mengine:''}</div>
+        <div>
+          <span class="sr-conf" style="color:${cCol}">Uhakika: ${r.uhakika||'—'}</span>
+          ${r.sehemu?`<span class="sr-conf" style="color:rgba(255,255,255,.8)">🌱 ${r.sehemu}</span>`:''}
+          ${r.bei_ya_soko?`<span class="sr-conf" style="color:rgba(255,255,255,.7)">💰 ${r.bei_ya_soko}</span>`:''}
+        </div>
+        ${r.maelezo?`<div class="sr-desc">${r.maelezo}</div>`:''}
+      </div>
+
+      <div class="sr-sec">
+        <div class="sr-sec-ttl">💚 Faida za Afya</div>
+        ${faida||'<div style="color:var(--muted);font-size:13px">Hakuna faida zilizoandikwa</div>'}
+      </div>
+
+      <div class="sr-sec">
+        <div class="sr-sec-ttl">💊 Magonjwa Yanayotibiwa</div>
+        <div style="margin-top:4px">${chips||'<span class="sr-chip">Hakuna taarifa</span>'}</div>
+      </div>
+
+      <div class="sr-sec">
+        <div class="sr-sec-ttl">📋 Jinsi ya Kuandaa na Kutumia</div>
+        ${hatua||'<div style="color:var(--muted);font-size:13px">Hakuna maelekezo</div>'}
+      </div>
+
+      ${r.onyo?`
+      <div class="sr-sec">
+        <div class="sr-sec-ttl">⚠️ Onyo Muhimu</div>
+        <div class="sr-warn">⚠️ ${r.onyo}</div>
+      </div>`:''}
+
+      <div class="sr-sec">
+        <button class="sr-again" onclick="scanReset()">📷 Chunguza Mmea Mwingine</button>
+      </div>
+    </div>
+    <div style="text-align:center;font-size:11px;color:var(--muted);padding-bottom:8px;line-height:1.7">
+      ℹ️ Taarifa hizi ni za kielimu tu. Wasiliana na daktari kabla ya matibabu yoyote.
+    </div>`;
+
+  area.scrollIntoView({behavior:'smooth',block:'start'});
+}
+
+function scanReset(){
+  _scanImg  = null;
+  _scanBusy = false;
+  renderScanScreen();
+}
+
+
+// ── INIT ──
+loadPrefs();
+if(loadSession()&&CU){afterLogin();}
+else{goto('s-welcome');}
+</script><script>
 // ══════════════════════════════════
 // DATA STORE
 // ══════════════════════════════════
@@ -1296,19 +1397,22 @@ const getPays=()=>db().payments||[];
 const setPays=p=>{const d=db();d.payments=p;saveDb(d);};
 const getCodes=()=>db().codes||[];
 const setCodes=c=>{const d=db();d.codes=c;saveDb(d);};
-const getStg=()=>db().settings||{priceM:5000,price3:25000,mpesa:'255652421286',tigo:'255652421286',wa:'255652421286'};
+const getStg=()=>db().settings||{priceM:3000,price6:15000,priceY:25000,mpesa:'67363327',tigo:'255652421286',wa:'255652421286'};
 const saveStg=s=>{const d=db();d.settings=s;saveDb(d);};
 
 let CU=null,toastT=null;
 
 // ── SCREENS ──
+function checkPremiumExpiry(){}
 function goto(id){
-  if(CU&&id!=='s-malipo'&&id!=='s-welcome'&&id!=='s-login')checkPremiumExpiry();
+  try{if(CU&&id!=='s-malipo'&&id!=='s-welcome'&&id!=='s-login')checkPremiumExpiry();}catch(e){}
   document.querySelectorAll('.sc').forEach(s=>s.classList.remove('on'));
-  document.getElementById(id).classList.add('on');
+  var _el=document.getElementById(id);
+  if(_el)_el.classList.add('on');
   window.scrollTo(0,0);
-  const appScs=['s-home','s-uchunguzi','s-ripoti','s-maktaba','s-mmea','s-ratiba','s-malipo','s-akaunti','s-settings','s-chat','s-chat-room'];
-  document.getElementById('bnav').classList.toggle('show',appScs.includes(id));
+  const appScs=['s-home','s-uchunguzi','s-ripoti','s-maktaba','s-mmea','s-ratiba','s-malipo','s-akaunti','s-settings','s-chat','s-chat-room','s-scan'];
+  var _bnav=document.getElementById('bnav');
+  if(_bnav)_bnav.classList.toggle('show',appScs.includes(id));
   if(id==='s-home')refreshHome();
   if(id==='s-maktaba')renderMimea();
   if(id==='s-ratiba')renderRatiba();
@@ -1320,12 +1424,13 @@ function nb2(p,el){setNb(p,el);}
 function setNb(p,el){
   document.querySelectorAll('.nb').forEach(b=>b.classList.remove('on'));
   if(el)el.classList.add('on');
-  if(p==='home')      goto('s-home');
-  else if(p==='uch') {goto('s-uchunguzi');startDiag();}
-  else if(p==='mak')  goto('s-maktaba');
-  else if(p==='chat'){goto('s-chat');renderTestis();}
-  else if(p==='rat')  goto('s-ratiba');
-  else if(p==='ak')   goto('s-akaunti');
+  if(p==='home')       goto('s-home');
+  else if(p==='uch')  {goto('s-uchunguzi');startDiag();}
+  else if(p==='scan')  {goto('s-scan');renderScanScreen();}
+  else if(p==='mak')   goto('s-maktaba');
+  else if(p==='chat') {goto('s-chat');renderTestis();}
+  else if(p==='rat')   goto('s-ratiba');
+  else if(p==='ak')    goto('s-akaunti');
 }
 
 // ── AUTH ──
@@ -1362,7 +1467,7 @@ function doRegister(){
   ),1500);
 }
 function afterLogin(){
-  document.getElementById('home-greeting').textContent=CU.name.split(' ')[0];
+  var _hg=document.getElementById('home-greeting');if(_hg)_hg.textContent=CU.name.split(' ')[0];
   const havEl=document.getElementById('home-av');
   if(CU.avatar){havEl.innerHTML=`<img src="${CU.avatar}" style="width:36px;height:36px;object-fit:cover;border-radius:50%;">`;}
   else{havEl.textContent=CU.name[0].toUpperCase();}
@@ -1413,7 +1518,7 @@ function openWA(num,msg){window.open('https://wa.me/'+num.replace(/[^0-9]/g,'')+
 // ── HOME ──
 function refreshHome(){
   if(!CU)return;
-  document.getElementById('home-greeting').textContent=CU.name.split(' ')[0];
+  var _hg=document.getElementById('home-greeting');if(_hg)_hg.textContent=CU.name.split(' ')[0];
   document.getElementById('ratiba-home-sub').textContent=CU.premium?'✅ Fungua Ratiba':'🔒 Inagusa malipo';
   const stg=getStg();
   const prEl=document.getElementById('home-price');
@@ -1435,7 +1540,7 @@ function refreshHome(){
       if(rEl)rEl.style.display=tl.days<7?'block':'none';
     } else if(tl?.expired){
       hcdSlot.style.display='block';
-            hcdSlot.innerHTML=`<div style="font-size:12px;color:rgba(255,255,255,.8);font-weight:700;">⚠️ Uanachama umekwisha! <button onclick="goto('s-malipo')" style="background:#fff;color:var(--gr);border:none;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;margin-left:6px;">Lipa Sasa</button></div>`;    }
+            hcdSlot.innerHTML=`<div style="font-size:12px;color:rgba(255,255,255,.8);font-weight:700;">⚠️ Uanachama umekwisha! <button onclick="goto(&quot;s-malipo&quot;)" style="background:#fff;color:var(--gr);border:none;padding:4px 12px;border-radius:20px;font-size:11px;font-weight:800;cursor:pointer;font-family:DM Sans,sans-serif;margin-left:6px;">Lipa Sasa</button></div>`;    }
   }
   const sc=document.getElementById('mimea-home-scroll');
   if(sc){
@@ -1528,7 +1633,7 @@ function genRipoti(){
       </div>`:''}
       <div style="margin-bottom:18px;">
         <div class="ripoti-sec-title">🌿 Mimea Inayopendekezwa</div>
-        <div class="mimea-chips">${mimeaRec.map(m=>`<div class="mmea-chip" onclick="goto('s-maktaba')">${m.emoji} ${m.name}</div>`).join('')}</div>
+        <div class="mimea-chips">${mimeaRec.map(m=>`<div class="mmea-chip" onclick="goto(&quot;s-maktaba&quot;)">${m.emoji} ${m.name}</div>`).join('')}</div>
       </div>
       <div style="margin-bottom:18px;">
         <div class="ripoti-sec-title">📅 Hatua Zinazofuata</div>
@@ -1543,8 +1648,8 @@ function genRipoti(){
         </div>
       </div>
       <div style="display:flex;flex-direction:column;gap:10px;">
-        <button class="btn btn-gr btn-full" onclick="goto('s-maktaba')">🌱 Angalia Maktaba ya Mimea</button>
-        <button class="btn btn-out btn-full" onclick="goto('s-malipo')">📅 Fungua Ratiba ya Siku 7</button>
+        <button class="btn btn-gr btn-full" onclick="goto(&quot;s-maktaba&quot;)">🌱 Angalia Maktaba ya Mimea</button>
+        <button class="btn btn-out btn-full" onclick="goto(&quot;s-malipo&quot;)">📅 Fungua Ratiba ya Siku 7</button>
       </div>
     </div>`;
   if(CU){CU.uchunguzi=(CU.uchunguzi||0)+1;
@@ -1733,12 +1838,12 @@ function openMmea(id){
         <div style="margin-top:16px;">
   <div style="font-size:12px;font-weight:700;color:var(--sub);margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;">📅 Chagua Ratiba ya Kutumia</div>
   <div style="display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:10px;">
-    <button onclick="setMmeaRatibaAndGo('nguvu')" style="background:var(--gr3);border:1.5px solid var(--gr4);color:var(--gr2);padding:10px 8px;border-radius:var(--rs);font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;text-align:center;">💪 Nguvu za Kiume</button>
-    <button onclick="setMmeaRatibaAndGo('usingizi')" style="background:var(--gr3);border:1.5px solid var(--gr4);color:var(--gr2);padding:10px 8px;border-radius:var(--rs);font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;text-align:center;">😴 Usingizi Bora</button>
-    <button onclick="setMmeaRatibaAndGo('shinikizo')" style="background:var(--gr3);border:1.5px solid var(--gr4);color:var(--gr2);padding:10px 8px;border-radius:var(--rs);font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;text-align:center;">❤️ Shinikizo la Damu</button>
-    <button onclick="setMmeaRatibaAndGo('uchovu')" style="background:var(--gr3);border:1.5px solid var(--gr4);color:var(--gr2);padding:10px 8px;border-radius:var(--rs);font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;text-align:center;">⚡ Uchovu & Nishati</button>
+    <button onclick="setMmeaRatibaAndGo('nguvu')" style="background:var(--gr3);border:1.5px solid var(--gr4);color:var(--gr2);padding:10px 8px;border-radius:var(--rs);font-size:12px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;text-align:center;">💪 Nguvu za Kiume</button>
+    <button onclick="setMmeaRatibaAndGo('usingizi')" style="background:var(--gr3);border:1.5px solid var(--gr4);color:var(--gr2);padding:10px 8px;border-radius:var(--rs);font-size:12px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;text-align:center;">😴 Usingizi Bora</button>
+    <button onclick="setMmeaRatibaAndGo('shinikizo')" style="background:var(--gr3);border:1.5px solid var(--gr4);color:var(--gr2);padding:10px 8px;border-radius:var(--rs);font-size:12px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;text-align:center;">❤️ Shinikizo la Damu</button>
+    <button onclick="setMmeaRatibaAndGo('uchovu')" style="background:var(--gr3);border:1.5px solid var(--gr4);color:var(--gr2);padding:10px 8px;border-radius:var(--rs);font-size:12px;font-weight:700;cursor:pointer;font-family:DM Sans,sans-serif;text-align:center;">⚡ Uchovu & Nishati</button>
   </div>
-  <button onclick="setMmeaRatibaAndGo('jumla')" style="width:100%;background:var(--gr);color:#fff;padding:11px;border-radius:var(--rs);font-size:13px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;border:none;">🌿 Ratiba ya Jumla →</button>
+  <button onclick="setMmeaRatibaAndGo('jumla')" style="width:100%;background:var(--gr);color:#fff;padding:11px;border-radius:var(--rs);font-size:13px;font-weight:800;cursor:pointer;font-family:DM Sans,sans-serif;border:none;">🌿 Ratiba ya Jumla →</button>
 </div>
       </div>
       <div class="mmea-sec" id="ms-mcha">
@@ -1747,7 +1852,7 @@ function openMmea(id){
       </div>
       <div class="mmea-sec" id="ms-faid">
         ${m.faida.map(f=>`<div class="faida-item"><span style="font-size:16px;flex-shrink:0;">✅</span><span style="font-size:13px;font-weight:600;">${f}</span></div>`).join('')}
-        <button onclick="goto('s-ratiba')" style="width:100%;background:var(--gr);color:#fff;padding:11px;border-radius:var(--rs);font-size:13px;font-weight:800;cursor:pointer;font-family:'DM Sans',sans-serif;border:none;margin-top:10px;">📅 Angalia Ratiba Yangu →</button>
+        <button onclick="goto(&quot;s-ratiba&quot;)" style="width:100%;background:var(--gr);color:#fff;padding:11px;border-radius:var(--rs);font-size:13px;font-weight:800;cursor:pointer;font-family:DM Sans,sans-serif;border:none;margin-top:10px;">📅 Angalia Ratiba Yangu →</button>
       </div>
     </div>`;
   goto('s-mmea');
@@ -1869,8 +1974,8 @@ function renderRatiba(){
   var stg=getStg();
   var rData=getRatibaForCondition();
   var DAYS=rData.days;
-  var P='font-family:\'Playfair Display\',serif;';
-  var DM='font-family:\'DM Sans\',sans-serif;';
+  var P='font-family:Playfair Display,serif;';
+  var DM='font-family:DM Sans,sans-serif;';
   if(!prem){
     var locked='<div class="ratiba-locked">'
       +'<span class="ratiba-lock-icon">🔒</span>'
@@ -1911,149 +2016,129 @@ function switchCond(k){if(CU){CU.lastDiagCondition=k;saveSession();}renderRatiba
 // ══════════════════════════════════
 // MALIPO
 // ══════════════════════════════════
-let selMethod='mpesa',selPkg=5000;
+let selMethod='mpesa',selPkg=3000;
 
 function renderMalipo(){
-  var el = document.getElementById('malipo-body');
-  if(!el) return;
-  var stg = getStg();
-  var priceM = Number(stg.priceM || 5000);
-  var price6 = Number(stg.price3 || 25000);
-  var lipa  = stg.mpesa || '67363327';
+  var el=document.getElementById('malipo-body');
+  if(!el)return;
+  var stg=getStg();
+  var priceM=Number(stg.priceM||3000);
+  var price6=Number(stg.price6||15000);
+  var priceY=Number(stg.priceY||25000);
+  var lipa=stg.mpesa||'67363327';
 
-  // ── PREMIUM / RENEW SCREEN ──
-  if(CU && CU.premium){
-    var expStr = CU.premiumExpiry ? new Date(CU.premiumExpiry).toLocaleDateString('sw') : '—';
-    var td2 = CU.isTrial ? 30 : (CU.premiumDays || 30);
-    var cdHtml = CU.premiumExpiry ? buildCountdownHTML(CU.premiumExpiry, td2, !!CU.isTrial) : '';
-
-    el.innerHTML =
-      '<div class="malipo-card">'
-     +'<div style="text-align:center;padding:10px 0 16px;">'
-     +'<span style="font-size:56px;display:block;margin-bottom:10px;">🏆</span>'
-     +'<div style="font-family:'Playfair Display',serif;font-size:22px;font-weight:700;color:var(--gr2);margin-bottom:6px;">Una Uanachama wa Premium!</div>'
-     +'<div style="font-size:13px;color:var(--sub);font-weight:500;">Unaisha: <strong style="color:var(--gr);">'+expStr+'</strong></div>'
-     +'</div>'
-     + cdHtml
-     +'<div style="display:flex;gap:10px;margin-top:16px;">'
-     +'<button class="btn btn-gr" style="flex:1;padding:13px;" onclick="goto('s-ratiba')">📅 Ratiba yangu →</button>'
-     +'<button class="btn btn-out" style="flex:1;padding:13px;" onclick="goto('s-maktaba')">🌱 Maktaba →</button>'
-     +'</div>'
-     +'<div style="border-top:1px solid var(--line);margin-top:20px;padding-top:18px;">'
-     +'<div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">🔄 Ongeza / Renew Uanachama</div>'
-     +'<div style="font-size:13px;color:var(--muted);margin-bottom:14px;font-weight:500;">Weka code mpya — muda utaongezwa juu ya uliobaki</div>'
-     +'<div class="fg"><label>Msimbo wa Ufikiaji</label>'
-     +'<input class="inp" id="code-inp-renew" type="text" placeholder="HERB-XXXX-XXXX" style="letter-spacing:3px;text-transform:uppercase;font-weight:800;text-align:center;font-size:18px;"></div>'
-     +'<button class="btn btn-am btn-full" onclick="doActivate((document.getElementById('code-inp-renew')||{}).value||'')">🔑 Weka Msimbo wa Renewal →</button>'
-     +'</div>'
-     +'</div>';
-
-    if(CU.premiumExpiry) startCountdown(CU.premiumExpiry, td2, !!CU.isTrial);
+  // PREMIUM USER
+  if(CU&&CU.premium){
+    var expStr=CU.premiumExpiry?new Date(CU.premiumExpiry).toLocaleDateString('sw'):'—';
+    var td2=CU.isTrial?30:(CU.premiumDays||30);
+    var cdHtml=CU.premiumExpiry?buildCountdownHTML(CU.premiumExpiry,td2,!!CU.isTrial):'';
+    var div=document.createElement('div');
+    div.className='malipo-card';
+    // Build premium UI using DOM (no quote escaping needed)
+    var topDiv=document.createElement('div');
+    topDiv.style.cssText='text-align:center;padding:10px 0 16px;';
+    topDiv.innerHTML='<span style="font-size:56px;display:block;margin-bottom:10px;">🏆</span><div style="font-size:22px;font-weight:700;color:var(--gr2);margin-bottom:6px;">Una Uanachama wa Premium!</div><div style="font-size:13px;color:var(--sub);font-weight:500;">Unaisha: <strong style="color:var(--gr);">'+expStr+'</strong></div>';
+    div.appendChild(topDiv);
+    if(cdHtml){var cdDiv=document.createElement('div');cdDiv.innerHTML=cdHtml;div.appendChild(cdDiv);}
+    var btnRow=document.createElement('div');
+    btnRow.style.cssText='display:flex;gap:10px;margin-top:16px;';
+    var b1=document.createElement('button');b1.className='btn btn-gr';b1.style.cssText='flex:1;padding:13px;';b1.textContent='📅 Ratiba yangu →';b1.onclick=function(){goto('s-ratiba');};
+    var b2=document.createElement('button');b2.className='btn btn-out';b2.style.cssText='flex:1;padding:13px;';b2.textContent='🌱 Maktaba →';b2.onclick=function(){goto('s-maktaba');};
+    btnRow.appendChild(b1);btnRow.appendChild(b2);div.appendChild(btnRow);
+    var renewDiv=document.createElement('div');
+    renewDiv.style.cssText='border-top:1px solid var(--line);margin-top:20px;padding-top:18px;';
+    renewDiv.innerHTML='<div style="font-size:14px;font-weight:700;color:var(--text);margin-bottom:4px;">🔄 Ongeza / Renew Uanachama</div><div style="font-size:13px;color:var(--muted);margin-bottom:14px;">Weka code mpya kupata muda zaidi</div><input class="inp" id="code-inp-renew" type="text" placeholder="HERB-XXXX-XXXX" style="letter-spacing:3px;text-transform:uppercase;font-weight:800;text-align:center;font-size:18px;margin-bottom:10px;"><button class="btn btn-am btn-full" id="renew-btn">🔑 Weka Msimbo wa Renewal →</button>';
+    div.appendChild(renewDiv);
+    el.innerHTML='';
+    el.appendChild(div);
+    document.getElementById('renew-btn').onclick=function(){
+      var v=(document.getElementById('code-inp-renew')||{}).value||'';
+      doActivate(v);
+    };
+    if(CU.premiumExpiry)startCountdown(CU.premiumExpiry,td2,!!CU.isTrial);
     return;
   }
 
-  // ── FREE USER: PAYMENT SCREEN ──
-  el.innerHTML =
-    '<div class="malipo-card">'
-   +'<div class="malipo-title">Lipa Uanachama wa Premium</div>'
-   +'<p style="font-size:14px;color:var(--sub);font-weight:500;margin-bottom:22px;line-height:1.5;">Fungua Ratiba ya Siku 7, Maktaba yote, na Dr. Revo AI bila kikwazo.</p>'
+  // FREE USER — show packages
+  var div2=document.createElement('div');
+  div2.className='malipo-card';
+  div2.innerHTML=
+    '<div style="text-align:center;margin-bottom:18px;">'+
+      '<div style="font-size:13px;font-weight:600;color:var(--muted);margin-bottom:6px;">Jiunge na Premium</div>'+
+      '<div id="pay-amt-show" style="font-size:34px;font-weight:700;color:var(--gr2);">TSh '+priceM.toLocaleString()+'</div>'+
+    '</div>'+
+    '<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-bottom:18px;" id="pkg-grid">'+
+      '<div class="pkg-opt on" id="pkg-1m">'+
+        '<div style="font-size:13px;font-weight:700;color:var(--text);">🎁 Mwezi 1</div>'+
+        '<div style="font-size:16px;font-weight:700;color:var(--gr2);">TSh '+priceM.toLocaleString()+'</div>'+
+        '<div style="font-size:10px;color:var(--gr2);">Kawaida</div>'+
+      '</div>'+
+      '<div class="pkg-opt" id="pkg-6m" style="position:relative;">'+
+        '<div style="position:absolute;top:-8px;right:4px;background:var(--am);color:#fff;font-size:9px;font-weight:700;padding:2px 6px;border-radius:var(--pill);">POPULAR</div>'+
+        '<div style="font-size:13px;font-weight:700;color:var(--text);">Miezi 6</div>'+
+        '<div style="font-size:16px;font-weight:700;color:var(--gr2);">TSh '+price6.toLocaleString()+'</div>'+
+        '<div style="font-size:10px;color:var(--gr2);">Okoa 17%</div>'+
+      '</div>'+
+      '<div class="pkg-opt" id="pkg-yr">'+
+        '<div style="font-size:13px;font-weight:700;color:var(--text);">Mwaka 1</div>'+
+        '<div style="font-size:16px;font-weight:700;color:var(--gr2);">TSh '+priceY.toLocaleString()+'</div>'+
+        '<div style="font-size:10px;color:var(--gr2);">Okoa 31%</div>'+
+      '</div>'+
+    '</div>'+
+    '<div style="background:var(--gr3);border:1.5px solid var(--gr4);border-radius:var(--rs);padding:14px;margin-bottom:18px;">'+
+      '<div style="font-size:13px;font-weight:800;color:var(--gr2);margin-bottom:6px;">📱 M-Pesa (Vodacom)</div>'+
+      '<div style="font-size:14px;font-weight:700;color:var(--text);">Lipa Namba: <strong>'+lipa+'</strong></div>'+
+      '<div style="font-size:12px;color:var(--sub);font-weight:500;margin-top:3px;">Jina: JOS NATURAL HERBS</div>'+
+    '</div>'+
+    '<button class="btn btn-am btn-full" style="font-size:15px;margin-bottom:12px;" onclick="submitPay()">📱 Niambie Admin — WhatsApp →</button>'+
+    '<div style="text-align:center;margin-bottom:12px;font-size:12px;color:var(--muted);">Una msimbo tayari? <span style="color:var(--gr);font-weight:700;cursor:pointer;" id="show-code-btn">Bonyeza hapa</span></div>'+
+    '<div id="code-section" style="display:none;">'+
+      '<input class="inp" id="code-inp" type="text" placeholder="HERB-XXXX-XXXX" style="letter-spacing:3px;text-transform:uppercase;font-weight:800;text-align:center;font-size:18px;margin-bottom:10px;">'+
+      '<button class="btn btn-gr btn-full" id="activate-btn">🔑 Fungua Premium →</button>'+
+    '</div>';
+  el.innerHTML='';
+  el.appendChild(div2);
 
-   // Price selection
-   +'<div style="background:linear-gradient(135deg,var(--gr3),var(--am3));border:1.5px solid var(--gr4);border-radius:var(--r);padding:16px;margin-bottom:18px;text-align:center;">'
-   +'<div style="font-size:11px;font-weight:700;color:var(--sub);text-transform:uppercase;letter-spacing:.5px;margin-bottom:4px;">Bei ya Uanachama</div>'
-   +'<div id="pay-amt-show" style="font-family:'Playfair Display',serif;font-size:34px;font-weight:700;color:var(--gr2);">TSh '+priceM.toLocaleString()+'</div>'
-   +'</div>'
-
-   // Packages
-   +'<div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:18px;">'
-   +'<div class="pkg-opt on" id="pkg-1m" onclick="selPkg='+priceM+';document.querySelectorAll('.pkg-opt').forEach(e=>e.classList.remove('on'));this.classList.add('on');document.getElementById('pay-amt-show').textContent='TSh '+Number('+priceM+').toLocaleString();" style="border:2px solid var(--gr);border-radius:var(--rs);padding:14px;text-align:center;cursor:pointer;background:var(--gr3);">'
-   +'<div style="font-size:13px;font-weight:700;color:var(--text);">Mwezi 1</div>'
-   +'<div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--gr2);">TSh '+priceM.toLocaleString()+'</div>'
-   +'</div>'
-   +'<div class="pkg-opt" id="pkg-6m" onclick="selPkg='+price6+';document.querySelectorAll('.pkg-opt').forEach(e=>e.classList.remove('on'));this.classList.add('on');document.getElementById('pay-amt-show').textContent='TSh '+Number('+price6+').toLocaleString();" style="border:2px solid var(--line);border-radius:var(--rs);padding:14px;text-align:center;cursor:pointer;position:relative;">'
-   +'<div style="position:absolute;top:-8px;right:8px;background:var(--am);color:#fff;font-size:9px;font-weight:700;padding:2px 8px;border-radius:var(--pill);">POPULAR</div>'
-   +'<div style="font-size:13px;font-weight:700;color:var(--text);">Miezi 6</div>'
-   +'<div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;">TSh '+price6.toLocaleString()+'</div>'
-   +'</div>'
-   +'</div>'
-
-   // Method
-   +'<div style="background:var(--gr3);border:1.5px solid var(--gr4);border-radius:var(--rs);padding:14px;margin-bottom:18px;">'
-   +'<div style="font-size:13px;font-weight:800;color:var(--gr2);margin-bottom:6px;">📱 M-Pesa (Vodacom)</div>'
-   +'<div style="font-size:14px;font-weight:700;color:var(--text);">Lipa Namba: <strong>'+lipa+'</strong></div>'
-   +'<div style="font-size:12px;color:var(--sub);font-weight:500;margin-top:3px;">Jina: JOS NATURAL HERBS</div>'
-   +'</div>'
-
-   // Steps
-   +'<div style="background:var(--card2);border-radius:var(--rs);padding:14px;margin-bottom:16px;">'
-   +'<div style="font-size:12px;font-weight:700;color:var(--sub);margin-bottom:10px;text-transform:uppercase;letter-spacing:.5px;">Hatua za Kulipa</div>'
-   +'<div style="font-size:13px;color:var(--sub);font-weight:500;display:flex;align-items:flex-start;gap:9px;margin-bottom:8px;"><span style="width:22px;height:22px;border-radius:50%;background:var(--gr);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">1</span>Tuma pesa M-Pesa Lipa Namba <strong>'+lipa+'</strong></div>'
-   +'<div style="font-size:13px;color:var(--sub);font-weight:500;display:flex;align-items:flex-start;gap:9px;margin-bottom:8px;"><span style="width:22px;height:22px;border-radius:50%;background:var(--gr);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">2</span>Bonyeza "Niambie Admin" — WhatsApp inafunguliwa</div>'
-   +'<div style="font-size:13px;color:var(--sub);font-weight:500;display:flex;align-items:flex-start;gap:9px;"><span style="width:22px;height:22px;border-radius:50%;background:var(--gr);color:#fff;font-size:11px;font-weight:700;display:flex;align-items:center;justify-content:center;flex-shrink:0;">3</span>Pokea Msimbo wako — weka chini</div>'
-   +'</div>'
-
-   // WA Button
-   +'<button class="btn btn-am btn-full" style="font-size:15px;margin-bottom:12px;" onclick="submitPay()">📱 Niambie Admin — WhatsApp →</button>'
-
-   // Code input
-   +'<div style="text-align:center;margin-bottom:12px;font-size:12px;color:var(--muted);">Una msimbo tayari? <span style="color:var(--gr);font-weight:700;cursor:pointer;" onclick="document.getElementById('code-section').style.display='block';this.parentElement.style.display='none'">Weka hapa</span></div>'
-   +'<div id="code-section" style="display:none;">'
-   +'<div class="fg"><label>Msimbo wa Ufikiaji</label>'
-   +'<input class="inp" id="code-inp" type="text" placeholder="HERB-XXXX-XXXX" style="letter-spacing:3px;text-transform:uppercase;font-weight:800;text-align:center;font-size:18px;"></div>'
-   +'<button class="btn btn-gr btn-full" onclick="doActivate((document.getElementById('code-inp')||{}).value||'')">🔑 Fungua Premium →</button>'
-   +'</div>'
-   +'</div>';
-
-  selPkg = priceM;
+  // Attach event listeners safely (no inline quotes needed)
+  selPkg=priceM;
+  var amtShow=document.getElementById('pay-amt-show');
+  function setPkg(id,price){
+    document.querySelectorAll('.pkg-opt').forEach(function(e){e.classList.remove('on');});
+    document.getElementById(id).classList.add('on');
+    selPkg=price;
+    if(amtShow)amtShow.textContent='TSh '+Number(price).toLocaleString();
+  }
+  document.getElementById('pkg-1m').onclick=function(){setPkg('pkg-1m',priceM);};
+  document.getElementById('pkg-6m').onclick=function(){setPkg('pkg-6m',price6);};
+  document.getElementById('pkg-yr').onclick=function(){setPkg('pkg-yr',priceY);};
+  var scBtn=document.getElementById('show-code-btn');
+  if(scBtn)scBtn.onclick=function(){document.getElementById('code-section').style.display='block';};
+  var actBtn=document.getElementById('activate-btn');
+  if(actBtn)actBtn.onclick=function(){doActivate((document.getElementById('code-inp')||{}).value||'');};
 }
+
+
 
 
 function submitPay(){
-  var stg = getStg();
-  var wa = stg.wa || '255652421286';
-  var pkg = selPkg===Number(stg.price3||25000) ? 'Miezi 6 (TSh '+Number(stg.price3||25000).toLocaleString()+')' : 'Mwezi 1 (TSh '+Number(stg.priceM||5000).toLocaleString()+')';
-  var msg = 'Habari Dr. Revo!
-
-Nataka kununua Uanachama wa AFYA-LISHE SMART.
-
-'
-          + 'Mteja: '+(CU&&CU.name||'Mgeni')+'
-'
-          + 'Barua Pepe: '+(CU&&CU.email||'—')+'
-'
-          + 'Package: '+pkg+'
-
-'
-          + 'Nimetuma pesa kwa Lipa Namba '+( stg.mpesa||'67363327')+' (JOS NATURAL HERBS).
-
-'
-          + 'Tafadhali nitumie Msimbo wa Ufikiaji. Asante!';
-
-  // Record payment
-  var pays = getPays();
-  pays.unshift({id:Date.now(),userId:CU&&CU.email,name:CU&&CU.name,phone:CU&&CU.phone||'',method:'mpesa',txnCode:'WA-'+Date.now(),amount:selPkg,date:new Date().toISOString(),status:'pending'});
-  setPays(pays);
-
-  window.open('https://wa.me/'+wa.replace(/[^0-9]/g,'')+'?text='+encodeURIComponent(msg),'_blank');
-
-  // Show success state
-  var el = document.getElementById('malipo-body');
-  if(el){
-    el.innerHTML =
-      '<div class="malipo-card" style="text-align:center;padding:28px 24px;">'
-     +'<span style="font-size:60px;display:block;margin-bottom:14px;">📱</span>'
-     +'<div style="font-family:'Playfair Display',serif;font-size:20px;font-weight:700;color:var(--text);margin-bottom:8px;">WhatsApp Imefunguliwa!</div>'
-     +'<p style="font-size:14px;color:var(--sub);font-weight:500;line-height:1.6;margin-bottom:20px;">Tuma ujumbe uliofunguliwa kwa Dr. Revo. Utapokea Msimbo wako wa Ufikiaji hivi karibuni.</p>'
-     +'<div style="background:var(--gr3);border:1px solid var(--gr4);border-radius:var(--rs);padding:14px;margin-bottom:20px;font-size:13px;color:var(--sub);font-weight:500;">'
-     +'📞 <strong>+255 652 421 286</strong> — Dr. Revo, JOS Natural Herbs</div>'
-     +'<div class="fg"><label>Msimbo wa Ufikiaji (ukipokea)</label>'
-     +'<input class="inp" id="code-inp-after" type="text" placeholder="HERB-XXXX-XXXX" style="letter-spacing:3px;text-transform:uppercase;font-weight:800;text-align:center;font-size:18px;"></div>'
-     +'<button class="btn btn-gr btn-full" style="margin-bottom:10px;" onclick="doActivate((document.getElementById('code-inp-after')||{}).value||'')">🔑 Weka Msimbo — Fungua Premium →</button>'
-     +'<button class="btn btn-out btn-full" onclick="renderMalipo()">← Rudi</button>'
-     +'</div>';
-  }
-  toast('📱 WhatsApp imefunguliwa! Tuma ujumbe kwa Dr. Revo','ok');
+  var stg=getStg();
+  var wa=stg.wa||'255652421286';
+  var priceM=Number(stg.priceM||3000);
+  var price6=Number(stg.price6||15000);
+  var priceY=Number(stg.priceY||25000);
+  var pkgLabel=selPkg>=priceY?'Mwaka 1 (TSh '+priceY.toLocaleString()+')':selPkg>=price6?'Miezi 6 (TSh '+price6.toLocaleString()+')':'Mwezi 1 (TSh '+priceM.toLocaleString()+')';
+  var name=CU&&CU.name||'Mgeni';
+  var email=CU&&CU.email||'—';
+  var lipa=stg.mpesa||'67363327';
+  var msg='Habari Dr. Revo!%0A%0ANataka kununua Uanachama wa AFYA-LISHE SMART.%0A%0A'
+    +'Mteja: '+name+'%0A'
+    +'Barua Pepe: '+email+'%0A'
+    +'Package: '+pkgLabel+'%0A%0A'
+    +'Nimetuma pesa kwa Lipa Namba '+lipa+' (JOS NATURAL HERBS).%0A%0A'
+    +'Tafadhali nitumie Msimbo wa Ufikiaji. Asante!';
+  window.open('https://wa.me/'+wa+'?text='+msg,'_blank');
 }
+
 
 
 function activateCode(){
@@ -2132,351 +2217,7 @@ function setMmeaRatibaAndGo(cond){
 }
 
 
-// ══════════════════════════════════
-// SCANNER NAV UPDATE
-// ══════════════════════════════════
-// Patch setNb after all functions are defined
-window.addEventListener('DOMContentLoaded', function() {
-  var _origSetNb = window.setNb;
-  window.setNb = function(p, el) {
-    document.querySelectorAll('.nb').forEach(function(b){ b.classList.remove('on'); });
-    if (el) el.classList.add('on');
-    if (p === 'scan') { goto('s-scanner'); openScanner(); return; }
-    if (p === 'home')       goto('s-home');
-    else if (p === 'uch')  { goto('s-uchunguzi'); startDiag(); }
-    else if (p === 'mak')   goto('s-maktaba');
-    else if (p === 'chat') { goto('s-chat'); if(typeof renderTestis==='function') renderTestis(); }
-    else if (p === 'rat')   goto('s-ratiba');
-    else if (p === 'ak')    goto('s-akaunti');
-  };
-});
-
-// ══════════════════════════════════
-// SCANNER GLOBALS
-// ══════════════════════════════════
-let scanImageB64 = null;
-let scanImageMime = 'image/jpeg';
-let scanHistory = [];
-const SCAN_HIST_KEY = 'afya_scan_history';
-
-function loadScanHistory() {
-  try { scanHistory = JSON.parse(localStorage.getItem(SCAN_HIST_KEY) || '[]'); } catch { scanHistory = []; }
-}
-function saveScanHistory() {
-  try { localStorage.setItem(SCAN_HIST_KEY, JSON.stringify(scanHistory.slice(0, 20))); } catch {}
-}
-
-// ── Open Scanner screen ──
-function openScanner() {
-  loadScanHistory();
-  const isPrem = CU && CU.premium;
-  document.getElementById('scanner-locked').style.display  = isPrem ? 'none'  : 'block';
-  document.getElementById('scanner-active').style.display = isPrem ? 'block' : 'none';
-  if (isPrem) renderScanHistory();
-}
-
-// ── Handle file selection ──
-function handleScanFile(input) {
-  const file = input.files[0];
-  if (!file) return;
-  const reader = new FileReader();
-  reader.onload = e => {
-    const result = e.target.result;
-    scanImageMime = file.type || 'image/jpeg';
-    // Extract base64
-    scanImageB64 = result.split(',')[1];
-    // Show preview
-    document.getElementById('scan-preview-img').src = result;
-    document.getElementById('scan-empty-state').style.display = 'none';
-    document.getElementById('scan-preview-state').style.display = 'block';
-    document.getElementById('scan-drop').classList.add('has-img');
-    // Enable button
-    const btn = document.getElementById('scan-btn');
-    btn.disabled = false;
-    document.getElementById('scan-btn-icon').textContent = '🔬';
-    document.getElementById('scan-btn-text').textContent = 'Chunguza Mmea Huu — AI';
-    // Reset results
-    document.getElementById('scan-result').classList.remove('show');
-    document.getElementById('scan-loading').classList.remove('show');
-    document.getElementById('scan-again-btn-wrap').style.display = 'none';
-  };
-  reader.readAsDataURL(file);
-  // Reset input so same file can be selected again
-  input.value = '';
-}
-
-function clearScan() {
-  scanImageB64 = null;
-  document.getElementById('scan-preview-img').src = '';
-  document.getElementById('scan-empty-state').style.display = 'block';
-  document.getElementById('scan-preview-state').style.display = 'none';
-  document.getElementById('scan-drop').classList.remove('has-img');
-  const btn = document.getElementById('scan-btn');
-  btn.disabled = true;
-  document.getElementById('scan-btn-icon').textContent = '🔬';
-  document.getElementById('scan-btn-text').textContent = 'Chagua Picha Kwanza';
-  document.getElementById('scan-result').classList.remove('show');
-  document.getElementById('scan-loading').classList.remove('show');
-  document.getElementById('scan-again-btn-wrap').style.display = 'none';
-}
-
-// ── Main AI Analysis ──
-async function doScanAnalyze() {
-  if (!scanImageB64) { toast('Chagua picha ya mmea kwanza', 'err'); return; }
-  if (!CU || !CU.premium) { toast('Hii ni kipengele cha Premium tu', 'err'); goto('s-malipo'); return; }
-
-  // Show loading
-  const btn = document.getElementById('scan-btn');
-  btn.disabled = true;
-  document.getElementById('scan-btn-icon').textContent = '⏳';
-  document.getElementById('scan-btn-text').textContent = 'AI inachunguza...';
-  document.getElementById('scan-loading').classList.add('show');
-  document.getElementById('scan-result').classList.remove('show');
-  document.getElementById('scan-again-btn-wrap').style.display = 'none';
-
-  const loadingMsgs = [
-    'Inatoa picha ya mmea...',
-    'Inatambua sifa za mmea...',
-    'Inachunguza database ya mimea...',
-    'Inakusanya taarifa za kiafya...',
-    'Inatengeneza ripoti yako...'
-  ];
-  let mi = 0;
-  const msgInterval = setInterval(() => {
-    document.getElementById('scan-loading-msg').textContent = loadingMsgs[mi % loadingMsgs.length];
-    mi++;
-  }, 1800);
-
-  try {
-    const prompt = `Wewe ni mtaalamu wa mimea ya kiafya Afrika Mashariki, hasa Tanzania. Mtumiaji amepiga picha ya mmea na anataka kujua:
-
-1. Jina la mmea (Kiswahili na Kiingereza na jina la kisayansi/Latin)
-2. Emoji inayofanana na mmea huo
-3. Faida za kiafya za mmea huo (angalau 5-8)
-4. Maradhi/matatizo yanayotibiwa na mmea huo (angalau 5-8)
-5. Jinsi ya kutumia mmea huo (hatua 4-5 za kina)
-6. Tahadhari/onyo muhimu za kutumia mmea huo
-7. Bidhaa za JOS Natural Herbs zinazohusiana (kama mmea huu unapatikana kwenye duka la mitishamba)
-8. Kiwango cha uhakika wako (1-100%)
-
-Jibu kwa muundo huu wa JSON PEKE YAKE (bila maelezo mengine):
-{
-  "jina_sw": "Jina la Kiswahili",
-  "jina_en": "English Name",
-  "jina_latin": "Scientific Name",
-  "emoji": "🌿",
-  "uhakika": 92,
-  "maelezo_mfupi": "Maelezo mafupi ya mmea huu (maneno 20-30)",
-  "faida": ["faida 1", "faida 2", "faida 3", "faida 4", "faida 5"],
-  "maradhi": ["ugonjwa 1", "tatizo 2", "hali 3", "tatizo 4", "ugonjwa 5"],
-  "jinsi_ya_kutumia": [
-    {"hatua": 1, "maelezo": "Maelezo ya hatua ya kwanza"},
-    {"hatua": 2, "maelezo": "Maelezo ya hatua ya pili"},
-    {"hatua": 3, "maelezo": "Maelezo ya hatua ya tatu"},
-    {"hatua": 4, "maelezo": "Maelezo ya hatua ya nne"}
-  ],
-  "tahadhari": "Onyo au tahadhari muhimu za kutumia mmea huu",
-  "bidhaa_jos": "Bidhaa ya JOS Natural Herbs inayohusiana au ushauri wa kuipata",
-  "hatari": false
-}
-
-Kama picha haina mmea wazi, jibu: {"kosa": "Picha haikuwa wazi au haikuonyesha mmea. Jaribu tena na picha nzuri zaidi ya mmea."}`;
-
-    const response = await fetch('https://api.anthropic.com/v1/messages', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({
-        model: 'claude-sonnet-4-20250514',
-        max_tokens: 1500,
-        messages: [{
-          role: 'user',
-          content: [
-            {
-              type: 'image',
-              source: { type: 'base64', media_type: scanImageMime, data: scanImageB64 }
-            },
-            { type: 'text', text: prompt }
-          ]
-        }]
-      })
-    });
-
-    clearInterval(msgInterval);
-
-    if (!response.ok) throw new Error('API error ' + response.status);
-
-    const data = await response.json();
-    const raw = data.content.map(c => c.text || '').join('');
-    const clean = raw.replace(/```json|```/g, '').trim();
-    const result = JSON.parse(clean);
-
-    if (result.kosa) {
-      document.getElementById('scan-loading').classList.remove('show');
-      toast('⚠️ ' + result.kosa, 'err');
-      btn.disabled = false;
-      document.getElementById('scan-btn-icon').textContent = '🔬';
-      document.getElementById('scan-btn-text').textContent = 'Jaribu Tena';
-      return;
-    }
-
-    // Save to history
-    const histItem = {
-      id: Date.now(),
-      jina_sw: result.jina_sw,
-      jina_en: result.jina_en,
-      emoji: result.emoji,
-      thumb: document.getElementById('scan-preview-img').src,
-      date: new Date().toLocaleDateString('sw'),
-      result: result
-    };
-    scanHistory.unshift(histItem);
-    saveScanHistory();
-
-    // Update stats
-    if (CU) {
-      CU.scanCount = (CU.scanCount || 0) + 1;
-      saveSession();
-    }
-
-    renderScanResult(result);
-    renderScanHistory();
-
-  } catch (err) {
-    clearInterval(msgInterval);
-    console.error(err);
-    document.getElementById('scan-loading').classList.remove('show');
-    toast('Hitilafu — angalia muunganisho wa internet', 'err');
-    btn.disabled = false;
-    document.getElementById('scan-btn-icon').textContent = '🔬';
-    document.getElementById('scan-btn-text').textContent = 'Jaribu Tena';
-  }
-}
-
-// ── Render Results ──
-function renderScanResult(r) {
-  document.getElementById('scan-loading').classList.remove('show');
-
-  // Header
-  document.getElementById('res-icon').textContent = r.emoji || '🌿';
-  document.getElementById('res-name').textContent = r.jina_sw || r.jina_en || 'Mmea Usiojulikana';
-  document.getElementById('res-latin').textContent = (r.jina_en || '') + (r.jina_latin ? ' · ' + r.jina_latin : '');
-  document.getElementById('res-conf').textContent = '✓ ' + (r.uhakika || 90) + '% uhakika';
-
-  // Body
-  let html = '';
-
-  // Short desc
-  if (r.maelezo_mfupi) {
-    html += `<div style="background:var(--gr3);border-left:4px solid var(--gr);border-radius:var(--rs);padding:12px 14px;margin-bottom:18px;font-size:13.5px;color:var(--sub);font-weight:500;line-height:1.6;">${r.maelezo_mfupi}</div>`;
-  }
-
-  // Faida
-  if (r.faida && r.faida.length) {
-    html += `<div class="scan-section">
-      <div class="scan-section-title">💚 Faida za Kiafya</div>
-      <div>${r.faida.map(f => `<span class="scan-tag">✓ ${f}</span>`).join('')}</div>
-    </div>`;
-  }
-
-  // Maradhi
-  if (r.maradhi && r.maradhi.length) {
-    html += `<div class="scan-section">
-      <div class="scan-section-title">🩺 Maradhi Yanayotibiwa</div>
-      <div>${r.maradhi.map(m => `<span class="scan-tag disease">• ${m}</span>`).join('')}</div>
-    </div>`;
-  }
-
-  // Jinsi ya kutumia
-  if (r.jinsi_ya_kutumia && r.jinsi_ya_kutumia.length) {
-    html += `<div class="scan-section">
-      <div class="scan-section-title">📋 Jinsi ya Kutumia</div>
-      ${r.jinsi_ya_kutumia.map(s => `
-        <div class="scan-how-step">
-          <div class="scan-how-num">${s.hatua}</div>
-          <div class="scan-how-text">${s.maelezo}</div>
-        </div>`).join('')}
-    </div>`;
-  }
-
-  // Tahadhari
-  if (r.tahadhari) {
-    html += `<div class="scan-section">
-      <div class="scan-section-title">⚠️ Tahadhari</div>
-      <div class="scan-warning-box">⚠️ ${r.tahadhari}</div>
-    </div>`;
-  }
-
-  // JOS Product CTA
-  if (r.bidhaa_jos) {
-    html += `<div class="scan-product-cta" onclick="openWA('255652421286','Habari Dr. Revo! Nimescan mmea wa ${r.jina_sw} kwenye AFYA-LISHE. Nataka kujua kuhusu: ${r.bidhaa_jos}')">
-      <div class="scan-product-ico">🌿</div>
-      <div>
-        <div class="scan-product-title">Patikana JOS Natural Herbs</div>
-        <div class="scan-product-sub">${r.bidhaa_jos}</div>
-      </div>
-      <div style="color:var(--am2);font-size:18px;">›</div>
-    </div>`;
-  }
-
-  document.getElementById('res-body').innerHTML = html;
-  document.getElementById('scan-result').classList.add('show');
-  document.getElementById('scan-again-btn-wrap').style.display = 'block';
-
-  // Reset button
-  const btn = document.getElementById('scan-btn');
-  btn.disabled = false;
-  document.getElementById('scan-btn-icon').textContent = '📷';
-  document.getElementById('scan-btn-text').textContent = 'Scan Mmea Mwingine';
-
-  // Scroll to result
-  setTimeout(() => document.getElementById('scan-result').scrollIntoView({ behavior: 'smooth', block: 'start' }), 200);
-
-  toast('✅ Mmea umetambuliwa — ' + (r.jina_sw || r.jina_en) + '!', 'ok');
-}
-
-// ── Scan History ──
-function renderScanHistory() {
-  const list = document.getElementById('scan-history-list');
-  const empty = document.getElementById('scan-history-empty');
-  if (!scanHistory.length) {
-    list.innerHTML = '';
-    empty.style.display = 'block';
-    return;
-  }
-  empty.style.display = 'none';
-  list.innerHTML = scanHistory.slice(0, 8).map(h => `
-    <div class="scan-history-item" onclick="rerenderFromHistory(${h.id})">
-      <div class="scan-history-thumb">
-        ${h.thumb ? `<img src="${h.thumb}" alt="${h.jina_sw}">` : h.emoji}
-      </div>
-      <div>
-        <div class="scan-history-name">${h.emoji} ${h.jina_sw}</div>
-        <div class="scan-history-date">${h.jina_en} · ${h.date}</div>
-      </div>
-      <div style="margin-left:auto;color:var(--muted);font-size:14px;">›</div>
-    </div>`).join('');
-}
-
-function rerenderFromHistory(id) {
-  const h = scanHistory.find(x => x.id === id);
-  if (!h) return;
-  if (h.thumb) {
-    document.getElementById('scan-preview-img').src = h.thumb;
-    document.getElementById('scan-empty-state').style.display = 'none';
-    document.getElementById('scan-preview-state').style.display = 'block';
-    document.getElementById('scan-drop').classList.add('has-img');
-  }
-  renderScanResult(h.result);
-  window.scrollTo({ top: 0, behavior: 'smooth' });
-}
-
-function showScanHistory() {
-  const sec = document.getElementById('scan-history-section');
-  if (sec) sec.scrollIntoView({ behavior: 'smooth' });
-}
-
-// ══ TOAST (override to support type param already exists) ══
-
+function toast(msg,type=''){
   const t=document.getElementById('toast');
   t.textContent=msg;
   t.className='toast show'+(type?' '+type:'');
@@ -2484,34 +2225,300 @@ function showScanHistory() {
   toastT=setTimeout(()=>t.classList.remove('show'),3200);
 }
 
-// ── INIT ──
-  // Function ya kuhamisha kurasa/sections
-function goto(sectionId) {
-    // 1. Tafuta sections zote (hakikisha sections zako zina class ya 'page-section')
-    const sections = document.querySelectorAll('.sc');
-    
-    // 2. Ficha sections zote kwanza
-    sections.forEach(sec => {
-        sec.style.display = 'none';
-    });
 
-    // 3. Onyesha ile section iliyoitwa (mfano 's-welcome')
-    const activeSection = document.getElementById(sectionId);
-    if (activeSection) {
-        activeSection.style.display = 'block';
-        // Hii itasaidia kupandisha ukurasa juu kila unapobadilisha page
-        window.scrollTo(0, 0);
-    } else {
-        console.error("Section ya " + sectionId + " haipo kwenye HTML!");
-    }
-}                                      
-loadPrefs();
-if(loadSession() && typeof CU !== 'undefined') { 
-    afterLogin(); 
-} else { 
-    goto('welcome'); 
+// ── PREFERENCES ──
+function setMode(mode, btn){
+  try{
+    document.body.classList.remove('light','dark','auto');
+    if(mode==='dark')document.body.classList.add('dark');
+    else if(mode==='light')document.body.classList.add('light');
+    document.querySelectorAll('.mode-opt').forEach(b=>b.classList.remove('on'));
+    if(btn)btn.classList.add('on');
+    localStorage.setItem('afya_mode', mode);
+  }catch(e){}
 }
-else{goto(welcome');}
+
+function setLang(lang, btn){
+  try{
+    document.querySelectorAll('.lang-opt').forEach(b=>b.classList.remove('on'));
+    if(btn)btn.classList.add('on');
+    localStorage.setItem('afya_lang', lang);
+  }catch(e){}
+}
+
+function loadPrefs(){
+  try{
+    var mode=localStorage.getItem('afya_mode')||'auto';
+    var lang=localStorage.getItem('afya_lang')||'sw';
+    setMode(mode, document.getElementById('mode-'+mode));
+    setLang(lang, document.getElementById('lang-'+lang));
+  }catch(e){}
+}
+
+
+function updateAIAvatar(){
+  try{
+    var el=document.getElementById('ai-avatar');
+    if(el&&CU&&CU.premium)el.style.borderColor='var(--gr)';
+  }catch(e){}
+}
+
+
+function addNotif(title, body, icon, screen){
+  try{
+    var notes=JSON.parse(localStorage.getItem('afya_notifs')||'[]');
+    notes.unshift({title:title,body:body,icon:icon||'🌿',screen:screen||'s-home',time:Date.now()});
+    if(notes.length>20)notes=notes.slice(0,20);
+    localStorage.setItem('afya_notifs', JSON.stringify(notes));
+  }catch(e){}
+}
+
+
+// ══════════════════════════════════
+// COUNTDOWN & PREMIUM EXPIRY
+// ══════════════════════════════════
+function getTimeLeft(expiryISO){
+  var ms = new Date(expiryISO).getTime() - Date.now();
+  if(ms <= 0) return {expired:true, days:0, hours:0, mins:0, secs:0, pct:0};
+  var secs = Math.floor(ms/1000);
+  var mins = Math.floor(secs/60);
+  var hours = Math.floor(mins/60);
+  var days = Math.floor(hours/24);
+  return {
+    expired:false,
+    days:days,
+    hours:hours%24,
+    mins:mins%60,
+    secs:secs%60,
+    pct:100
+  };
+}
+
+function buildCountdownHTML(expiryISO, totalDays, isTrial){
+  var tl = getTimeLeft(expiryISO);
+  if(tl.expired) return '<div style="color:var(--red);font-weight:700;text-align:center;padding:10px;">⚠️ Uanachama wako umekwisha!</div>';
+  var label = isTrial ? '🎁 Jaribio Bure' : '⏰ Uanachama';
+  return '<div class="cd-wrap" id="cd-main">'
+    +'<div style="font-size:11px;font-weight:700;color:var(--gr2);margin-bottom:8px;text-align:center;">'+label+' — Muda Uliobaki</div>'
+    +'<div style="display:flex;gap:8px;justify-content:center;margin-bottom:10px;">'
+    +'<div style="text-align:center;background:var(--gr3);border-radius:10px;padding:8px 12px;min-width:52px;">'
+    +'<div style="font-size:22px;font-weight:800;color:var(--gr2);" id="cd-days">'+tl.days+'</div>'
+    +'<div style="font-size:9px;color:var(--muted);font-weight:600;">SIKU</div></div>'
+    +'<div style="text-align:center;background:var(--gr3);border-radius:10px;padding:8px 12px;min-width:52px;">'
+    +'<div style="font-size:22px;font-weight:800;color:var(--gr2);" id="cd-hours">'+tl.hours+'</div>'
+    +'<div style="font-size:9px;color:var(--muted);font-weight:600;">SAA</div></div>'
+    +'<div style="text-align:center;background:var(--gr3);border-radius:10px;padding:8px 12px;min-width:52px;">'
+    +'<div style="font-size:22px;font-weight:800;color:var(--gr2);" id="cd-mins">'+tl.mins+'</div>'
+    +'<div style="font-size:9px;color:var(--muted);font-weight:600;">DAKI</div></div>'
+    +'</div></div>';
+}
+
+var _cdInterval = null;
+function startCountdown(expiryISO, totalDays, isTrial){
+  if(_cdInterval) clearInterval(_cdInterval);
+  _cdInterval = setInterval(function(){
+    var tl = getTimeLeft(expiryISO);
+    var d=document.getElementById('cd-days');
+    var h=document.getElementById('cd-hours');
+    var m=document.getElementById('cd-mins');
+    if(d)d.textContent=tl.days;
+    if(h)h.textContent=tl.hours;
+    if(m)m.textContent=tl.mins;
+    if(tl.expired){clearInterval(_cdInterval);renderMalipo();}
+  }, 60000);
+}
+
+function checkPremiumExpiry(){
+  if(!CU||!CU.premium||!CU.premiumExpiry) return;
+  var tl = getTimeLeft(CU.premiumExpiry);
+  if(tl.expired){
+    CU.premium=false; CU.premiumExpiry=null;
+    saveSession();
+    var us=getUsers(); var ix=us.findIndex(function(u){return u.email===CU.email;});
+    if(ix>=0){us[ix].premium=false;us[ix].premiumExpiry=null;setUsers(us);}
+    toast('Uanachama wako umekwisha. Fanya upya!','err');
+  }
+}
+
+// ══════════════════════════════════
+// AKAUNTI / PROFILE
+// ══════════════════════════════════
+function refreshAkaunti(){
+  if(!CU) return;
+  var el=document.getElementById('akaunti-body');
+  if(!el) return;
+  var planLabel = CU.premium ? (CU.isTrial?'🎁 Jaribio Bure (Siku 30)':'⭐ Premium') : '🆓 Bure';
+  var expStr = CU.premiumExpiry ? new Date(CU.premiumExpiry).toLocaleDateString('sw') : '—';
+  el.innerHTML =
+    '<div class="ak-card">'
+    +'<div style="display:flex;align-items:center;gap:14px;margin-bottom:18px;">'
+    +'<div style="width:60px;height:60px;border-radius:50%;background:var(--gr);color:#fff;display:flex;align-items:center;justify-content:center;font-size:26px;font-weight:700;flex-shrink:0;">'
+    +(CU.name?CU.name[0].toUpperCase():'U')
+    +'</div>'
+    +'<div><div style="font-size:17px;font-weight:800;color:var(--text);">'+CU.name+'</div>'
+    +'<div style="font-size:13px;color:var(--muted);font-weight:500;">'+CU.email+'</div>'
+    +'<div style="font-size:12px;color:var(--gr2);font-weight:700;margin-top:3px;">'+planLabel+'</div>'
+    +'</div></div>'
+    +(CU.premium&&CU.premiumExpiry?'<div style="background:var(--gr3);border:1px solid var(--gr4);border-radius:12px;padding:10px 14px;margin-bottom:14px;font-size:13px;color:var(--sub);font-weight:500;">⏰ Unaisha: <strong style="color:var(--gr);">'+expStr+'</strong></div>':'')
+    +'<div style="display:flex;flex-direction:column;gap:10px;">'
+    +'<button class="btn btn-gr btn-full" onclick="goto('s-ratiba')">📅 Ratiba yangu →</button>'
+    +(CU.premium?'':'<button class="btn btn-am btn-full" onclick="goto('s-malipo')">⭐ Pata Premium →</button>')
+    +'<button class="btn btn-out btn-full" onclick="doLogout()">🚪 Toka</button>'
+    +'</div>'
+    +'</div>';
+}
+
+// ══════════════════════════════════
+// CHAT / TESTIMONIALS
+// ══════════════════════════════════
+function renderTestis(){
+  var el=document.getElementById('testis-body');
+  if(!el) return;
+  var testis=[
+    {name:'Amina J.',stars:5,text:'Moringa imenisaidia sana! Nguvu zangu zimeongezeka ndani ya wiki 2.',avatar:'A'},
+    {name:'John M.',stars:5,text:'Ratiba ya Siku 7 inafanya kazi vizuri sana. Asante AFYA-LISHE!',avatar:'J'},
+    {name:'Fatuma K.',stars:4,text:'Dr. Revo AI anajua mambo. Nilipata ushauri mzuri wa shinikizo la damu.',avatar:'F'},
+    {name:'David S.',stars:5,text:'Maktaba ya mimea ni nzuri sana. Ninapenda jinsi inavyoelezea kila mmea.',avatar:'D'},
+  ];
+  var html='';
+  testis.forEach(function(t){
+    var stars='⭐'.repeat(t.stars);
+    html+='<div class="testi-card">'
+      +'<div style="display:flex;align-items:center;gap:10px;margin-bottom:8px;">'
+      +'<div style="width:38px;height:38px;border-radius:50%;background:var(--gr);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;">'+t.avatar+'</div>'
+      +'<div><div style="font-size:13px;font-weight:700;color:var(--text);">'+t.name+'</div>'
+      +'<div style="font-size:12px;">'+stars+'</div></div></div>'
+      +'<div style="font-size:13px;color:var(--sub);line-height:1.6;font-weight:500;">'+t.text+'</div>'
+      +'</div>';
+  });
+  el.innerHTML=html;
+}
+
+function openChatRoom(room){ /* stub for chat rooms */ }
+function renderChat(){ /* stub */ }
+function sendChat(){ /* stub */ }
+
+// ══════════════════════════════════
+// MMEA RATIBA
+// ══════════════════════════════════
+function openMmeaRatiba(id){
+  var m=MIMEA.find(function(x){return x.id===id;});
+  if(!m){toast('Mmea haukupatikana','err');return;}
+  // Set current ratiba herb and go to ratiba
+  if(typeof currentRatibaHerbId !== 'undefined') currentRatibaHerbId=id;
+  goto('s-ratiba');
+}
+
+// ══════════════════════════════════
+// ADMIN (internal stub)
+// ══════════════════════════════════
+function admRefresh(){
+  var el=document.getElementById('adm-body');
+  if(!el) return;
+  var users=getUsers();
+  var prem=users.filter(function(u){return u.premium;}).length;
+  el.innerHTML='<div style="padding:16px;font-size:14px;color:var(--text);">'
+    +'<div style="font-weight:700;margin-bottom:10px;">👥 Watumiaji: '+users.length+'</div>'
+    +'<div style="font-weight:700;color:var(--gr);">⭐ Premium: '+prem+'</div>'
+    +'</div>';
+}
+
+// ══════════════════════════════════
+// PERSONALIZED GUIDE (stub if missing)
+// ══════════════════════════════════
+function getPersonalizedGuide(ans, pct, mimeaRec){
+  var guides=[];
+  if(pct<50){
+    guides.push({
+      emoji:'🌿',tatizo:'Inahitaji Huduma ya Jumla',color:'var(--am)',
+      suluhisho:'Kulingana na majibu yako, mwili wako unahitaji msaada wa jumla. Anza na mimea ya msingi iliyopendekezwa.',
+      mimea:mimeaRec.slice(0,3),ratiba:'Asubuhi na jioni kwa wiki 4'
+    });
+  } else {
+    guides.push({
+      emoji:'💪',tatizo:'Imarisha Afya Yako',color:'var(--gr)',
+      suluhisho:'Afya yako iko vizuri! Endelea na utaratibu mzuri wa mimea na lishe bora.',
+      mimea:mimeaRec.slice(0,2),ratiba:'Asubuhi kwa siku 30'
+    });
+  }
+  return guides;
+}
+
+// ── INIT ──
+loadPrefs();
+if(loadSession()&&CU){afterLogin();}
+else{goto('s-welcome');}
 </script>
+<!-- ══════════════════════════════════════════
+     MMEA SCANNER — AI Plant Identifier
+══════════════════════════════════════════ -->
+<div class="sc" id="s-scan" style="display:none">
+  <div class="tb">
+    <div style="flex:1">
+      <div style="font-family:Playfair Display,serif;font-size:20px;font-weight:900;color:var(--text)">📷 Scanner ya <em style="color:var(--gr)">Mimea</em></div>
+      <div style="font-size:10.5px;color:var(--muted);font-weight:600;margin-top:1px">Piga picha → AI inachambua kwa sekunde 15</div>
+    </div>
+    <div id="scan-prem-badge" style="display:none;background:var(--gr);color:#fff;font-size:9px;font-weight:800;padding:4px 10px;border-radius:100px">PREMIUM ✓</div>
+  </div>
+
+  <div class="sc-body" id="scan-body">
+    <!-- Filled by JS -->
+  </div>
+</div>
+
+<style>
+/* ── SCANNER STYLES ── */
+.scan-zone { border:2.5px dashed #86efac; border-radius:22px; background:linear-gradient(135deg,#f0fdf4,#dcfce7); padding:30px 20px; text-align:center; cursor:pointer; transition:all .2s; margin-bottom:14px; }
+.scan-zone.has-img { border-style:solid; border-color:var(--gr); padding:0; border-radius:22px; overflow:hidden; }
+.scan-zone img { width:100%; display:block; max-height:270px; object-fit:cover; }
+.scan-zone:active { transform:scale(.98); }
+.scan-ic { font-size:52px; margin-bottom:10px; }
+.scan-ttl { font-family:Playfair Display,serif; font-size:20px; font-weight:900; color:#166534; margin-bottom:5px; }
+.scan-sub { font-size:12.5px; color:#4ade80; font-weight:600; }
+.scan-row { display:flex; gap:10px; margin-bottom:14px; }
+.scan-btn { flex:1; display:flex; align-items:center; justify-content:center; gap:8px; background:var(--card); border:1.5px solid var(--line); border-radius:14px; padding:13px; font-size:13px; font-weight:700; color:var(--text); cursor:pointer; font-family:DM Sans,sans-serif; transition:all .15s; }
+.scan-btn:active { background:var(--bg2); transform:scale(.97); }
+.scan-go { width:100%; background:linear-gradient(135deg,#16a34a,#15803d); color:#fff; border:none; border-radius:18px; padding:18px; font-size:16px; font-weight:800; font-family:DM Sans,sans-serif; cursor:pointer; display:flex; align-items:center; justify-content:center; gap:10px; box-shadow:0 6px 24px rgba(22,163,74,.35); transition:transform .12s; margin-bottom:14px; }
+.scan-go:active { transform:scale(.97); }
+.scan-go:disabled { opacity:.55; pointer-events:none; }
+/* Loading */
+.scan-loading { text-align:center; padding:36px 20px; }
+.scan-leaf { font-size:48px; animation:leafSpin 1.3s linear infinite; display:inline-block; }
+@keyframes leafSpin { 0%{transform:rotate(0) scale(1)} 50%{transform:rotate(180deg) scale(1.15)} 100%{transform:rotate(360deg) scale(1)} }
+.scan-load-txt { font-size:14px; font-weight:700; color:var(--gr2); margin-top:14px; }
+.scan-load-sub { font-size:12px; color:var(--muted); margin-top:4px; }
+/* Result card */
+.sr-card { background:var(--card); border-radius:22px; overflow:hidden; box-shadow:var(--sh2); margin-bottom:14px; border:1px solid var(--line); }
+.sr-head { background:linear-gradient(135deg,#064e3b,#065f46); padding:20px 18px; }
+.sr-name { font-family:Playfair Display,serif; font-size:26px; font-weight:900; color:#fff; letter-spacing:-.5px; margin-bottom:3px; }
+.sr-latin { font-size:12px; color:#6ee7b7; font-style:italic; margin-bottom:10px; }
+.sr-conf { background:rgba(255,255,255,.18); border-radius:100px; padding:4px 14px; font-size:11px; font-weight:800; color:#fff; display:inline-block; margin-right:6px; margin-bottom:4px; }
+.sr-desc { font-size:13px; color:rgba(255,255,255,.75); margin-top:10px; line-height:1.6; font-weight:500; }
+.sr-sec { padding:16px 18px; border-bottom:1px solid var(--line); }
+.sr-sec:last-child { border-bottom:none; }
+.sr-sec-ttl { font-size:9.5px; font-weight:900; letter-spacing:1.5px; text-transform:uppercase; color:var(--muted); margin-bottom:12px; display:flex; align-items:center; gap:7px; }
+.sr-sec-ttl::after { content:''; flex:1; height:1px; background:var(--line); }
+.sr-benefit { display:flex; align-items:flex-start; gap:10px; margin-bottom:10px; }
+.sr-ben-ic { width:34px; height:34px; border-radius:10px; background:var(--gr3); display:flex; align-items:center; justify-content:center; font-size:18px; flex-shrink:0; }
+.sr-ben-txt { flex:1; font-size:13px; color:var(--sub); font-weight:500; line-height:1.5; padding-top:5px; }
+.sr-chip { background:var(--gr3); border:1px solid var(--gr4); border-radius:100px; padding:6px 14px; font-size:12px; font-weight:700; color:var(--gr2); display:inline-block; margin:3px 3px 3px 0; }
+.sr-step { display:flex; gap:12px; margin-bottom:14px; align-items:flex-start; }
+.sr-step-n { width:30px; height:30px; border-radius:50%; background:linear-gradient(135deg,var(--gr),var(--gr2)); color:#fff; font-size:13px; font-weight:800; display:flex; align-items:center; justify-content:center; flex-shrink:0; box-shadow:0 3px 10px rgba(22,163,74,.3); }
+.sr-step-txt { flex:1; font-size:13px; color:var(--sub); font-weight:500; line-height:1.6; padding-top:5px; }
+.sr-warn { background:#FEF2F2; border:1px solid #FECACA; border-radius:14px; padding:13px 15px; font-size:12px; color:#991B1B; font-weight:600; line-height:1.65; }
+.sr-again { width:100%; background:var(--bg2); border:1.5px solid var(--line); border-radius:14px; padding:14px; font-size:14px; font-weight:700; color:var(--text); cursor:pointer; font-family:DM Sans,sans-serif; }
+/* Lock */
+.scan-lock { text-align:center; padding:36px 20px 20px; }
+.scan-lock-ic { font-size:64px; margin-bottom:14px; }
+.scan-lock-ttl { font-family:Playfair Display,serif; font-size:24px; font-weight:900; color:var(--text); letter-spacing:-.5px; margin-bottom:8px; }
+.scan-lock-desc { font-size:14px; color:var(--sub); font-weight:500; line-height:1.65; margin-bottom:22px; }
+.scan-lock-feats { background:var(--gr3); border-radius:18px; padding:18px; margin-bottom:22px; text-align:left; }
+.scan-lock-feat { display:flex; align-items:center; gap:12px; padding:8px 0; border-bottom:1px solid var(--gr4); font-size:13px; font-weight:600; color:var(--gr2); }
+.scan-lock-feat:last-child { border-bottom:none; }
+.scan-lock-btn { width:100%; background:linear-gradient(135deg,var(--gr),var(--gr2)); color:#fff; border:none; border-radius:18px; padding:18px; font-size:16px; font-weight:800; font-family:DM Sans,sans-serif; cursor:pointer; box-shadow:0 6px 24px rgba(22,163,74,.3); }
+</style>
+
+
+
 </body>
 </html>
