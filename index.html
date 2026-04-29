@@ -1,331 +1,592 @@
 <!DOCTYPE html>
 <html lang="sw">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Afya-Lishe Smart | JOS Natural Herbs</title>
-    
-    <!-- Scripts & Styles -->
-    <script src="https://cdn.tailwindcss.com"></script>
-    <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
-    <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
-    <script src="https://unpkg.com/framer-motion@10.16.4/dist/framer-motion.js"></script>
-    <script src="https://unpkg.com/lucide@latest"></script>
-    <script src="https://unpkg.com/lucide-react@latest"></script>
-    <script src="https://cdn.jsdelivr.net/npm/@google/generative-ai@0.1.0/dist/index.min.js"></script>
-
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@700;900&family=DM+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
-
-    <style>
-        :root {
-            --gr: #1a6b3c; --gr2: #124d2b; --gr3: #e6f5ee; --gr4: #b3dcc4; --gr5: #6dbf8b;
-            --am: #c97b1a; --am2: #a35e0e; --am3: #fef3e2; --am4: #f5d58a;
-            --bg: #f4f7f2; --bg2: #ebefea; --card: #fff; --card2: #f8faf6;
-            --line: #dde3d7; --text: #1a2218; --sub: #4a5c42; --muted: #8a9a82;
-            --red: #c0392b; --red3: #fdecea;
-            --r: 12px; --rs: 10px; --rxs: 6px; --pill: 100px;
-            --sh: 0 1px 4px rgba(0,0,0,.05); --sh2: 0 4px 16px rgba(0,0,0,.08);
-            --shg: 0 4px 16px rgba(26,107,60,.18);
-            --t: .2s cubic-bezier(.4, 0, .2, 1);
-        }
-
-        body {
-            margin: 0; padding: 0; box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-            font-family: 'DM Sans', sans-serif;
-            background: var(--bg); color: var(--text);
-            -webkit-font-smoothing: antialiased;
-        }
-
-        h1, h2, h3, .font-playfair { font-family: 'Playfair Display', serif; }
-
-        .sc { display: none; min-height: 100vh; }
-        .sc.on { display: block; }
-
-        .btn { border: none; cursor: pointer; border-radius: var(--rs); transition: all var(--t); display: inline-flex; align-items: center; justify-content: center; gap: 7px; font-weight: 700; }
-        .btn-gr { background: var(--gr); color: #fff; padding: 10px 20px; font-size: 13px; box-shadow: var(--shg); }
-        .btn-am { background: var(--am); color: #fff; padding: 10px 20px; font-size: 13px; }
-        .btn-full { width: 100%; padding: 12px; font-size: 14px; }
-        
-        .inp { width: 100%; padding: 12px 16px; border: 1.5px solid var(--line); border-radius: var(--rs); font-size: 14px; outline: none; background: var(--card); }
-        .inp:focus { border-color: var(--gr); }
-
-        .topbar { position: sticky; top: 0; z-index: 200; height: 60px; background: rgba(255, 255, 255, 0.94); border-bottom: 1px solid var(--line); display: flex; align-items: center; justify-content: space-between; padding: 0 16px; backdrop-filter: blur(10px); }
-        .tb-logo { font-family: 'Playfair Display', serif; font-size: 18px; font-weight: 900; color: var(--gr); }
-        
-        .bnav { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; background: rgba(255, 255, 255, 0.98); border-top: 1px solid var(--line); display: flex; padding: 10px 0 calc(10px + env(safe-area-inset-bottom)); box-shadow: 0 -4px 15px rgba(0,0,0,0.05); }
-        .nb { flex: 1; display: flex; flex-direction: column; align-items: center; gap: 4px; color: var(--muted); border: none; background: none; cursor: pointer; }
-        .nb.on { color: var(--gr); }
-        .nbic { font-size: 20px; }
-        .nblb { font-size: 10px; font-weight: 700; }
-
-        /* Welcome Section */
-        .welcome { min-height: 100vh; background: linear-gradient(160deg, #0d3520 0%, #1a6b3c 100%); display: flex; flex-direction: column; padding: 40px 24px; color: white; text-align: center; justify-content: space-between; }
-        
-        /* Maktaba Cards */
-        .mmea-card { background: white; border-radius: 16px; overflow: hidden; border: 1px solid var(--line); box-shadow: var(--sh); }
-        .mmea-img { height: 120px; background: var(--gr3); display: flex; items-center; justify-center; font-size: 48px; }
-
-        /* Ratiba Styles */
-        .ratiba-day { background: white; border-radius: 16px; border: 1px solid var(--line); margin-bottom: 12px; overflow: hidden; }
-        .r-head { background: var(--gr); color: white; padding: 12px 16px; font-weight: 800; font-size: 14px; }
-        .r-session { display: flex; gap: 12px; padding: 12px; border-bottom: 1px solid #f0f0f0; }
-
-        .ai-fab { position: fixed; bottom: 90px; right: 20px; width: 56px; height: 56px; border-radius: 50%; background: var(--gr); color: white; display: flex; align-items: center; justify-content: center; font-size: 24px; box-shadow: 0 4px 20px rgba(0,0,0,0.2); z-index: 100; border: none; cursor: pointer; }
-    </style>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>AFYA-LISHE SMART</title>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    :root {
+      --gr: #1a6b3c;
+      --gr2: #124d2b;
+      --gr3: #e6f5ee;
+      --am: #c97b1a;
+      --bg: #f4f7f2;
+      --card: #fff;
+      --text: #1a2218;
+      --sub: #4a5c42;
+      --muted: #8a9a82;
+      --line: #dde3d7;
+    }
+    body {
+      font-family: 'DM Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background: var(--bg);
+      color: var(--text);
+    }
+    .screen { display: none; min-height: 100vh; }
+    .screen.active { display: block; }
+    .topbar {
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      background: rgba(255,255,255,0.95);
+      border-bottom: 1px solid var(--line);
+      padding: 12px 20px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(10px);
+    }
+    .logo {
+      font-size: 18px;
+      font-weight: 700;
+      color: var(--gr);
+    }
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+      padding: 20px;
+    }
+    .btn {
+      padding: 12px 24px;
+      border: none;
+      border-radius: 10px;
+      font-weight: 700;
+      cursor: pointer;
+      font-family: inherit;
+      transition: all 0.2s;
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .btn-primary {
+      background: var(--gr);
+      color: white;
+    }
+    .btn-primary:hover {
+      background: var(--gr2);
+      transform: translateY(-2px);
+    }
+    .btn-secondary {
+      background: var(--card);
+      color: var(--gr);
+      border: 2px solid var(--gr);
+    }
+    .btn-full {
+      width: 100%;
+      justify-content: center;
+      margin-bottom: 10px;
+    }
+    .input {
+      width: 100%;
+      padding: 12px 16px;
+      border: 1.5px solid var(--line);
+      border-radius: 10px;
+      font-family: inherit;
+      font-size: 14px;
+      margin-bottom: 12px;
+    }
+    .input:focus {
+      outline: none;
+      border-color: var(--gr);
+      box-shadow: 0 0 0 3px rgba(26,107,60,0.1);
+    }
+    .card {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 16px;
+      padding: 20px;
+      margin-bottom: 16px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+    }
+    .hero {
+      background: linear-gradient(135deg, #0a2e18, var(--gr));
+      color: white;
+      padding: 30px 20px;
+      border-radius: 16px;
+      margin-bottom: 20px;
+      text-align: center;
+    }
+    .hero h1 {
+      font-size: 24px;
+      margin-bottom: 8px;
+    }
+    .hero p {
+      font-size: 14px;
+      opacity: 0.9;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+    .grid-item {
+      background: var(--card);
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+    .grid-item:hover {
+      border-color: var(--gr);
+      transform: translateY(-3px);
+      box-shadow: 0 4px 12px rgba(26,107,60,0.15);
+    }
+    .grid-item-icon {
+      font-size: 32px;
+      margin-bottom: 8px;
+    }
+    .grid-item-title {
+      font-size: 12px;
+      font-weight: 700;
+      color: var(--text);
+    }
+    .toast {
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%) translateY(100px);
+      background: var(--text);
+      color: white;
+      padding: 12px 24px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 13px;
+      opacity: 0;
+      transition: all 0.3s;
+      z-index: 9999;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+    .toast.success {
+      background: var(--gr);
+    }
+    .toast.error {
+      background: #c0392b;
+    }
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255,255,255,0.95);
+      border-top: 1px solid var(--line);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 0 max(8px, env(safe-area-inset-bottom));
+      z-index: 100;
+      backdrop-filter: blur(10px);
+    }
+    .nav-btn {
+      flex: 1;
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 8px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      font-size: 12px;
+      color: var(--muted);
+      transition: color 0.2s;
+    }
+    .nav-btn.active {
+      color: var(--gr);
+    }
+    .nav-icon {
+      font-size: 20px;
+    }
+  </style>
 </head>
 <body>
-    <div id="root"></div>
 
-    <script type="text/babel">
-        const { useState, useEffect, useRef } = React;
-        const { motion, AnimatePresence } = window.Motion;
+<!-- WELCOME SCREEN -->
+<div class="screen active" id="welcome">
+  <div class="hero" style="min-height: 100vh; display: flex; flex-direction: column; justify-content: center;">
+    <div style="font-size: 64px; margin-bottom: 16px;">🌿</div>
+    <h1 style="font-size: 32px; margin-bottom: 8px;">AFYA-LISHE SMART</h1>
+    <p style="font-size: 14px; margin-bottom: 30px;">Tiba ya Asili · Lishe Bora · Nguvu za Mwili</p>
+    <button class="btn btn-primary btn-full" onclick="showScreen('home')">🌿 Anza Safari ya Afya →</button>
+    <button class="btn btn-secondary btn-full" onclick="showScreen('login')">Ingia Akaunti Yako</button>
+  </div>
+</div>
 
-        // ==========================================
-        //  WEKA GEMINI API KEY YAKO HAPA CHINI
-        // ==========================================
-        const MY_GEMINI_KEY = ""; // Weka ufunguo wako hapa kati ya ""
+<!-- LOGIN SCREEN -->
+<div class="screen" id="login">
+  <div class="topbar">
+    <button class="btn btn-secondary" onclick="showScreen('welcome')">← Nyuma</button>
+    <div class="logo">Ingia</div>
+    <div style="width: 70px;"></div>
+  </div>
+  <div class="container">
+    <div class="card" style="max-width: 400px; margin: 40px auto;">
+      <h2 style="text-align: center; margin-bottom: 20px;">Karibu Tena</h2>
+      <input class="input" id="email" type="email" placeholder="Barua Pepe">
+      <input class="input" id="password" type="password" placeholder="Nywila">
+      <button class="btn btn-primary btn-full" onclick="doLogin()">Ingia →</button>
+      <button class="btn btn-secondary btn-full" onclick="showScreen('register')">Sajili Akaunti Mpya</button>
+    </div>
+  </div>
+</div>
 
-        // --- Constants ---
-        const MIMEA = [
-            { id: 0, emoji: '🎃', name: 'Mbegu za Maboga', latin: 'Cucurbita pepo', cats: ['nguvu', 'uzazi'], rating: 4.9, reviews: 234, matumizi: 'Inaboresha nguvu za kiume, ina zinki nyingi kwa testosterone.', faida: ['Inaboresha nguvu za kiume', 'Ina zinki kwa uzazi', 'Antioxidants nyingi'], steps: [{t: 'Nunua', tx: 'Nunua mbegu safi.'}, {t: 'Saga', tx: 'Saga ziwe poda.'}], onyo: 'Wajawazito wapunguze kiasi.' },
-            { id: 1, emoji: '🫚', name: 'Tangawizi', latin: 'Zingiber officinale', cats: ['damu', 'lishe'], rating: 4.8, reviews: 412, matumizi: 'Inaboresha mzunguko wa damu na kutibu uvimbe.', faida: ['Mzunguko wa damu', 'Mmengenyo', 'Kinga ya mwili'], steps: [{t: 'Kata', tx: 'Kata vipande vidogo.'}, {t: 'Chemsha', tx: 'Chemsha na asali.'}], onyo: 'Daktari akishauri epuka ukiwa na vidonda.' },
-            { id: 2, emoji: '🌿', name: 'Moringa', latin: 'Moringa oleifera', cats: ['lishe', 'nguvu'], rating: 5.0, reviews: 2000, matumizi: 'Inajulikana kama mti wa uzima, inatibu magonjwa 300+.', faida: ['Multivitamin', 'Nishati', 'Kinga'], steps: [{t: 'Poda', tx: 'Kijiko 1 kila siku.'}], onyo: 'None.' }
-            // Unaweza kuongeza mingine hapa...
-        ];
+<!-- REGISTER SCREEN -->
+<div class="screen" id="register">
+  <div class="topbar">
+    <button class="btn btn-secondary" onclick="showScreen('login')">← Nyuma</button>
+    <div class="logo">Sajili</div>
+    <div style="width: 70px;"></div>
+  </div>
+  <div class="container">
+    <div class="card" style="max-width: 400px; margin: 40px auto;">
+      <h2 style="text-align: center; margin-bottom: 20px;">Unda Akaunti</h2>
+      <input class="input" id="fname" type="text" placeholder="Jina la Kwanza">
+      <input class="input" id="lname" type="text" placeholder="Jina la Familia">
+      <input class="input" id="reg-email" type="email" placeholder="Barua Pepe">
+      <input class="input" id="reg-password" type="password" placeholder="Nywila (herufi 6+)">
+      <button class="btn btn-primary btn-full" onclick="doRegister()">Sajili Sasa →</button>
+    </div>
+  </div>
+</div>
 
-        const RATIBA_ALL = {
-            jumla: {
-                title: '🌿 Ratiba ya Jumla ya Afya',
-                desc: 'Programu ya siku 7 kwa afya bora ya mwezi mzima.',
-                days: [
-                    { siku: 'Siku 1', sessions: [{ t: '06:30', lbl: 'Asubuhi', title: 'Tangawizi + Asali', text: 'Kunywa kabla ya mlo.', pill: '🫚 Detox' }] },
-                    { siku: 'Siku 2', sessions: [{ t: '06:30', lbl: 'Asubuhi', title: 'Vitunguu Saumu', text: 'Vitunguu 3 na asali.', pill: '🧄 Blood' }] }
-                ]
-            }
-        };
+<!-- HOME SCREEN -->
+<div class="screen" id="home">
+  <div class="topbar">
+    <div class="logo">🌿 AFYA-LISHE</div>
+    <button class="btn btn-secondary" onclick="doLogout()">Toka</button>
+  </div>
+  <div class="container" style="padding-bottom: 100px;">
+    <div class="hero">
+      <h1>Je, afya yako ikoje leo?</h1>
+      <p>Fanya uchunguzi wa afya na kupata mapendekezo ya kibinafsi</p>
+      <button class="btn btn-primary" style="margin-top: 16px; width: 100%; justify-content: center;" onclick="showScreen('diagnosis')">🔬 Anza Uchunguzi →</button>
+    </div>
 
-        // --- Sub-components ---
-        
-        const AIChat = ({ isVisible, onClose }) => {
-            const [input, setInput] = useState('');
-            const [messages, setMessages] = useState([]);
-            const [loading, setLoading] = useState(false);
+    <h3 style="margin-bottom: 12px;">⚡ Haraka</h3>
+    <div class="grid">
+      <div class="grid-item" onclick="showScreen('herbs')">
+        <div class="grid-item-icon">🌱</div>
+        <div class="grid-item-title">Maktaba ya Mimea</div>
+      </div>
+      <div class="grid-item" onclick="showScreen('schedule')">
+        <div class="grid-item-icon">📅</div>
+        <div class="grid-item-title">Ratiba</div>
+      </div>
+      <div class="grid-item" onclick="showScreen('profile')">
+        <div class="grid-item-icon">👤</div>
+        <div class="grid-item-title">Akaunti</div>
+      </div>
+    </div>
+  </div>
+</div>
 
-            const send = async () => {
-                if(!input.trim() || !MY_GEMINI_KEY) return;
-                const userMsg = { role: 'user', text: input };
-                setMessages(prev => [...prev, userMsg]);
-                setInput('');
-                setLoading(true);
-                
-                try {
-                    // Logic ya Gemini hapa...
-                    setTimeout(() => {
-                        setMessages(prev => [...prev, { role: 'bot', text: 'Habari! Mimi ni Dr. Revo. Naomba API Key iwekwe kwenye kodi ili nijibu vizuri.' }]);
-                        setLoading(false);
-                    }, 1000);
-                } catch(e) { setLoading(false); }
-            };
+<!-- DIAGNOSIS SCREEN -->
+<div class="screen" id="diagnosis">
+  <div class="topbar">
+    <button class="btn btn-secondary" onclick="showScreen('home')">← Nyuma</button>
+    <div class="logo">🔬 Uchunguzi</div>
+    <div style="width: 70px;"></div>
+  </div>
+  <div class="container" style="padding-bottom: 100px;">
+    <div id="diagnosis-content"></div>
+  </div>
+</div>
 
-            if(!isVisible) return null;
-            return (
-                <div className="fixed inset-0 bg-white z-[300] flex flex-col pt-10">
-                    <div className="p-4 border-b flex justify-between items-center">
-                        <button onClick={onClose} className="font-bold text-green-800">← Rudi</button>
-                        <h2 className="font-bold">🌿 Dr. Revo AI</h2>
-                        <div className="w-10"></div>
-                    </div>
-                    <div className="flex-1 overflow-y-auto p-4 space-y-4">
-                        {messages.length === 0 && <p className="text-center text-gray-400 mt-10">Karibu! Nieleze unajisikiaje kisha nitakushauri.</p>}
-                        {messages.map((m, i) => (
-                            <div key={i} className={`flex ${m.role === 'user' ? 'justify-end' : 'justify-start'}`}>
-                                <div className={`max-w-[80%] p-3 rounded-2xl ${m.role === 'user' ? 'bg-green-800 text-white' : 'bg-gray-100 text-gray-800'}`}>
-                                    {m.text}
-                                </div>
-                            </div>
-                        ))}
-                    </div>
-                    <div className="p-4 border-t flex gap-2">
-                        <input value={input} onChange={e => setInput(e.target.value)} className="inp" placeholder="Andika hapa..." />
-                        <button onClick={send} className="btn btn-gr">Tuma</button>
-                    </div>
-                </div>
-            );
-        };
+<!-- HERBS SCREEN -->
+<div class="screen" id="herbs">
+  <div class="topbar">
+    <button class="btn btn-secondary" onclick="showScreen('home')">← Nyuma</button>
+    <div class="logo">🌱 Mimea</div>
+    <div style="width: 70px;"></div>
+  </div>
+  <div class="container" style="padding-bottom: 100px;">
+    <input class="input" type="text" placeholder="Tafuta mmea..." onkeyup="filterHerbs(this.value)">
+    <div class="grid" id="herbs-grid"></div>
+  </div>
+</div>
 
-        // --- Main App ---
+<!-- SCHEDULE SCREEN -->
+<div class="screen" id="schedule">
+  <div class="topbar">
+    <button class="btn btn-secondary" onclick="showScreen('home')">← Nyuma</button>
+    <div class="logo">📅 Ratiba</div>
+    <div style="width: 70px;"></div>
+  </div>
+  <div class="container" style="padding-bottom: 100px;">
+    <div id="schedule-content"></div>
+  </div>
+</div>
 
-        function App() {
-            const [screen, setScreen] = useState('welcome');
-            const [isAiOpen, setIsAiOpen] = useState(false);
-            const [selectedMmea, setSelectedMmea] = useState(null);
+<!-- PROFILE SCREEN -->
+<div class="screen" id="profile">
+  <div class="topbar">
+    <button class="btn btn-secondary" onclick="showScreen('home')">← Nyuma</button>
+    <div class="logo">👤 Akaunti</div>
+    <div style="width: 70px;"></div>
+  </div>
+  <div class="container" style="padding-bottom: 100px;">
+    <div class="card">
+      <h2 id="profile-name">—</h2>
+      <p id="profile-email" style="color: var(--muted); margin-bottom: 20px;">—</p>
+      <button class="btn btn-primary btn-full" onclick="showScreen('home')">← Nyuma</button>
+      <button class="btn btn-secondary btn-full" onclick="doLogout()">🚪 Toka</button>
+    </div>
+  </div>
+</div>
 
-            const goto = (s) => { setScreen(s); window.scrollTo(0, 0); };
+<!-- BOTTOM NAV -->
+<div class="bottom-nav">
+  <button class="nav-btn active" onclick="navTo('home')">
+    <div class="nav-icon">🏠</div>
+    <div>Nyumbani</div>
+  </button>
+  <button class="nav-btn" onclick="navTo('diagnosis')">
+    <div class="nav-icon">🔬</div>
+    <div>Uchunguzi</div>
+  </button>
+  <button class="nav-btn" onclick="navTo('herbs')">
+    <div class="nav-icon">🌱</div>
+    <div>Mimea</div>
+  </button>
+  <button class="nav-btn" onclick="navTo('schedule')">
+    <div class="nav-icon">📅</div>
+    <div>Ratiba</div>
+  </button>
+  <button class="nav-btn" onclick="navTo('profile')">
+    <div class="nav-icon">👤</div>
+    <div>Mimi</div>
+  </button>
+</div>
 
-            return (
-                <div className="min-h-screen">
-                    <AnimatePresence mode="wait">
-                        {screen === 'welcome' && (
-                            <motion.div key="w" className="welcome" initial={{ opacity: 0 }} animate={{ opacity: 1 }}>
-                                <div>
-                                    <div className="text-8xl mb-4">🌿</div>
-                                    <h1 className="text-4xl font-black mb-2">AFYA-LISHE</h1>
-                                    <p className="opacity-80">Tiba ya Asili na Lishe Bora kutoka JOS Natural Herbs</p>
-                                </div>
-                                <div className="space-y-3">
-                                    <button onClick={() => goto('home')} className="w-full bg-white text-green-900 py-4 rounded-2xl font-black text-lg">Anza Sasa →</button>
-                                    <p className="text-xs opacity-60">Imetengenezwa na Dr. Revo</p>
-                                </div>
-                            </motion.div>
-                        )}
+<!-- TOAST -->
+<div class="toast" id="toast"></div>
 
-                        {screen === 'home' && (
-                            <motion.div key="h" initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="pb-24">
-                                <nav className="topbar">
-                                    <span className="tb-logo">🌿 AFYA-LISHE</span>
-                                    <div className="w-8 h-8 rounded-full bg-green-100 flex items-center justify-center text-xs">👤</div>
-                                </nav>
-                                
-                                <div className="p-4">
-                                    <div className="bg-green-800 p-6 rounded-3xl text-white mb-6">
-                                        <h2 className="text-xl font-bold mb-1 font-playfair">Habari Rafiki 👋</h2>
-                                        <p className="text-sm opacity-80 mb-4">Je, unataka kufanya uchunguzi wa afya yako leo?</p>
-                                        <button onClick={() => goto('uchunguzi')} className="bg-white text-green-900 px-6 py-2 rounded-xl font-bold text-sm">Anza Uchunguzi</button>
-                                    </div>
+<script>
+// ═══════════════════════════════════
+// DATA & STATE
+// ═══════════════════════════════════
+let currentUser = null;
+const DB_KEY = 'afya_users';
+const SESSION_KEY = 'afya_session';
 
-                                    <div className="grid grid-cols-2 gap-3 mb-8">
-                                        <div onClick={() => goto('maktaba')} className="bg-white border p-4 rounded-2xl shadow-sm text-center">
-                                            <div className="text-3xl mb-2">🌱</div>
-                                            <div className="font-bold text-sm">Maktaba</div>
-                                        </div>
-                                        <div onClick={() => goto('ratiba')} className="bg-white border p-4 rounded-2xl shadow-sm text-center">
-                                            <div className="text-3xl mb-2">📅</div>
-                                            <div className="font-bold text-sm">Ratiba</div>
-                                        </div>
-                                    </div>
+const HERBS = [
+  { id: 1, name: 'Moringa', emoji: '🌿', desc: 'Virutubisho vingi' },
+  { id: 2, name: 'Tangawizi', emoji: '🫚', desc: 'Mzunguko wa damu' },
+  { id: 3, name: 'Vitunguu Saumu', emoji: '🧄', desc: 'Inaboresha moyo' },
+  { id: 4, name: 'Mdalasini', emoji: '🍂', desc: 'Inadhibiti sukari' },
+  { id: 5, name: 'Asali', emoji: '🍯', desc: 'Inaboresha kinga' },
+];
 
-                                    <h3 className="font-bold mb-4 font-playfair">Mimea Inayopendekezwa</h3>
-                                    <div className="space-y-3">
-                                        {MIMEA.map(m => (
-                                            <div key={m.id} onClick={() => { setSelectedMmea(m); goto('detail'); }} className="flex items-center gap-4 bg-white p-3 rounded-2xl border">
-                                                <div className="text-3xl">{m.emoji}</div>
-                                                <div>
-                                                    <div className="font-bold text-sm">{m.name}</div>
-                                                    <div className="text-[10px] text-gray-400 italic">{m.latin}</div>
-                                                </div>
-                                                <div className="ml-auto text-green-700">›</div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                </div>
-                            </motion.div>
-                        )}
+const DIAGNOSIS_QUESTIONS = [
+  { q: 'Je, mara ngapi huhisi uchovu?', opts: ['Kila siku', 'Mara nyingi', 'Wakati mwingine', 'Nadra'] },
+  { q: 'Je, unaripoti dalili zozote za kupungukiwa nguvu za kiume?', opts: ['Ndio, sana', 'Ndio, kidogo', 'Wakati mwingine', 'Hapana'] },
+  { q: 'Je, usingizi wako wa usiku ni wa ubora gani?', opts: ['Mbaya sana', 'Mbaya', 'Wastani', 'Nzuri'] },
+];
 
-                        {screen === 'maktaba' && (
-                            <div className="p-4 pb-24">
-                                <div className="flex items-center gap-4 mb-6">
-                                    <button onClick={() => goto('home')} className="text-2xl">←</button>
-                                    <h2 className="font-bold text-xl">Maktaba ya Mimea</h2>
-                                </div>
-                                <div className="grid grid-cols-2 gap-4">
-                                    {MIMEA.map(m => (
-                                        <div key={m.id} onClick={() => { setSelectedMmea(m); goto('detail'); }} className="mmea-card">
-                                            <div className="mmea-img">{m.emoji}</div>
-                                            <div className="p-3">
-                                                <div className="font-bold text-sm">{m.name}</div>
-                                                <div className="text-yellow-500 text-[10px]">⭐ {m.rating}</div>
-                                            </div>
-                                        </div>
-                                    ))}
-                                </div>
-                            </div>
-                        )}
+// ═══════════════════════════════════
+// UI FUNCTIONS
+// ═══════════════════════════════════
+function showScreen(id) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  window.scrollTo(0, 0);
+  
+  if (id === 'home') renderHome();
+  if (id === 'herbs') renderHerbs();
+  if (id === 'diagnosis') renderDiagnosis();
+  if (id === 'schedule') renderSchedule();
+  if (id === 'profile') renderProfile();
+}
 
-                        {screen === 'detail' && selectedMmea && (
-                            <div className="pb-24">
-                                <div className="h-48 bg-green-50 flex items-center justify-center text-8xl relative">
-                                    <button onClick={() => goto('maktaba')} className="absolute top-4 left-4 bg-white/80 w-10 h-10 rounded-full flex items-center justify-center font-bold">←</button>
-                                    {selectedMmea.emoji}
-                                </div>
-                                <div className="p-6">
-                                    <h2 className="text-2xl font-black mb-1">{selectedMmea.name}</h2>
-                                    <p className="italic text-gray-400 mb-6">{selectedMmea.latin}</p>
-                                    
-                                    <div className="mb-6">
-                                        <h3 className="font-bold border-b pb-2 mb-3">Maelezo</h3>
-                                        <p className="text-sm leading-relaxed text-gray-600 font-medium">{selectedMmea.matumizi}</p>
-                                    </div>
+function navTo(id) {
+  document.querySelectorAll('.nav-btn').forEach(b => b.classList.remove('active'));
+  event.target.closest('.nav-btn').classList.add('active');
+  showScreen(id);
+}
 
-                                    <div className="mb-6">
-                                        <h3 className="font-bold border-b pb-2 mb-3">Faida</h3>
-                                        <div className="space-y-2">
-                                            {selectedMmea.faida.map((f,i) => <div key={i} className="bg-green-50 p-2 rounded-lg text-xs font-bold text-green-800">✅ {f}</div>)}
-                                        </div>
-                                    </div>
+function toast(msg, type = 'success') {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.className = `toast show ${type}`;
+  setTimeout(() => el.classList.remove('show'), 3000);
+}
 
-                                    <button onClick={() => goto('home')} className="btn btn-gr btn-full">Rudi Nyumbani</button>
-                                </div>
-                            </div>
-                        )}
+// ═══════════════════════════════════
+// AUTH
+// ═══════════════════════════════════
+function doLogin() {
+  const email = document.getElementById('email').value.trim();
+  const password = document.getElementById('password').value.trim();
+  
+  if (!email || !password) {
+    toast('Jaza sehemu zote', 'error');
+    return;
+  }
+  
+  const users = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+  const user = users.find(u => u.email === email && u.password === password);
+  
+  if (!user) {
+    toast('Barua pepe au nywila si sahihi', 'error');
+    return;
+  }
+  
+  currentUser = user;
+  localStorage.setItem(SESSION_KEY, JSON.stringify(user));
+  toast('Karibu ' + user.name + '! 🌿', 'success');
+  showScreen('home');
+}
 
-                        {screen === 'ratiba' && (
-                             <div className="p-4 pb-24">
-                                <div className="flex items-center gap-4 mb-6">
-                                    <button onClick={() => goto('home')} className="text-2xl">←</button>
-                                    <h2 className="font-bold text-xl">Ratiba Yako</h2>
-                                </div>
-                                {RATIBA_ALL.jumla.days.map((d, i) => (
-                                    <div key={i} className="ratiba-day">
-                                        <div className="r-head uppercase tracking-wider">{d.siku}</div>
-                                        {d.sessions.map((s, j) => (
-                                            <div key={j} className="r-session">
-                                                <div className="w-16 flex-shrink-0 text-center font-black text-green-700 text-xs">{s.t}</div>
-                                                <div>
-                                                    <div className="font-bold text-sm mb-1">{s.title}</div>
-                                                    <p className="text-xs text-gray-500 font-medium">{s.text}</p>
-                                                    <div className="mt-2 text-[10px] bg-green-50 px-2 py-1 rounded-full inline-block font-black text-green-900 border border-green-200">{s.pill}</div>
-                                                </div>
-                                            </div>
-                                        ))}
-                                    </div>
-                                ))}
-                                <button className="btn btn-gr btn-full mt-4" onClick={() => alert('Ratiba imehifadhiwa!')}>📥 Pakua Ratiba (PDF)</button>
-                             </div>
-                        )}
-                    </AnimatePresence>
+function doRegister() {
+  const fname = document.getElementById('fname').value.trim();
+  const lname = document.getElementById('lname').value.trim();
+  const email = document.getElementById('reg-email').value.trim();
+  const password = document.getElementById('reg-password').value.trim();
+  
+  if (!fname || !email || !password || password.length < 6) {
+    toast('Jaza sehemu zote sahihi', 'error');
+    return;
+  }
+  
+  const users = JSON.parse(localStorage.getItem(DB_KEY) || '[]');
+  if (users.find(u => u.email === email)) {
+    toast('Barua pepe hii tayari imesajiliwa', 'error');
+    return;
+  }
+  
+  const newUser = {
+    id: Date.now(),
+    name: fname + ' ' + lname,
+    email,
+    password,
+    premium: true,
+    premiumExpiry: new Date(Date.now() + 30 * 86400000).toISOString(),
+  };
+  
+  users.push(newUser);
+  localStorage.setItem(DB_KEY, JSON.stringify(users));
+  
+  currentUser = newUser;
+  localStorage.setItem(SESSION_KEY, JSON.stringify(newUser));
+  toast('Akaunti imefunguliwa! 🎉', 'success');
+  showScreen('home');
+}
 
-                    {/* Nav ya chini */}
-                    {screen !== 'welcome' && (
-                        <nav className="bnav">
-                            <button onClick={() => goto('home')} className={`nb ${screen === 'home' ? 'on' : ''}`}>
-                                <span className="nbic">🏠</span><span className="nblb">Leo</span>
-                            </button>
-                            <button onClick={() => goto('maktaba')} className={`nb ${screen === 'maktaba' ? 'on' : ''}`}>
-                                <span className="nbic">🍃</span><span className="nblb">Mimea</span>
-                            </button>
-                            <button onClick={() => goto('ratiba')} className={`nb ${screen === 'ratiba' ? 'on' : ''}`}>
-                                <span className="nbic">📅</span><span className="nblb">Ratiba</span>
-                            </button>
-                        </nav>
-                    )}
+function doLogout() {
+  currentUser = null;
+  localStorage.removeItem(SESSION_KEY);
+  toast('Umetoka salama 👋');
+  showScreen('welcome');
+}
 
-                    {/* AI FAB */}
-                    {screen !== 'welcome' && (
-                        <button onClick={() => setIsAiOpen(true)} className="ai-fab">🌿</button>
-                    )}
+// ═══════════════════════════════════
+// SCREENS
+// ═══════════════════════════════════
+function renderHome() {
+  if (!currentUser) showScreen('welcome');
+}
 
-                    <AIChat isVisible={isAiOpen} onClose={() => setIsAiOpen(false)} />
-                </div>
-            );
-        }
+function renderHerbs() {
+  const grid = document.getElementById('herbs-grid');
+  grid.innerHTML = HERBS.map(h => `
+    <div class="grid-item">
+      <div class="grid-item-icon">${h.emoji}</div>
+      <div class="grid-item-title">${h.name}</div>
+      <div style="font-size: 11px; color: var(--muted); margin-top: 4px;">${h.desc}</div>
+    </div>
+  `).join('');
+}
 
-        const root = ReactDOM.createRoot(document.getElementById('root'));
-        root.render(<App />);
+function filterHerbs(query) {
+  const grid = document.getElementById('herbs-grid');
+  const filtered = HERBS.filter(h => h.name.toLowerCase().includes(query.toLowerCase()));
+  grid.innerHTML = filtered.map(h => `
+    <div class="grid-item">
+      <div class="grid-item-icon">${h.emoji}</div>
+      <div class="grid-item-title">${h.name}</div>
+      <div style="font-size: 11px; color: var(--muted); margin-top: 4px;">${h.desc}</div>
+    </div>
+  `).join('');
+}
 
-    </script>
+function renderDiagnosis() {
+  const content = document.getElementById('diagnosis-content');
+  content.innerHTML = `
+    <div class="card">
+      <h2>Maswali 3 ya Haraka</h2>
+      <p style="color: var(--muted); margin-bottom: 20px;">Jibu maswali haya kuona mapendekezo ya kibinafsi</p>
+      ${DIAGNOSIS_QUESTIONS.map((q, i) => `
+        <div style="margin-bottom: 20px;">
+          <p style="font-weight: 700; margin-bottom: 10px;">${i + 1}. ${q.q}</p>
+          <div style="display: flex; flex-direction: column; gap: 8px;">
+            ${q.opts.map(opt => `
+              <button class="btn btn-secondary" style="justify-content: flex-start; padding: 10px 14px;">
+                ${opt}
+              </button>
+            `).join('')}
+          </div>
+        </div>
+      `).join('')}
+      <button class="btn btn-primary btn-full" onclick="toast('Matokeo yatakuja hapa', 'success')">📊 Tazama Matokeo →</button>
+    </div>
+  `;
+}
+
+function renderSchedule() {
+  const content = document.getElementById('schedule-content');
+  if (!currentUser || !currentUser.premium) {
+    content.innerHTML = `
+      <div class="card">
+        <h2>📅 Ratiba ya Siku 7</h2>
+        <p style="color: var(--muted); margin-bottom: 20px;">Lipa uanachama kuona ratiba kamili</p>
+        <button class="btn btn-primary btn-full">💳 Pata Premium</button>
+      </div>
+    `;
+    return;
+  }
+  
+  content.innerHTML = `
+    <div class="card">
+      <h2>📅 Ratiba ya Siku 7</h2>
+      <p style="color: var(--muted); margin-bottom: 20px;">Programu yako ya matumizi ya mimea</p>
+      ${['Siku 1', 'Siku 2', 'Siku 3', 'Siku 4', 'Siku 5', 'Siku 6', 'Siku 7'].map(day => `
+        <div style="background: var(--bg); padding: 12px; border-radius: 8px; margin-bottom: 10px;">
+          <strong>${day}</strong>
+          <p style="font-size: 12px; color: var(--muted); margin-top: 4px;">Asubuhi: Moringa · Mchana: Tangawizi · Jioni: Asali</p>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+function renderProfile() {
+  if (!currentUser) {
+    showScreen('login');
+    return;
+  }
+  
+  document.getElementById('profile-name').textContent = currentUser.name;
+  document.getElementById('profile-email').textContent = currentUser.email;
+}
+
+// ═══════════════════════════════════
+// INIT
+// ═══════════════════════════════════
+window.addEventListener('DOMContentLoaded', () => {
+  const session = localStorage.getItem(SESSION_KEY);
+  if (session) {
+    currentUser = JSON.parse(session);
+    showScreen('home');
+  } else {
+    showScreen('welcome');
+  }
+});
+</script>
+
 </body>
 </html>
